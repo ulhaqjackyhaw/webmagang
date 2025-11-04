@@ -193,20 +193,25 @@ class InternController extends Controller
             'rejection_reason' => $validated['status'] === 'rejected' ? $validated['rejection_reason'] : null
         ]);
 
-        if ($validated['status'] === 'approved') {
-            // Redirect to WhatsApp
-            $phone = preg_replace('/[^0-9]/', '', $intern->no_wa);
-            if (substr($phone, 0, 1) === '0') {
-                $phone = '62' . substr($phone, 1);
-            }
+        // Format phone number
+        $phone = preg_replace('/[^0-9]/', '', $intern->no_wa);
+        if (substr($phone, 0, 1) === '0') {
+            $phone = '62' . substr($phone, 1);
+        }
 
+        if ($validated['status'] === 'approved') {
+            // Redirect to WhatsApp for approved
             $message = "Halo {$intern->nama}, selamat! Pengajuan magang Anda telah disetujui. Silakan hubungi kami untuk informasi lebih lanjut.";
             $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
 
             return redirect($waUrl);
-        }
+        } else {
+            // Redirect to WhatsApp for rejected
+            $message = "Halo {$intern->nama}, mohon maaf pengajuan magang Anda ditolak.\n\nAlasan: {$validated['rejection_reason']}\n\nAnda dapat mengajukan kembali setelah memperbaiki kekurangan yang ada. Terima kasih.";
+            $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
 
-        return redirect()->route('interns.index')->with('success', 'Data berhasil ditolak dengan alasan.');
+            return redirect($waUrl);
+        }
     }
 
     /**

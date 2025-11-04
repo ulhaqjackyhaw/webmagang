@@ -62,11 +62,12 @@
                     </label>
                     <div class="relative">
                         <input type="password" name="password" id="password"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 @error('password') border-red-500 @enderror"
+                            class="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 @error('password') border-red-500 @enderror"
                             placeholder="••••••••" required>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i class="fas fa-key text-gray-400 group-focus-within:text-blue-500 transition-colors"></i>
-                        </div>
+                        <button type="button" onclick="togglePassword()"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hover:text-blue-600 transition-colors">
+                            <i id="toggleIcon" class="fas fa-eye text-gray-400"></i>
+                        </button>
                     </div>
                     @error('password')
                         <p class="text-red-500 text-sm mt-2 flex items-center">
@@ -102,6 +103,25 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+                toggleIcon.classList.add('text-blue-600');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+                toggleIcon.classList.remove('text-blue-600');
+            }
+        }
+    </script>
 
     <style>
         @keyframes blob {

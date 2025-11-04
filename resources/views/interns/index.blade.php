@@ -28,7 +28,7 @@
             @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                 <div class="relative inline-block text-left">
                     <button onclick="toggleDropdown(event)" type="button"
-                        class="group bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                        class="group bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
                         <i class="fas fa-file-excel group-hover:scale-110 transition-transform"></i>
                         <span class="font-semibold">Export</span>
                         <i class="fas fa-chevron-down ml-1"></i>
@@ -37,23 +37,23 @@
                         class="hidden absolute right-0 mt-2 w-64 rounded-xl shadow-2xl bg-white ring-1 ring-gray-200 z-10 overflow-hidden">
                         <div class="py-2">
                             <a href="{{ route('interns.export') }}?status=all"
-                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200">
+                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200">
                                 <i class="fas fa-list text-blue-500 mr-3 group-hover:scale-110 transition-transform"></i>
                                 <span class="font-medium">Semua Data</span>
                             </a>
                             <a href="{{ route('interns.export') }}?status=pending"
-                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-orange-50 transition-all duration-200">
+                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-yellow-50 transition-all duration-200">
                                 <i class="fas fa-clock text-yellow-500 mr-3 group-hover:scale-110 transition-transform"></i>
                                 <span class="font-medium">Menunggu Persetujuan</span>
                             </a>
                             <a href="{{ route('interns.export') }}?status=approved"
-                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-200">
+                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-green-50 transition-all duration-200">
                                 <i
                                     class="fas fa-check-circle text-green-500 mr-3 group-hover:scale-110 transition-transform"></i>
                                 <span class="font-medium">Diterima</span>
                             </a>
                             <a href="{{ route('interns.export') }}?status=rejected"
-                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-200">
+                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-red-50 transition-all duration-200">
                                 <i
                                     class="fas fa-times-circle text-red-500 mr-3 group-hover:scale-110 transition-transform"></i>
                                 <span class="font-medium">Ditolak</span>

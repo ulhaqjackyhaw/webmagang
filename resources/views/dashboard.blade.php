@@ -215,7 +215,7 @@
                         </div>
                         <h3
                             class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
-                            Export Data</h3>
+                            Export Data Apply(Diterima/Ditolak)</h3>
                         <p class="text-gray-600 group-hover:text-purple-100 text-sm transition-colors duration-300">Export
                             ke Excel</p>
                         <div
