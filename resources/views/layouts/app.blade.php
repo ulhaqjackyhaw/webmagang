@@ -11,8 +11,8 @@
 
 <body class="bg-gray-100">
     @auth
-        <nav
-            class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white shadow-2xl relative overflow-hidden">
+        <nav class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white shadow-2xl relative"
+            style="z-index: 1000;">
             <!-- Decorative elements -->
             <div class="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -mt-32 -ml-32"></div>
             <div class="absolute bottom-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mb-32 -mr-32"></div>
@@ -72,7 +72,8 @@
 
                             <!-- Dropdown Menu -->
                             <div id="profileDropdownMenu"
-                                class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl z-50 border border-gray-200 animate-fadeIn">
+                                class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200"
+                                style="z-index: 9999 !important;">
                                 <div
                                     class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
                                     <p class="font-bold text-gray-800">{{ auth()->user()->name }}</p>
@@ -172,6 +173,20 @@
             animation: slide-in 0.3s ease-out;
         }
 
+        /* Profile dropdown styles */
+        #profileDropdownMenu {
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+        }
+
+        #profileDropdownMenu.hidden {
+            display: none;
+        }
+
+        #profileDropdownMenu:not(.hidden) {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -183,10 +198,6 @@
                 transform: translateY(0);
             }
         }
-
-        .animate-fadeIn {
-            animation: fadeIn 0.2s ease-out;
-        }
     </style>
 
     <script>
@@ -196,8 +207,12 @@
             const dropdown = document.getElementById('profileDropdownMenu');
             const chevron = document.getElementById('profileChevron');
 
+            console.log('Dropdown toggle - Current state:', dropdown.classList.contains('hidden'));
+
             dropdown.classList.toggle('hidden');
             chevron.classList.toggle('rotate-180');
+
+            console.log('Dropdown toggle - New state:', dropdown.classList.contains('hidden'));
         }
 
         // Close profile dropdown when clicking outside
