@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Admin',
             'email' => 'admin@magang.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('4DM1NHC2025'),
             'role' => 'admin',
         ]);
 
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Tata Usaha',
             'email' => 'tu@magang.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('PasswordnyaHC2025'),
             'role' => 'tu',
         ]);
 
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Human Capital',
             'email' => 'hc@magang.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('PasswordnyaTU2025'),
             'role' => 'hc',
         ]);
     }
