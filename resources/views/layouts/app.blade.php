@@ -56,17 +56,62 @@
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <span class="text-sm">
-                            <i class="fas fa-user"></i> {{ auth()->user()->name }}
-                            <span
-                                class="text-xs bg-blue-800 px-2 py-1 rounded">{{ strtoupper(auth()->user()->role) }}</span>
-                        </span>
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">
-                                <i class="fas fa-sign-out-alt"></i> Logout
+                        <div class="relative group">
+                            <button
+                                class="flex items-center space-x-2 hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm">
+                                <div class="bg-white bg-opacity-30 w-8 h-8 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-sm"></i>
+                                </div>
+                                <div class="text-left hidden md:block">
+                                    <p class="text-sm font-semibold">{{ auth()->user()->name }}</p>
+                                    <p class="text-xs opacity-90">{{ strtoupper(auth()->user()->role) }}</p>
+                                </div>
+                                <i class="fas fa-chevron-down text-xs"></i>
                             </button>
-                        </form>
+
+                            <!-- Dropdown Menu -->
+                            <div
+                                class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-200">
+                                <div
+                                    class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
+                                    <p class="font-bold text-gray-800">{{ auth()->user()->name }}</p>
+                                    <p class="text-sm text-gray-600">{{ auth()->user()->email }}</p>
+                                    <span class="inline-block mt-2 px-3 py-1 bg-blue-600 text-white text-xs rounded-full">
+                                        {{ strtoupper(auth()->user()->role) }}
+                                    </span>
+                                </div>
+                                <div class="py-2">
+                                    <a href="{{ route('profile.show') }}"
+                                        class="flex items-center space-x-3 px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 group/item">
+                                        <i
+                                            class="fas fa-user-circle text-blue-600 group-hover/item:scale-110 transition-transform"></i>
+                                        <span class="text-gray-700 font-medium">Lihat Profile</span>
+                                    </a>
+                                    <a href="{{ route('profile.edit') }}"
+                                        class="flex items-center space-x-3 px-4 py-3 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-200 group/item">
+                                        <i
+                                            class="fas fa-edit text-green-600 group-hover/item:scale-110 transition-transform"></i>
+                                        <span class="text-gray-700 font-medium">Edit Profile</span>
+                                    </a>
+                                    <a href="{{ route('profile.edit-password') }}"
+                                        class="flex items-center space-x-3 px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-all duration-200 group/item">
+                                        <i
+                                            class="fas fa-key text-purple-600 group-hover/item:scale-110 transition-transform"></i>
+                                        <span class="text-gray-700 font-medium">Ganti Password</span>
+                                    </a>
+                                    <hr class="my-2">
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit"
+                                            class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-200 group/item text-left">
+                                            <i
+                                                class="fas fa-sign-out-alt text-red-600 group-hover/item:scale-110 transition-transform"></i>
+                                            <span class="text-gray-700 font-medium">Logout</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
