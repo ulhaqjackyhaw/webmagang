@@ -12,7 +12,7 @@
         </h1>
         <p class="text-gray-600 mt-2 flex items-center">
             <i class="fas fa-search mr-2 text-teal-500"></i>
-            Cari dan pilih anak magang yang sudah diterima
+            Cari dan pilih peserta magang yang sudah diterima
         </p>
     </div>
 

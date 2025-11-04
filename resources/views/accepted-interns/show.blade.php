@@ -12,7 +12,7 @@
         </h1>
         <p class="text-gray-600 mt-2 flex items-center">
             <i class="fas fa-info-circle mr-2 text-purple-500"></i>
-            Informasi lengkap anak magang yang terdaftar
+            Informasi lengkap peserta magang yang terdaftar
         </p>
     </div>
 

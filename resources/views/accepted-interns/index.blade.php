@@ -6,9 +6,8 @@
     <!-- Header Section with Modern Design -->
     <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
-            <h1
-                class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center">
-                <i class="fas fa-database mr-3 text-blue-600"></i>
+            <h1 class="text-4xl font-bold text-blue-600 flex items-center">
+                <i class="fas fa-database mr-3"></i>
                 Database Peserta Magang
             </h1>
             <p class="text-gray-600 mt-2 flex items-center">

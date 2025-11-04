@@ -8,11 +8,11 @@
         <h1
             class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center">
             <i class="fas fa-id-card-alt mr-3 text-purple-600"></i>
-            Detail Data Magang
+            Detail Data Pengajuan Magang
         </h1>
         <p class="text-gray-600 mt-2 flex items-center">
             <i class="fas fa-info-circle mr-2 text-purple-500"></i>
-            Informasi lengkap anak magang
+            Informasi lengkap pengajuan magang
         </p>
     </div>
 

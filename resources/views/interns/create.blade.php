@@ -8,11 +8,11 @@
         <h1
             class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center">
             <i class="fas fa-user-plus mr-3 text-blue-600"></i>
-            Tambah Data Magang
+            Tambah Data Pengajuan Magang
         </h1>
         <p class="text-gray-600 mt-2 flex items-center">
             <i class="fas fa-file-alt mr-2 text-blue-500"></i>
-            Input data anak magang baru
+            Input data pengajuan magang baru
         </p>
     </div>
 

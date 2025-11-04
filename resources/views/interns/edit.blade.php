@@ -8,11 +8,11 @@
         <h1
             class="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent flex items-center">
             <i class="fas fa-user-edit mr-3 text-green-600"></i>
-            Edit Data Magang
+            Edit Data Pengajuan Magang
         </h1>
         <p class="text-gray-600 mt-2 flex items-center">
             <i class="fas fa-edit mr-2 text-green-500"></i>
-            Update data anak magang
+            Update data pengajuan magang
         </p>
     </div>
 

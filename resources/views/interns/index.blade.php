@@ -5,14 +5,13 @@
 @section('content')
     <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
-            <h1
-                class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent flex items-center">
-                <i class="fas fa-users mr-3 text-indigo-600"></i>
-                Data Magang
+            <h1 class="text-4xl font-bold text-indigo-600 flex items-center">
+                <i class="fas fa-users mr-3"></i>
+                Data Pengajuan Magang
             </h1>
             <p class="text-gray-600 mt-2 flex items-center">
                 <i class="fas fa-tasks mr-2 text-indigo-500"></i>
-                Kelola data peserta apply magang
+                Kelola data pengajuan magang
             </p>
         </div>
         <div class="flex space-x-3">
