@@ -56,8 +56,8 @@
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <div class="relative group">
-                            <button
+                        <div class="relative" id="profileDropdown">
+                            <button onclick="toggleProfileDropdown(event)" type="button"
                                 class="flex items-center space-x-2 hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm">
                                 <div class="bg-white bg-opacity-30 w-8 h-8 rounded-full flex items-center justify-center">
                                     <i class="fas fa-user text-sm"></i>
@@ -66,12 +66,13 @@
                                     <p class="text-sm font-semibold">{{ auth()->user()->name }}</p>
                                     <p class="text-xs opacity-90">{{ strtoupper(auth()->user()->role) }}</p>
                                 </div>
-                                <i class="fas fa-chevron-down text-xs"></i>
+                                <i class="fas fa-chevron-down text-xs transition-transform duration-300"
+                                    id="profileChevron"></i>
                             </button>
 
                             <!-- Dropdown Menu -->
-                            <div
-                                class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-200">
+                            <div id="profileDropdownMenu"
+                                class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl z-50 border border-gray-200 animate-fadeIn">
                                 <div
                                     class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
                                     <p class="font-bold text-gray-800">{{ auth()->user()->name }}</p>
@@ -170,7 +171,59 @@
         .animate-slide-in {
             animation: slide-in 0.3s ease-out;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.2s ease-out;
+        }
     </style>
+
+    <script>
+        // Profile Dropdown Toggle
+        function toggleProfileDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('profileDropdownMenu');
+            const chevron = document.getElementById('profileChevron');
+
+            dropdown.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+        }
+
+        // Close profile dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const profileDropdown = document.getElementById('profileDropdown');
+            const dropdown = document.getElementById('profileDropdownMenu');
+            const chevron = document.getElementById('profileChevron');
+
+            if (profileDropdown && !profileDropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const dropdown = document.getElementById('profileDropdownMenu');
+                const chevron = document.getElementById('profileChevron');
+                if (dropdown) {
+                    dropdown.classList.add('hidden');
+                    chevron.classList.remove('rotate-180');
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

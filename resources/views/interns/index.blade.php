@@ -13,7 +13,7 @@
             </h1>
             <p class="text-gray-600 mt-2 flex items-center">
                 <i class="fas fa-tasks mr-2 text-indigo-500"></i>
-                Kelola data anak magang
+                Kelola data peserta apply magang
             </p>
         </div>
         <div class="flex space-x-3">
@@ -27,7 +27,7 @@
 
             @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                 <div class="relative inline-block text-left">
-                    <button onclick="toggleDropdown()"
+                    <button onclick="toggleDropdown(event)" type="button"
                         class="group bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
                         <i class="fas fa-file-excel group-hover:scale-110 transition-transform"></i>
                         <span class="font-semibold">Export</span>
@@ -195,22 +195,22 @@
     </div>
 
     <script>
-        function toggleDropdown() {
-            document.getElementById('exportDropdown').classList.toggle('hidden');
+        function toggleDropdown(event) {
+            event.stopPropagation(); // Prevent event from bubbling
+            const dropdown = document.getElementById('exportDropdown');
+            dropdown.classList.toggle('hidden');
         }
 
         // Close dropdown when clicking outside
-        window.onclick = function(event) {
-            if (!event.target.matches('.inline-flex') && !event.target.closest('.inline-flex')) {
-                var dropdowns = document.getElementsByClassName("absolute");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (!openDropdown.classList.contains('hidden')) {
-                        openDropdown.classList.add('hidden');
-                    }
-                }
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('exportDropdown');
+            const button = event.target.closest('button[onclick*="toggleDropdown"]');
+
+            // If click is outside dropdown and button, close it
+            if (!button && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
             }
-        }
+        });
 
         function openRejectModal(internId) {
             const form = document.getElementById('rejectForm');
@@ -227,6 +227,8 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeRejectModal();
+                // Also close export dropdown if open
+                document.getElementById('exportDropdown').classList.add('hidden');
             }
         });
     </script>
