@@ -165,9 +165,9 @@
                             class="fas fa-list text-white group-hover:text-green-600 text-2xl transition-colors duration-300"></i>
                     </div>
                     <h3 class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
-                        Lihat Data Magang</h3>
+                        Lihat Data Pengajuan Magang</h3>
                     <p class="text-gray-600 group-hover:text-green-100 text-sm transition-colors duration-300">Lihat semua
-                        data magang</p>
+                        data pengajuan magang</p>
                     <div
                         class="mt-4 flex items-center text-green-600 group-hover:text-white text-sm font-medium transition-colors duration-300">
                         <span>Buka Data</span>
@@ -190,7 +190,7 @@
                         </div>
                         <h3
                             class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
-                            Database Magang</h3>
+                            Database Peserta Magang</h3>
                         <p class="text-gray-600 group-hover:text-teal-100 text-sm transition-colors duration-300">Data
                             peserta magang terdaftar</p>
                         <div
