@@ -3,12 +3,20 @@
 @section('title', 'Edit Data Magang')
 
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Edit Data Magang</h1>
-        <p class="text-gray-600">Update data anak magang</p>
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1
+            class="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent flex items-center">
+            <i class="fas fa-user-edit mr-3 text-green-600"></i>
+            Edit Data Magang
+        </h1>
+        <p class="text-gray-600 mt-2 flex items-center">
+            <i class="fas fa-edit mr-2 text-green-500"></i>
+            Update data anak magang
+        </p>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
         <form action="{{ route('interns.update', $intern->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -85,9 +93,15 @@
                 </div>
             </div>
 
-            <div class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Lampiran Dokumen</h3>
-                <p class="text-sm text-gray-600 mb-4">Kosongkan jika tidak ingin mengubah file</p>
+            <div class="mt-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-paperclip text-purple-500 mr-2"></i>
+                    Lampiran Dokumen
+                </h3>
+                <p class="text-sm text-gray-600 mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded">
+                    <i class="fas fa-info-circle text-yellow-600 mr-2"></i>
+                    Kosongkan jika tidak ingin mengubah file
+                </p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label for="file_proposal" class="block text-gray-700 font-medium mb-2">
@@ -136,13 +150,16 @@
                 </div>
             </div>
 
-            <div class="mt-6 flex space-x-4">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
-                    <i class="fas fa-save"></i> Update
+            <div class="mt-8 flex space-x-4">
+                <button type="submit"
+                    class="group bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-save group-hover:scale-110 transition-transform"></i>
+                    <span class="font-semibold">Update Data</span>
                 </button>
                 <a href="{{ route('interns.index') }}"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded">
-                    <i class="fas fa-arrow-left"></i> Kembali
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-arrow-left"></i>
+                    <span class="font-semibold">Kembali</span>
                 </a>
             </div>
         </form>

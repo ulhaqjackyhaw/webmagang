@@ -3,16 +3,27 @@
 @section('title', 'Edit Data Database Magang')
 
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Edit Data Database Magang</h1>
-        <p class="text-gray-600">Update informasi periode magang</p>
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1
+            class="text-4xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent flex items-center">
+            <i class="fas fa-edit mr-3 text-yellow-600"></i>
+            Edit Data Database Magang
+        </h1>
+        <p class="text-gray-600 mt-2 flex items-center">
+            <i class="fas fa-info-circle mr-2 text-yellow-500"></i>
+            Update informasi periode magang
+        </p>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
         <!-- Display Intern Info (Read Only) -->
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Anak Magang</h3>
-            <div class="bg-gray-50 border rounded-lg p-4">
+        <div class="mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-user text-blue-500 mr-2"></i>
+                Data Anak Magang
+            </h3>
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-gray-600 text-sm mb-1">Nama Lengkap</label>
@@ -38,7 +49,10 @@
             @csrf
             @method('PUT')
 
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Informasi Periode Magang</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-calendar-alt text-green-500 mr-2"></i>
+                Informasi Periode Magang
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                     <label for="periode_awal" class="block text-gray-700 font-medium mb-2">
@@ -80,13 +94,16 @@
                 </div>
             </div>
 
-            <div class="mt-6 flex space-x-4">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
-                    <i class="fas fa-save"></i> Update
+            <div class="mt-8 flex space-x-4">
+                <button type="submit"
+                    class="group bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-save group-hover:scale-110 transition-transform"></i>
+                    <span class="font-semibold">Update Data</span>
                 </button>
                 <a href="{{ route('accepted-interns.index') }}"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded">
-                    <i class="fas fa-arrow-left"></i> Kembali
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-arrow-left"></i>
+                    <span class="font-semibold">Kembali</span>
                 </a>
             </div>
         </form>

@@ -3,43 +3,60 @@
 @section('title', 'Data Magang')
 
 @section('content')
-    <div class="mb-6 flex justify-between items-center">
+    <!-- Header Section -->
+    <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">Data Magang</h1>
-            <p class="text-gray-600">Kelola data anak magang</p>
+            <h1
+                class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent flex items-center">
+                <i class="fas fa-users mr-3 text-indigo-600"></i>
+                Data Magang
+            </h1>
+            <p class="text-gray-600 mt-2 flex items-center">
+                <i class="fas fa-tasks mr-2 text-indigo-500"></i>
+                Kelola data anak magang
+            </p>
         </div>
-        <div class="flex space-x-2">
+        <div class="flex space-x-3">
             @if (auth()->user()->role === 'tu')
-                <a href="{{ route('interns.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-                    <i class="fas fa-plus"></i> Tambah Data
+                <a href="{{ route('interns.create') }}"
+                    class="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-plus-circle group-hover:rotate-90 transition-transform duration-300"></i>
+                    <span class="font-semibold">Tambah Data</span>
                 </a>
             @endif
 
             @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                 <div class="relative inline-block text-left">
                     <button onclick="toggleDropdown()"
-                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded inline-flex items-center">
-                        <i class="fas fa-file-excel mr-2"></i> Export
-                        <i class="fas fa-chevron-down ml-2"></i>
+                        class="group bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                        <i class="fas fa-file-excel group-hover:scale-110 transition-transform"></i>
+                        <span class="font-semibold">Export</span>
+                        <i class="fas fa-chevron-down ml-1"></i>
                     </button>
                     <div id="exportDropdown"
-                        class="hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-                        <div class="py-1">
+                        class="hidden absolute right-0 mt-2 w-64 rounded-xl shadow-2xl bg-white ring-1 ring-gray-200 z-10 overflow-hidden">
+                        <div class="py-2">
                             <a href="{{ route('interns.export') }}?status=all"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-list"></i> Semua Data
+                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200">
+                                <i class="fas fa-list text-blue-500 mr-3 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-medium">Semua Data</span>
                             </a>
                             <a href="{{ route('interns.export') }}?status=pending"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-clock"></i> Menunggu Persetujuan
+                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-orange-50 transition-all duration-200">
+                                <i class="fas fa-clock text-yellow-500 mr-3 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-medium">Menunggu Persetujuan</span>
                             </a>
                             <a href="{{ route('interns.export') }}?status=approved"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-check-circle"></i> Diterima
+                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-200">
+                                <i
+                                    class="fas fa-check-circle text-green-500 mr-3 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-medium">Diterima</span>
                             </a>
                             <a href="{{ route('interns.export') }}?status=rejected"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-times-circle"></i> Ditolak
+                                class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-200">
+                                <i
+                                    class="fas fa-times-circle text-red-500 mr-3 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-medium">Ditolak</span>
                             </a>
                         </div>
                     </div>
@@ -48,10 +65,10 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+                <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>

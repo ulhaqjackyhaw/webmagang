@@ -3,13 +3,24 @@
 @section('title', 'Detail Data Database Magang')
 
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Detail Data Database Magang</h1>
-        <p class="text-gray-600">Informasi lengkap anak magang yang terdaftar</p>
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1
+            class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center">
+            <i class="fas fa-id-card mr-3 text-purple-600"></i>
+            Detail Data Database Magang
+        </h1>
+        <p class="text-gray-600 mt-2 flex items-center">
+            <i class="fas fa-info-circle mr-2 text-purple-500"></i>
+            Informasi lengkap anak magang yang terdaftar
+        </p>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Data Pribadi</h3>
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center border-b-2 border-blue-200 pb-4">
+            <i class="fas fa-user-circle text-blue-500 mr-3"></i>
+            Data Pribadi
+        </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label class="block text-gray-600 text-sm mb-1">Nama Lengkap</label>
@@ -42,7 +53,10 @@
             </div>
         </div>
 
-        <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Informasi Magang</h3>
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center border-b-2 border-green-200 pb-4">
+            <i class="fas fa-briefcase text-green-500 mr-3"></i>
+            Informasi Magang
+        </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label class="block text-gray-600 text-sm mb-1">Periode Awal</label>
@@ -87,49 +101,55 @@
             </div>
         </div>
 
-        <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Dokumen Lampiran</h3>
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center border-b-2 border-purple-200 pb-4">
+            <i class="fas fa-file-alt text-purple-500 mr-3"></i>
+            Dokumen Lampiran
+        </h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             @if ($acceptedIntern->intern->file_proposal)
                 <a href="{{ asset('storage/' . $acceptedIntern->intern->file_proposal) }}" target="_blank"
-                    class="border rounded-lg p-4 hover:shadow-md transition">
+                    class="group border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 text-sm">Proposal</p>
-                            <p class="text-blue-600 font-semibold text-xs">
-                                <i class="fas fa-file-pdf"></i> Lihat Dokumen
+                            <p class="text-gray-600 text-sm font-medium">Proposal</p>
+                            <p class="text-blue-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
                             </p>
                         </div>
-                        <i class="fas fa-external-link-alt text-blue-500 text-xl"></i>
+                        <i
+                            class="fas fa-external-link-alt text-blue-500 text-2xl group-hover:scale-110 transition-transform"></i>
                     </div>
                 </a>
             @endif
 
             @if ($acceptedIntern->intern->file_cv)
                 <a href="{{ asset('storage/' . $acceptedIntern->intern->file_cv) }}" target="_blank"
-                    class="border rounded-lg p-4 hover:shadow-md transition">
+                    class="group border-2 border-gray-200 hover:border-green-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-green-50 to-green-100">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 text-sm">CV</p>
-                            <p class="text-blue-600 font-semibold text-xs">
-                                <i class="fas fa-file-pdf"></i> Lihat Dokumen
+                            <p class="text-gray-600 text-sm font-medium">CV</p>
+                            <p class="text-green-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
                             </p>
                         </div>
-                        <i class="fas fa-external-link-alt text-blue-500 text-xl"></i>
+                        <i
+                            class="fas fa-external-link-alt text-green-500 text-2xl group-hover:scale-110 transition-transform"></i>
                     </div>
                 </a>
             @endif
 
             @if ($acceptedIntern->intern->file_surat)
                 <a href="{{ asset('storage/' . $acceptedIntern->intern->file_surat) }}" target="_blank"
-                    class="border rounded-lg p-4 hover:shadow-md transition">
+                    class="group border-2 border-gray-200 hover:border-purple-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-purple-50 to-purple-100">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 text-sm">Surat Magang</p>
-                            <p class="text-blue-600 font-semibold text-xs">
-                                <i class="fas fa-file-pdf"></i> Lihat Dokumen
+                            <p class="text-gray-600 text-sm font-medium">Surat Magang</p>
+                            <p class="text-purple-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
                             </p>
                         </div>
-                        <i class="fas fa-external-link-alt text-blue-500 text-xl"></i>
+                        <i
+                            class="fas fa-external-link-alt text-purple-500 text-2xl group-hover:scale-110 transition-transform"></i>
                     </div>
                 </a>
             @endif
@@ -137,12 +157,14 @@
 
         <div class="flex space-x-4">
             <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
-                class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded">
-                <i class="fas fa-edit"></i> Edit
+                class="group bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-edit group-hover:scale-110 transition-transform"></i>
+                <span class="font-semibold">Edit Data</span>
             </a>
             <a href="{{ route('accepted-interns.index') }}"
-                class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded">
-                <i class="fas fa-arrow-left"></i> Kembali
+                class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-arrow-left"></i>
+                <span class="font-semibold">Kembali</span>
             </a>
         </div>
     </div>

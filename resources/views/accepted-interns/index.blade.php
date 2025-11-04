@@ -3,26 +3,37 @@
 @section('title', 'Database Magang Diterima')
 
 @section('content')
-    <div class="mb-6 flex justify-between items-center">
+    <!-- Header Section with Modern Design -->
+    <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">Database peserta Magang Diterima</h1>
-            <p class="text-gray-600">Data peserta magang yang telah terdaftar</p>
+            <h1
+                class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center">
+                <i class="fas fa-database mr-3 text-blue-600"></i>
+                Database Peserta Magang
+            </h1>
+            <p class="text-gray-600 mt-2 flex items-center">
+                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                Data peserta magang yang telah terdaftar
+            </p>
         </div>
-        <div class="flex space-x-2">
+        <div class="flex space-x-3">
             <a href="{{ route('accepted-interns.create') }}"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-                <i class="fas fa-plus"></i> Tambah Data
+                class="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-plus-circle group-hover:rotate-90 transition-transform duration-300"></i>
+                <span class="font-semibold">Tambah Data</span>
             </a>
 
             <!-- Export Button -->
             <a href="{{ route('accepted-interns.export', $selectedUnit ? ['unit' => $selectedUnit] : []) }}"
-                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded inline-flex items-center">
-                <i class="fas fa-file-excel mr-2"></i>
-                @if ($selectedUnit)
-                    Export {{ $selectedUnit }}
-                @else
-                    Export Semua Data
-                @endif
+                class="group bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-file-excel group-hover:scale-110 transition-transform duration-300"></i>
+                <span class="font-semibold">
+                    @if ($selectedUnit)
+                        Export {{ $selectedUnit }}
+                    @else
+                        Export Semua Data
+                    @endif
+                </span>
             </a>
         </div>
     </div>

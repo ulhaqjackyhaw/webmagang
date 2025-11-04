@@ -3,12 +3,20 @@
 @section('title', 'Tambah Data Magang')
 
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Tambah Data Magang</h1>
-        <p class="text-gray-600">Input data anak magang baru</p>
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1
+            class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center">
+            <i class="fas fa-user-plus mr-3 text-blue-600"></i>
+            Tambah Data Magang
+        </h1>
+        <p class="text-gray-600 mt-2 flex items-center">
+            <i class="fas fa-file-alt mr-2 text-blue-500"></i>
+            Input data anak magang baru
+        </p>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="bg-white rounded-2xl shadow-xl p-8">
         <form action="{{ route('interns.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -82,8 +90,11 @@
                 </div>
             </div>
 
-            <div class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Lampiran Dokumen</h3>
+            <div class="mt-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-paperclip text-purple-500 mr-2"></i>
+                    Lampiran Dokumen
+                </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label for="file_proposal" class="block text-gray-700 font-medium mb-2">
@@ -126,13 +137,16 @@
                 </div>
             </div>
 
-            <div class="mt-6 flex space-x-4">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
-                    <i class="fas fa-save"></i> Simpan
+            <div class="mt-8 flex space-x-4">
+                <button type="submit"
+                    class="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-save group-hover:scale-110 transition-transform"></i>
+                    <span class="font-semibold">Simpan Data</span>
                 </button>
                 <a href="{{ route('interns.index') }}"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded">
-                    <i class="fas fa-arrow-left"></i> Kembali
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-arrow-left"></i>
+                    <span class="font-semibold">Kembali</span>
                 </a>
             </div>
         </form>

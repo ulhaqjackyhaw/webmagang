@@ -11,28 +11,46 @@
 
 <body class="bg-gray-100">
     @auth
-        <nav class="bg-blue-600 text-white shadow-lg">
-            <div class="container mx-auto px-4">
+        <nav
+            class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white shadow-2xl relative overflow-hidden">
+            <!-- Decorative elements -->
+            <div class="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -mt-32 -ml-32"></div>
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mb-32 -mr-32"></div>
+
+            <div class="container mx-auto px-4 relative z-10">
                 <div class="flex items-center justify-between py-4">
-                    <div class="flex items-center space-x-4">
-                        <h1 class="text-xl font-bold">Sistem Magang</h1>
-                        <div class="hidden md:flex space-x-4">
-                            <a href="{{ route('dashboard') }}" class="hover:bg-blue-700 px-3 py-2 rounded">
-                                <i class="fas fa-home"></i> Dashboard
+                    <div class="flex items-center space-x-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-white bg-opacity-20 p-2 rounded-xl backdrop-blur-sm">
+                                <i class="fas fa-graduation-cap text-xl"></i>
+                            </div>
+                            <h1 class="text-xl font-bold">Sistem Magang</h1>
+                        </div>
+                        <div class="hidden md:flex space-x-2">
+                            <a href="{{ route('dashboard') }}"
+                                class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 backdrop-blur-sm">
+                                <i class="fas fa-home"></i>
+                                <span>Dashboard</span>
                             </a>
                             @if (auth()->user()->role === 'tu' || auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
-                                <a href="{{ route('interns.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">
-                                    <i class="fas fa-users"></i> Data Apply Magang
+                                <a href="{{ route('interns.index') }}"
+                                    class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 backdrop-blur-sm">
+                                    <i class="fas fa-users"></i>
+                                    <span>Data Apply Magang</span>
                                 </a>
                             @endif
                             @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
-                                <a href="{{ route('accepted-interns.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">
-                                    <i class="fas fa-database"></i> Database Magang
+                                <a href="{{ route('accepted-interns.index') }}"
+                                    class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 backdrop-blur-sm">
+                                    <i class="fas fa-database"></i>
+                                    <span>Database Magang</span>
                                 </a>
                             @endif
                             @if (auth()->user()->role === 'admin')
-                                <a href="{{ route('users.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">
-                                    <i class="fas fa-user-cog"></i> Kelola User
+                                <a href="{{ route('users.index') }}"
+                                    class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 backdrop-blur-sm">
+                                    <i class="fas fa-user-cog"></i>
+                                    <span>Kelola User</span>
                                 </a>
                             @endif
                         </div>
@@ -57,19 +75,57 @@
 
     <main class="container mx-auto px-4 py-8">
         @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                <i class="fas fa-check-circle"></i> {{ session('success') }}
+            <div
+                class="bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-500 text-green-700 px-6 py-4 rounded-lg mb-6 shadow-lg transform animate-slide-in flex items-center">
+                <div class="bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-4">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-semibold">Berhasil!</p>
+                    <p class="text-sm">{{ session('success') }}</p>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-green-700 hover:text-green-900">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
         @endif
 
         @if (session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+            <div
+                class="bg-gradient-to-r from-red-50 to-red-100 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-lg mb-6 shadow-lg transform animate-slide-in flex items-center">
+                <div class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-4">
+                    <i class="fas fa-exclamation-circle text-xl"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-semibold">Error!</p>
+                    <p class="text-sm">{{ session('error') }}</p>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-red-700 hover:text-red-900">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
         @endif
 
         @yield('content')
     </main>
+
+    <style>
+        @keyframes slide-in {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slide-in 0.3s ease-out;
+        }
+    </style>
 </body>
 
 </html>
