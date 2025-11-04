@@ -123,14 +123,10 @@
                                         class="text-green-600 hover:text-green-900" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('interns.destroy', $intern->id) }}" method="POST"
-                                        class="inline" onsubmit="return confirm('Yakin ingin menghapus?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" onclick="openDeleteModal({{ $intern->id }})"
+                                        class="text-red-600 hover:text-red-900" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 @endif
 
                                 @if ((auth()->user()->role === 'hc' || auth()->user()->role === 'admin') && $intern->status === 'pending')
@@ -162,6 +158,7 @@
         </div>
     </div>
 
+    <!-- Modal Alasan Penolakan -->
     <div id="rejectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-lg w-full max-w-md">
             <div class="p-6">
@@ -193,6 +190,45 @@
         </div>
     </div>
 
+    <!-- Modal Konfirmasi Hapus -->
+    <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md transform transition-all">
+            <div class="p-6">
+                <!-- Icon Warning -->
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-4xl"></i>
+                    </div>
+                </div>
+
+                <!-- Title & Message -->
+                <h3 class="text-2xl font-bold text-gray-800 text-center mb-2">Konfirmasi Hapus</h3>
+                <p class="text-gray-600 text-center mb-6">
+                    Apakah Anda yakin ingin menghapus data ini? <br>
+                    <span class="text-red-600 font-semibold">Tindakan ini tidak dapat dibatalkan!</span>
+                </p>
+
+                <!-- Form Hidden -->
+                <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                </form>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                    <button type="button" onclick="confirmDelete()"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-trash mr-2"></i>Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- 
         ================================================================
         REFAKTOR JAVASCRIPT DIMULAI DARI SINI
@@ -204,6 +240,8 @@
         const rejectModal = document.getElementById('rejectModal');
         const rejectForm = document.getElementById('rejectForm');
         const rejectReasonText = document.getElementById('rejection_reason');
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteForm = document.getElementById('deleteForm');
 
         /**
          * Menutup Export Dropdown
@@ -237,13 +275,9 @@
          * Membuka Modal Penolakan
          */
         function openRejectModal(internId) {
-            // Set action form secara dinamis
             rejectForm.action = `/interns/${internId}/status`;
-            // Kosongkan textarea
             rejectReasonText.value = '';
-            // Tampilkan modal
             rejectModal.classList.remove('hidden');
-            // Fokus ke textarea
             rejectReasonText.focus();
         }
 
@@ -256,22 +290,55 @@
             }
         }
 
+        /**
+         * Membuka Modal Konfirmasi Hapus
+         */
+        function openDeleteModal(internId) {
+            deleteForm.action = `/interns/${internId}`;
+            deleteModal.classList.remove('hidden');
+        }
+
+        /**
+         * Menutup Modal Konfirmasi Hapus
+         */
+        function closeDeleteModal() {
+            if (deleteModal && !deleteModal.classList.contains('hidden')) {
+                deleteModal.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Konfirmasi dan Submit Delete
+         */
+        function confirmDelete() {
+            deleteForm.submit();
+        }
+
         // --- Global Event Listeners ---
 
         // Listener untuk klik di luar dropdown
         document.addEventListener('click', function(event) {
             const button = event.target.closest('button[onclick*="toggleDropdown"]');
-            // Jika klik BUKAN pada tombol ATAU di dalam area dropdown
             if (!button && exportDropdown && !exportDropdown.contains(event.target)) {
                 closeDropdown();
             }
         });
+
+        // Listener untuk klik di luar modal delete
+        if (deleteModal) {
+            deleteModal.addEventListener('click', function(e) {
+                if (e.target === deleteModal) {
+                    closeDeleteModal();
+                }
+            });
+        }
 
         // Listener untuk tombol 'Escape'
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeDropdown();
                 closeRejectModal();
+                closeDeleteModal();
             }
         });
     </script>

@@ -6,7 +6,7 @@
     <!-- Header Section -->
     <div class="mb-8">
         <h1
-            class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center">
+            class="text-4xl font-bold text-purple-600 flex items-center">
             <i class="fas fa-id-card mr-3 text-purple-600"></i>
             Detail Data Database Magang
         </h1>

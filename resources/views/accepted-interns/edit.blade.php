@@ -6,7 +6,7 @@
     <!-- Header Section -->
     <div class="mb-8">
         <h1
-            class="text-4xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent flex items-center">
+            class="text-4xl font-bold text-yellow-600 flex items-center">
             <i class="fas fa-edit mr-3 text-yellow-600"></i>
             Edit Data Database Magang
         </h1>

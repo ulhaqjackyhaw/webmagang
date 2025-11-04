@@ -6,7 +6,8 @@
     <!-- Header Section -->
     <div class="mb-8">
         <h1
-            class="text-4xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent flex items-center">
+            
+            class="text-4xl font-bold text-teal-600 flex items-center">
             <i class="fas fa-user-plus mr-3 text-teal-600"></i>
             Tambah Data ke Database Magang
         </h1>

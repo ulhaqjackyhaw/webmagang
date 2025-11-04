@@ -5,8 +5,7 @@
 @section('content')
     <!-- Header Section -->
     <div class="mb-8">
-        <h1
-            class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center">
+        <h1 class="text-4xl font-bold text-indigo-600 flex items-center">
             <i class="fas fa-user-plus mr-3 text-blue-600"></i>
             Tambah Data Pengajuan Magang
         </h1>

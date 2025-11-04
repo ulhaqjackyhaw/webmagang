@@ -154,14 +154,10 @@
                                     class="text-yellow-600 hover:text-yellow-900" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('accepted-interns.destroy', $acceptedIntern->id) }}" method="POST"
-                                    class="inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                                    class="text-red-600 hover:text-red-900" title="Hapus">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     @empty
@@ -179,4 +175,75 @@
             </table>
         </div>
     </div>
+
+    <!-- Modal Konfirmasi Hapus -->
+    <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md transform transition-all">
+            <div class="p-6">
+                <!-- Icon Warning -->
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-4xl"></i>
+                    </div>
+                </div>
+
+                <!-- Title & Message -->
+                <h3 class="text-2xl font-bold text-gray-800 text-center mb-2">Konfirmasi Hapus</h3>
+                <p class="text-gray-600 text-center mb-6">
+                    Apakah Anda yakin ingin menghapus data ini? <br>
+                    <span class="text-red-600 font-semibold">Tindakan ini tidak dapat dibatalkan!</span>
+                </p>
+
+                <!-- Form Hidden -->
+                <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                </form>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                    <button type="button" onclick="confirmDelete()"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-trash mr-2"></i>Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteForm = document.getElementById('deleteForm');
+
+        function openDeleteModal(internId) {
+            deleteForm.action = `/accepted-interns/${internId}`;
+            deleteModal.classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            deleteModal.classList.add('hidden');
+        }
+
+        function confirmDelete() {
+            deleteForm.submit();
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+    </script>
 @endsection

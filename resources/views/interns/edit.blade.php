@@ -6,7 +6,7 @@
     <!-- Header Section -->
     <div class="mb-8">
         <h1
-            class="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent flex items-center">
+            class="text-4xl font-bold text-green-600 flex items-center">
             <i class="fas fa-user-edit mr-3 text-green-600"></i>
             Edit Data Pengajuan Magang
         </h1>
