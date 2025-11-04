@@ -3,7 +3,6 @@
 @section('title', 'Data Magang')
 
 @section('content')
-    <!-- Header Section -->
     <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
             <h1
@@ -28,14 +27,16 @@
             @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                 <div class="relative inline-block text-left">
                     <button onclick="toggleDropdown(event)" type="button"
-                        class="group bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
+                        class="group bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 cursor-pointer pointer-events-auto"
+                        style="position: relative; z-index: 100;">
                         <i class="fas fa-file-excel group-hover:scale-110 transition-transform"></i>
                         <span class="font-semibold">Export</span>
                         <i class="fas fa-chevron-down ml-1"></i>
                     </button>
                     <div id="exportDropdown"
-                        class="hidden absolute right-0 mt-2 w-64 rounded-xl shadow-2xl bg-white ring-1 ring-gray-200 z-10 overflow-hidden">
-                        <div class="py-2">
+                        class="hidden absolute right-0 mt-2 w-64 rounded-xl shadow-2xl bg-white ring-1 ring-gray-200 overflow-hidden pointer-events-none"
+                        style="z-index: 200;">
+                        <div class="py-2 pointer-events-auto">
                             <a href="{{ route('interns.export') }}?status=all"
                                 class="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200">
                                 <i class="fas fa-list text-blue-500 mr-3 group-hover:scale-110 transition-transform"></i>
@@ -87,7 +88,7 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($interns as $index => $intern)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $intern->nama }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $intern->nim }}</td>
@@ -162,7 +163,6 @@
         </div>
     </div>
 
-    <!-- Modal Alasan Penolakan -->
     <div id="rejectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-lg w-full max-w-md">
             <div class="p-6">
@@ -194,41 +194,85 @@
         </div>
     </div>
 
+    {{-- 
+        ================================================================
+        REFAKTOR JAVASCRIPT DIMULAI DARI SINI
+        ================================================================
+    --}}
     <script>
-        function toggleDropdown(event) {
-            event.stopPropagation(); // Prevent event from bubbling
-            const dropdown = document.getElementById('exportDropdown');
-            dropdown.classList.toggle('hidden');
+        // --- Dropdown Logic ---
+        const exportDropdown = document.getElementById('exportDropdown');
+        const rejectModal = document.getElementById('rejectModal');
+        const rejectForm = document.getElementById('rejectForm');
+        const rejectReasonText = document.getElementById('rejection_reason');
+
+        /**
+         * Menutup Export Dropdown
+         */
+        function closeDropdown() {
+            if (exportDropdown && !exportDropdown.classList.contains('hidden')) {
+                exportDropdown.classList.add('hidden');
+                exportDropdown.classList.add('pointer-events-none');
+                exportDropdown.classList.remove('pointer-events-auto');
+            }
         }
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('exportDropdown');
-            const button = event.target.closest('button[onclick*="toggleDropdown"]');
+        /**
+         * Membuka/Menutup Export Dropdown
+         */
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const isHidden = exportDropdown.classList.contains('hidden');
+            if (isHidden) {
+                exportDropdown.classList.remove('hidden');
+                exportDropdown.classList.remove('pointer-events-none');
+                exportDropdown.classList.add('pointer-events-auto');
+            } else {
+                closeDropdown();
+            }
+        }
 
-            // If click is outside dropdown and button, close it
-            if (!button && !dropdown.contains(event.target)) {
-                dropdown.classList.add('hidden');
+        // --- Modal Logic ---
+
+        /**
+         * Membuka Modal Penolakan
+         */
+        function openRejectModal(internId) {
+            // Set action form secara dinamis
+            rejectForm.action = `/interns/${internId}/status`;
+            // Kosongkan textarea
+            rejectReasonText.value = '';
+            // Tampilkan modal
+            rejectModal.classList.remove('hidden');
+            // Fokus ke textarea
+            rejectReasonText.focus();
+        }
+
+        /**
+         * Menutup Modal Penolakan
+         */
+        function closeRejectModal() {
+            if (rejectModal && !rejectModal.classList.contains('hidden')) {
+                rejectModal.classList.add('hidden');
+            }
+        }
+
+        // --- Global Event Listeners ---
+
+        // Listener untuk klik di luar dropdown
+        document.addEventListener('click', function(event) {
+            const button = event.target.closest('button[onclick*="toggleDropdown"]');
+            // Jika klik BUKAN pada tombol ATAU di dalam area dropdown
+            if (!button && exportDropdown && !exportDropdown.contains(event.target)) {
+                closeDropdown();
             }
         });
 
-        function openRejectModal(internId) {
-            const form = document.getElementById('rejectForm');
-            form.action = `/interns/${internId}/status`;
-            document.getElementById('rejection_reason').value = '';
-            document.getElementById('rejectModal').classList.remove('hidden');
-        }
-
-        function closeRejectModal() {
-            document.getElementById('rejectModal').classList.add('hidden');
-        }
-
-        // Close modal with ESC key
+        // Listener untuk tombol 'Escape'
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
+                closeDropdown();
                 closeRejectModal();
-                // Also close export dropdown if open
-                document.getElementById('exportDropdown').classList.add('hidden');
             }
         });
     </script>
