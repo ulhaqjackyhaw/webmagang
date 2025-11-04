@@ -21,14 +21,11 @@
             <!-- Logo/Icon -->
             <div class="text-center mb-8">
                 <div
-                    class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg mb-4 transform hover:rotate-6 transition-transform duration-300">
-                    <i class="fas fa-graduation-cap text-white text-3xl"></i>
+                    class="inline-flex items-center justify-center w-60 h-30 bg-gradient-to-br from-white-500 to-indigo-600 rounded-2xl shadow-lg mb-4 transform hover:rotate-6 transition-transform duration-300 overflow-hidden">
+                    <img src="/images/company-logo.png" alt="Company Logo" class="w-40 h-20 object-contain" />
                 </div>
-                <h2
-                    class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                    Sistem Manajemen Magang
-                </h2>
-                <p class="text-gray-600">Silakan login untuk melanjutkan</p>
+                <h1 class="text-4xl font-bold text-blue-500 tracking-wide mb-2">MAJORPORT</h1>
+                <p class="text-base text-gray-600 font-medium mb-2">Sistem Manajemen Magang Injourney Airport</p>
             </div>
 
             <form method="POST" action="{{ route('login') }}" class="space-y-6">
