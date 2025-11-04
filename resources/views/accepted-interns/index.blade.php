@@ -98,6 +98,18 @@
         </div>
     </div>
 
+    <!-- Search Box -->
+    <div class="mb-6">
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400"></i>
+            </div>
+            <input type="text" id="searchInput"
+                class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                placeholder="Cari nama, NIM, kampus, unit magang, atau periode...">
+        </div>
+    </div>
+
     <!-- Table Section -->
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="bg-gray-50 px-6 py-4 border-b">
@@ -128,7 +140,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($acceptedInterns as $index => $acceptedIntern)
-                        <tr>
+                        <tr class="searchable-row">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ $acceptedIntern->intern->nama }}
@@ -161,7 +173,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        <tr id="emptyRow">
                             <td colspan="7" class="px-6 py-4 text-center text-gray-500">
                                 @if ($selectedUnit)
                                     Tidak ada data peserta magang di unit <strong>{{ $selectedUnit }}</strong>
@@ -171,6 +183,14 @@
                             </td>
                         </tr>
                     @endforelse
+                    <!-- No Results Row (hidden by default) -->
+                    <tr id="noResultsRow" class="hidden">
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                            <i class="fas fa-search text-gray-400 text-3xl mb-2"></i>
+                            <p class="font-semibold">Tidak ada data yang cocok dengan pencarian Anda</p>
+                            <p class="text-sm">Coba gunakan kata kunci yang berbeda</p>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -218,6 +238,39 @@
     <script>
         const deleteModal = document.getElementById('deleteModal');
         const deleteForm = document.getElementById('deleteForm');
+        const searchInput = document.getElementById('searchInput');
+        const searchableRows = document.querySelectorAll('.searchable-row');
+        const noResultsRow = document.getElementById('noResultsRow');
+        const emptyRow = document.getElementById('emptyRow');
+
+        /**
+         * Search/Filter Table Rows
+         */
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                searchableRows.forEach(function(row) {
+                    const text = row.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Show/hide no results message
+                if (searchableRows.length > 0) {
+                    if (visibleCount === 0 && searchTerm !== '') {
+                        noResultsRow.classList.remove('hidden');
+                    } else {
+                        noResultsRow.classList.add('hidden');
+                    }
+                }
+            });
+        }
 
         function openDeleteModal(internId) {
             deleteForm.action = `/accepted-interns/${internId}`;
