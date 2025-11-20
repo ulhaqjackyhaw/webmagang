@@ -65,6 +65,66 @@
         </div>
     </div>
 
+    <!-- Filter Section -->
+    <div class="mb-6">
+        <form method="GET" action="{{ route('interns.index') }}" class="bg-white rounded-xl shadow-md p-6 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Year Filter -->
+                <div>
+                    <label for="year" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-calendar-alt text-indigo-500 mr-1"></i> Tahun
+                    </label>
+                    <select name="year" id="year"
+                        class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300">
+                        <option value="">Semua Tahun</option>
+                        @foreach ($availableYears as $year)
+                            <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Month Filter -->
+                <div>
+                    <label for="month" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-calendar text-indigo-500 mr-1"></i> Bulan
+                    </label>
+                    <select name="month" id="month"
+                        class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300">
+                        <option value="">Semua Bulan</option>
+                        <option value="1" {{ $selectedMonth == 1 ? 'selected' : '' }}>Januari</option>
+                        <option value="2" {{ $selectedMonth == 2 ? 'selected' : '' }}>Februari</option>
+                        <option value="3" {{ $selectedMonth == 3 ? 'selected' : '' }}>Maret</option>
+                        <option value="4" {{ $selectedMonth == 4 ? 'selected' : '' }}>April</option>
+                        <option value="5" {{ $selectedMonth == 5 ? 'selected' : '' }}>Mei</option>
+                        <option value="6" {{ $selectedMonth == 6 ? 'selected' : '' }}>Juni</option>
+                        <option value="7" {{ $selectedMonth == 7 ? 'selected' : '' }}>Juli</option>
+                        <option value="8" {{ $selectedMonth == 8 ? 'selected' : '' }}>Agustus</option>
+                        <option value="9" {{ $selectedMonth == 9 ? 'selected' : '' }}>September</option>
+                        <option value="10" {{ $selectedMonth == 10 ? 'selected' : '' }}>Oktober</option>
+                        <option value="11" {{ $selectedMonth == 11 ? 'selected' : '' }}>November</option>
+                        <option value="12" {{ $selectedMonth == 12 ? 'selected' : '' }}>Desember</option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-end gap-2">
+                    <button type="submit"
+                        class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200">
+                        <i class="fas fa-filter mr-1"></i> Terapkan
+                    </button>
+                    @if ($selectedYear || $selectedMonth)
+                        <a href="{{ route('interns.index') }}"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-200">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </form>
+    </div>
+
     <!-- Search Box -->
     <div class="mb-6">
         <div class="relative">
@@ -104,7 +164,8 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $intern->nim }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $intern->asal_kampus }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $intern->program_studi }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $intern->program_studi }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $intern->no_wa }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if ($intern->status === 'pending')

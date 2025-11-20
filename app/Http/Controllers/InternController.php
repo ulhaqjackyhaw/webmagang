@@ -14,17 +14,39 @@ class InternController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
+        $query = Intern::query();
+
         if ($user->role === 'tu') {
-            $interns = Intern::where('created_by', $user->id)->latest()->get();
+            $query->where('created_by', $user->id);
         } else {
-            $interns = Intern::with('creator')->latest()->get();
+            $query->with('creator');
         }
 
-        return view('interns.index', compact('interns'));
+        // Filter by year if provided
+        $selectedYear = $request->get('year');
+        if ($selectedYear) {
+            $query->whereYear('created_at', $selectedYear);
+        }
+
+        // Filter by month if provided
+        $selectedMonth = $request->get('month');
+        if ($selectedMonth) {
+            $query->whereMonth('created_at', $selectedMonth);
+        }
+
+        $interns = $query->latest()->get();
+
+        // Get available years from data
+        $availableYears = Intern::selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        return view('interns.index', compact('interns', 'selectedYear', 'selectedMonth', 'availableYears'));
     }
 
     /**

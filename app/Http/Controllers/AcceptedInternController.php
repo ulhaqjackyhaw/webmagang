@@ -24,6 +24,18 @@ class AcceptedInternController extends Controller
             $query->where('unit_magang', $selectedUnit);
         }
 
+        // Filter by year if provided
+        $selectedYear = $request->get('year');
+        if ($selectedYear) {
+            $query->whereYear('periode_awal', $selectedYear);
+        }
+
+        // Filter by month if provided
+        $selectedMonth = $request->get('month');
+        if ($selectedMonth) {
+            $query->whereMonth('periode_awal', $selectedMonth);
+        }
+
         $acceptedInterns = $query->latest()->get();
 
         // Get statistics by unit
@@ -34,7 +46,13 @@ class AcceptedInternController extends Controller
 
         $totalInterns = AcceptedIntern::count();
 
-        return view('accepted-interns.index', compact('acceptedInterns', 'unitStats', 'totalInterns', 'selectedUnit'));
+        // Get available years from data
+        $availableYears = AcceptedIntern::selectRaw('YEAR(periode_awal) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        return view('accepted-interns.index', compact('acceptedInterns', 'unitStats', 'totalInterns', 'selectedUnit', 'selectedYear', 'selectedMonth', 'availableYears'));
     }
 
     /**
