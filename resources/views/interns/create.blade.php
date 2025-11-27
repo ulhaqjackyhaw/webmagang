@@ -4,148 +4,198 @@
 
 @section('content')
     <!-- Header Section -->
-    <div class="mb-8">
-        <h1 class="text-4xl font-bold text-indigo-600 flex items-center">
-            <i class="fas fa-user-plus mr-3 text-blue-600"></i>
-            Tambah Data Pengajuan Magang
-        </h1>
-        <p class="text-gray-600 mt-2 flex items-center">
-            <i class="fas fa-file-alt mr-2 text-blue-500"></i>
-            Input data pengajuan magang baru
+    <div class="mb-8 fade-in">
+        <div class="flex items-center gap-4 mb-3">
+            <div
+                class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <i class="fas fa-user-plus text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 font-heading">
+                    Tambah Data Magang
+                </h1>
+            </div>
+        </div>
+        <p class="text-gray-500 text-lg font-light ml-16">
+            Input data pengajuan magang baru dengan lengkap
         </p>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl p-8">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10 fade-in" style="animation-delay: 0.1s">
         <form action="{{ route('interns.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="nama" class="block text-gray-700 font-medium mb-2">Nama Lengkap <span
-                            class="text-red-500">*</span></label>
+                <div class="space-y-2">
+                    <label for="nama" class="block text-sm font-semibold text-gray-700">
+                        Nama Lengkap <span class="text-red-500">*</span>
+                    </label>
                     <input type="text" name="nama" id="nama" value="{{ old('nama') }}"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('nama') border-red-500 @enderror"
-                        required>
+                        class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('nama') border-red-300 bg-red-50 @enderror"
+                        placeholder="Masukkan nama lengkap" required>
                     @error('nama')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <i class="fas fa-exclamation-circle text-xs"></i>
+                            {{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <div>
-                    <label for="nim" class="block text-gray-700 font-medium mb-2">NIM <span
-                            class="text-red-500">*</span></label>
+                <div class="space-y-2">
+                    <label for="nim" class="block text-sm font-semibold text-gray-700">
+                        NIM <span class="text-red-500">*</span>
+                    </label>
                     <input type="text" name="nim" id="nim" value="{{ old('nim') }}"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('nim') border-red-500 @enderror"
-                        required>
+                        class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('nim') border-red-300 bg-red-50 @enderror"
+                        placeholder="Masukkan NIM" required>
                     @error('nim')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <i class="fas fa-exclamation-circle text-xs"></i>
+                            {{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <div>
-                    <label for="asal_kampus" class="block text-gray-700 font-medium mb-2">Asal Kampus <span
-                            class="text-red-500">*</span></label>
+                <div class="space-y-2">
+                    <label for="asal_kampus" class="block text-sm font-semibold text-gray-700">
+                        Asal Kampus <span class="text-red-500">*</span>
+                    </label>
                     <input type="text" name="asal_kampus" id="asal_kampus" value="{{ old('asal_kampus') }}"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('asal_kampus') border-red-500 @enderror"
-                        required>
+                        class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('asal_kampus') border-red-300 bg-red-50 @enderror"
+                        placeholder="Masukkan asal kampus" required>
                     @error('asal_kampus')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <i class="fas fa-exclamation-circle text-xs"></i>
+                            {{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <div>
-                    <label for="program_studi" class="block text-gray-700 font-medium mb-2">Program Studi <span
-                            class="text-red-500">*</span></label>
+                <div class="space-y-2">
+                    <label for="program_studi" class="block text-sm font-semibold text-gray-700">
+                        Program Studi <span class="text-red-500">*</span>
+                    </label>
                     <input type="text" name="program_studi" id="program_studi" value="{{ old('program_studi') }}"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('program_studi') border-red-500 @enderror"
-                        required>
+                        class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('program_studi') border-red-300 bg-red-50 @enderror"
+                        placeholder="Masukkan program studi" required>
                     @error('program_studi')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <i class="fas fa-exclamation-circle text-xs"></i>
+                            {{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <div>
-                    <label for="email_kampus" class="block text-gray-700 font-medium mb-2">Email Kampus
-                        <span class="text-xs text-gray-500">(opsional)</span>
+                <div class="space-y-2">
+                    <label for="email_kampus" class="block text-sm font-semibold text-gray-700">
+                        Email Kampus
+                        <span class="text-xs font-normal text-gray-400">(opsional)</span>
                     </label>
                     <input type="email" name="email_kampus" id="email_kampus" value="{{ old('email_kampus') }}"
                         placeholder="mahasiswa@kampus.ac.id"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email_kampus') border-red-500 @enderror">
+                        class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('email_kampus') border-red-300 bg-red-50 @enderror">
                     @error('email_kampus')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <i class="fas fa-exclamation-circle text-xs"></i>
+                            {{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <div>
-                    <label for="no_wa" class="block text-gray-700 font-medium mb-2">No WhatsApp <span
-                            class="text-red-500">*</span></label>
+                <div class="space-y-2">
+                    <label for="no_wa" class="block text-sm font-semibold text-gray-700">
+                        No WhatsApp <span class="text-red-500">*</span>
+                    </label>
                     <input type="text" name="no_wa" id="no_wa" value="{{ old('no_wa') }}"
                         placeholder="08xxxxxxxxxx"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('no_wa') border-red-500 @enderror"
+                        class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('no_wa') border-red-300 bg-red-50 @enderror"
                         required>
                     @error('no_wa')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <i class="fas fa-exclamation-circle text-xs"></i>
+                            {{ $message }}
+                        </p>
                     @enderror
                 </div>
             </div>
 
-            <div class="mt-8">
-                <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                    <i class="fas fa-paperclip text-purple-500 mr-2"></i>
-                    Lampiran Dokumen
-                </h3>
+            <div class="mt-10 pt-8 border-t border-gray-100">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-paperclip text-purple-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 font-heading">
+                        Lampiran Dokumen
+                    </h3>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label for="file_proposal" class="block text-gray-700 font-medium mb-2">
+                    <div class="space-y-2">
+                        <label for="file_proposal" class="block text-sm font-semibold text-gray-700">
                             File Proposal <span class="text-red-500">*</span>
-                            <span class="text-xs text-gray-500">(PDF/DOC, max 2MB)</span>
                         </label>
-                        <input type="file" name="file_proposal" id="file_proposal" accept=".pdf,.doc,.docx"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('file_proposal') border-red-500 @enderror"
-                            required>
+                        <p class="text-xs text-gray-400">PDF/DOC, max 2MB</p>
+                        <div class="relative">
+                            <input type="file" name="file_proposal" id="file_proposal" accept=".pdf,.doc,.docx"
+                                class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 file:cursor-pointer @error('file_proposal') border-red-300 bg-red-50 @enderror"
+                                required>
+                        </div>
                         @error('file_proposal')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle text-xs"></i>
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
-                    <div>
-                        <label for="file_cv" class="block text-gray-700 font-medium mb-2">
+                    <div class="space-y-2">
+                        <label for="file_cv" class="block text-sm font-semibold text-gray-700">
                             File CV <span class="text-red-500">*</span>
-                            <span class="text-xs text-gray-500">(PDF/DOC, max 2MB)</span>
                         </label>
-                        <input type="file" name="file_cv" id="file_cv" accept=".pdf,.doc,.docx"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('file_cv') border-red-500 @enderror"
-                            required>
+                        <p class="text-xs text-gray-400">PDF/DOC, max 2MB</p>
+                        <div class="relative">
+                            <input type="file" name="file_cv" id="file_cv" accept=".pdf,.doc,.docx"
+                                class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 file:cursor-pointer @error('file_cv') border-red-300 bg-red-50 @enderror"
+                                required>
+                        </div>
                         @error('file_cv')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle text-xs"></i>
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
-                    <div>
-                        <label for="file_surat" class="block text-gray-700 font-medium mb-2">
+                    <div class="space-y-2">
+                        <label for="file_surat" class="block text-sm font-semibold text-gray-700">
                             Surat Magang dari Kampus <span class="text-red-500">*</span>
-                            <span class="text-xs text-gray-500">(PDF/DOC, max 2MB)</span>
                         </label>
-                        <input type="file" name="file_surat" id="file_surat" accept=".pdf,.doc,.docx"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('file_surat') border-red-500 @enderror"
-                            required>
+                        <p class="text-xs text-gray-400">PDF/DOC, max 2MB</p>
+                        <div class="relative">
+                            <input type="file" name="file_surat" id="file_surat" accept=".pdf,.doc,.docx"
+                                class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 file:cursor-pointer @error('file_surat') border-red-300 bg-red-50 @enderror"
+                                required>
+                        </div>
                         @error('file_surat')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle text-xs"></i>
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
                 </div>
             </div>
 
-            <div class="mt-8 flex space-x-4">
+            <div class="mt-10 pt-8 border-t border-gray-100 flex flex-wrap gap-3">
                 <button type="submit"
-                    class="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
-                    <i class="fas fa-save group-hover:scale-110 transition-transform"></i>
-                    <span class="font-semibold">Simpan Data</span>
+                    class="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40">
+                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                    <i class="fas fa-check text-sm"></i>
+                    <span>Simpan Data</span>
                 </button>
                 <a href="{{ route('interns.index') }}"
-                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
-                    <i class="fas fa-arrow-left"></i>
-                    <span class="font-semibold">Kembali</span>
+                    class="group bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left text-sm"></i>
+                    <span>Kembali</span>
                 </a>
             </div>
         </form>

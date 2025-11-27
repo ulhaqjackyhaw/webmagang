@@ -5,17 +5,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Sistem Manajemen Magang')</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'heading': ['Poppins', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#2563eb',
+                        'accent': '#06b6d4',
+                        'success': '#10b981',
+                        'warning': '#f59e0b',
+                        'danger': '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .smooth-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .input-modern {
+            transition: all 0.2s ease;
+        }
+
+        .input-modern:focus {
+            transform: translateY(-1px);
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Prevent horizontal scroll while allowing dropdown to show */
+        main {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
     @auth
         <nav class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white shadow-2xl relative"
-            style="z-index: 1000;">
+            style="z-index: 1000; overflow: visible;">
             <!-- Decorative elements -->
-            <div class="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -mt-32 -ml-32"></div>
-            <div class="absolute bottom-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mb-32 -mr-32"></div>
+            <div class="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -mt-32 -ml-32 pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mb-32 -mr-32 pointer-events-none">
+            </div>
 
             <div class="container mx-auto px-4 relative z-10">
                 <div class="flex items-center justify-between py-4">
@@ -56,7 +144,7 @@
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <div class="relative" id="profileDropdown">
+                        <div class="relative" id="profileDropdown" style="z-index: 9999;">
                             <button onclick="toggleProfileDropdown(event)" type="button"
                                 class="flex items-center space-x-2 hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm">
                                 <div class="bg-white bg-opacity-30 w-8 h-8 rounded-full flex items-center justify-center">

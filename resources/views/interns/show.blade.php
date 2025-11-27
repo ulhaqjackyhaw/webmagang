@@ -4,152 +4,160 @@
 
 @section('content')
     <!-- Header Section -->
-    <div class="mb-8">
-        <h1
-            class="text-4xl font-bold text-purple-600 flex items-center">
-            <i class="fas fa-id-card-alt mr-3 text-purple-600"></i>
-            Detail Data Pengajuan Magang
-        </h1>
-        <p class="text-gray-600 mt-2 flex items-center">
-            <i class="fas fa-info-circle mr-2 text-purple-500"></i>
+    <div class="mb-8 fade-in">
+        <div class="flex items-center gap-4 mb-3">
+            <div
+                class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
+                <i class="fas fa-id-card text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 font-heading">
+                    Detail Pengajuan Magang
+                </h1>
+            </div>
+        </div>
+        <p class="text-gray-500 text-lg font-light ml-16">
             Informasi lengkap pengajuan magang
         </p>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl p-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">Nama Lengkap</label>
-                <p class="text-gray-900 font-semibold">{{ $intern->nama }}</p>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10 fade-in" style="animation-delay: 0.1s">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Nama Lengkap</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->nama }}</p>
             </div>
 
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">NIM</label>
-                <p class="text-gray-900 font-semibold">{{ $intern->nim }}</p>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">NIM</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->nim }}</p>
             </div>
 
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">Asal Kampus</label>
-                <p class="text-gray-900 font-semibold">{{ $intern->asal_kampus }}</p>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Asal Kampus</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->asal_kampus }}</p>
             </div>
 
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">Program Studi</label>
-                <p class="text-gray-900 font-semibold">{{ $intern->program_studi }}</p>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Program Studi</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->program_studi }}</p>
             </div>
 
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">Email Kampus</label>
-                <p class="text-gray-900 font-semibold">{{ $intern->email_kampus ?? '-' }}</p>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Kampus</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->email_kampus ?? '-' }}</p>
             </div>
 
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">No WhatsApp</label>
-                <p class="text-gray-900 font-semibold">{{ $intern->no_wa }}</p>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">No WhatsApp</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->no_wa }}</p>
             </div>
 
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">Status</label>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</label>
                 @if ($intern->status === 'pending')
                     <span
-                        class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                        <i class="fas fa-clock mr-1"></i> Menunggu Persetujuan
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-amber-50 text-amber-700 border border-amber-200">
+                        <i class="fas fa-clock"></i> Menunggu Persetujuan
                     </span>
                 @elseif($intern->status === 'approved')
                     <span
-                        class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        <i class="fas fa-check-circle mr-1"></i> Diterima
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <i class="fas fa-check-circle"></i> Diterima
                     </span>
                 @else
                     <span
-                        class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                        <i class="fas fa-times-circle mr-1"></i> Ditolak
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-red-50 text-red-700 border border-red-200">
+                        <i class="fas fa-times-circle"></i> Ditolak
                     </span>
                 @endif
             </div>
 
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">Dibuat Oleh</label>
-                <p class="text-gray-900 font-semibold">{{ $intern->creator->name }}</p>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Dibuat Oleh</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->creator->name }}</p>
             </div>
 
-            <div>
-                <label class="block text-gray-600 text-sm mb-1">Tanggal Dibuat</label>
-                <p class="text-gray-900 font-semibold">{{ $intern->created_at->format('d M Y H:i') }}</p>
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal Dibuat</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->created_at->format('d M Y H:i') }}</p>
             </div>
 
             @if ($intern->status === 'rejected' && $intern->rejection_reason)
-                <div class="col-span-2">
-                    <label class="block text-gray-600 text-sm mb-1">Alasan Penolakan</label>
-                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-                        <p class="text-red-800">{{ $intern->rejection_reason }}</p>
+                <div class="col-span-2 space-y-2">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Alasan
+                        Penolakan</label>
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                        <p class="text-red-700 font-medium">{{ $intern->rejection_reason }}</p>
                     </div>
                 </div>
             @endif
         </div>
 
-        <div class="border-t-2 border-purple-200 pt-8 mt-8">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-file-alt text-purple-500 mr-3"></i>
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 pt-8">
+            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-alt text-purple-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 font-heading">
                 Dokumen Lampiran
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                @if ($intern->file_proposal)
-                    <div class="group border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100"
-                        onclick="openPreview('{{ asset('storage/' . $intern->file_proposal) }}', 'Proposal')">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <p class="text-gray-600 text-sm font-medium mb-1">Proposal</p>
-                                <p class="text-gray-900 font-bold text-xs truncate">
-                                    {{ basename($intern->file_proposal) }}</p>
-                            </div>
-                            <div class="text-blue-500">
-                                <i class="fas fa-eye text-3xl group-hover:scale-125 transition-transform duration-300"></i>
-                            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            @if ($intern->file_proposal)
+                <a href="{{ asset('storage/' . $intern->file_proposal) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">Proposal</p>
+                            <p class="text-blue-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
                         </div>
+                        <i
+                            class="fas fa-external-link-alt text-blue-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
                     </div>
-                @endif
+                </a>
+            @endif
 
-                @if ($intern->file_cv)
-                    <div class="group border-2 border-gray-200 hover:border-green-400 rounded-xl p-5 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 bg-gradient-to-br from-green-50 to-green-100"
-                        onclick="openPreview('{{ asset('storage/' . $intern->file_cv) }}', 'CV')">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <p class="text-gray-600 text-sm font-medium mb-1">CV</p>
-                                <p class="text-gray-900 font-bold text-xs truncate">{{ basename($intern->file_cv) }}
-                                </p>
-                            </div>
-                            <div class="text-green-500">
-                                <i class="fas fa-eye text-3xl group-hover:scale-125 transition-transform duration-300"></i>
-                            </div>
+            @if ($intern->file_cv)
+                <a href="{{ asset('storage/' . $intern->file_cv) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-green-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-green-50 to-green-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">CV</p>
+                            <p class="text-green-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
                         </div>
+                        <i
+                            class="fas fa-external-link-alt text-green-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
                     </div>
-                @endif
+                </a>
+            @endif
 
-                @if ($intern->file_surat)
-                    <div class="group border-2 border-gray-200 hover:border-purple-400 rounded-xl p-5 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 bg-gradient-to-br from-purple-50 to-purple-100"
-                        onclick="openPreview('{{ asset('storage/' . $intern->file_surat) }}', 'Surat Magang')">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <p class="text-gray-600 text-sm font-medium mb-1">Surat Magang</p>
-                                <p class="text-gray-900 font-bold text-xs truncate">{{ basename($intern->file_surat) }}
-                                </p>
-                            </div>
-                            <div class="text-purple-500">
-                                <i class="fas fa-eye text-3xl group-hover:scale-125 transition-transform duration-300"></i>
-                            </div>
+            @if ($intern->file_surat)
+                <a href="{{ asset('storage/' . $intern->file_surat) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-purple-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-purple-50 to-purple-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">Surat Magang</p>
+                            <p class="text-purple-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
                         </div>
+                        <i
+                            class="fas fa-external-link-alt text-purple-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
                     </div>
-                @endif
-            </div>
+                </a>
+            @endif
         </div>
 
-        <div class="border-t-2 border-gray-200 pt-8 mt-8">
+        <div class="pt-8 mt-8 border-t border-gray-100">
             <div class="flex flex-wrap gap-3">
                 <a href="{{ route('interns.index') }}"
-                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
-                    <i class="fas fa-arrow-left"></i>
-                    <span class="font-semibold">Kembali</span>
+                    class="group bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left text-sm"></i>
+                    <span>Kembali</span>
                 </a>
 
                 @if ((auth()->user()->role === 'hc' || auth()->user()->role === 'admin') && $intern->status === 'pending')
@@ -157,15 +165,18 @@
                         @csrf
                         <input type="hidden" name="status" value="approved">
                         <button type="submit"
-                            class="group bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
-                            <i class="fas fa-check-circle group-hover:scale-110 transition-transform"></i>
-                            <span class="font-semibold">Approve & Hubungi via WhatsApp</span>
+                            class="group relative overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40">
+                            <span
+                                class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                            <i class="fas fa-check-circle text-sm"></i>
+                            <span>Approve & Hubungi via WhatsApp</span>
                         </button>
                     </form>
                     <button type="button" onclick="openRejectModal()"
-                        class="group bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center space-x-2">
-                        <i class="fas fa-times-circle group-hover:scale-110 transition-transform"></i>
-                        <span class="font-semibold">Tolak Lamaran</span>
+                        class="group relative overflow-hidden bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40">
+                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                        <i class="fas fa-times-circle text-sm"></i>
+                        <span>Tolak Lamaran</span>
                     </button>
                 @endif
             </div>
@@ -173,7 +184,8 @@
     </div>
 
     <!-- Modal Alasan Penolakan -->
-    <div id="rejectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div id="rejectModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white rounded-lg w-full max-w-md">
             <div class="p-6">
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Alasan Penolakan</h3>

@@ -4,31 +4,39 @@
 
 @section('content')
     <!-- Header Section -->
-    <div class="mb-8">
-        <h1
-            
-            class="text-4xl font-bold text-teal-600 flex items-center">
-            <i class="fas fa-user-plus mr-3 text-teal-600"></i>
-            Tambah Data ke Database Magang
-        </h1>
-        <p class="text-gray-600 mt-2 flex items-center">
-            <i class="fas fa-search mr-2 text-teal-500"></i>
+    <div class="mb-8 fade-in">
+        <div class="flex items-center gap-4 mb-3">
+            <div
+                class="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30">
+                <i class="fas fa-user-plus text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 font-heading">
+                    Tambah ke Database Magang
+                </h1>
+            </div>
+        </div>
+        <p class="text-gray-500 text-lg font-light ml-16">
             Cari dan pilih peserta magang yang sudah diterima
         </p>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl p-8" <!-- Search Section -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10 fade-in" style="animation-delay: 0.1s">
         <div class="mb-8">
-            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-search text-teal-500 mr-2"></i>
-                Cari Anak Magang
-            </h3>
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-search text-teal-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 font-heading">
+                    Cari Peserta Magang
+                </h3>
+            </div>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <i class="fas fa-search text-gray-400"></i>
                 </div>
                 <input type="text" id="searchInput" placeholder="Ketik nama, NIM, atau kampus untuk mencari..."
-                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300">
+                    class="input-modern w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white focus:border-transparent smooth-transition">
                 <div id="searchResults"
                     class="hidden absolute z-10 w-full mt-2 bg-white border-2 border-gray-100 rounded-xl shadow-2xl max-h-96 overflow-y-auto">
                 </div>
@@ -41,11 +49,15 @@
 
             <!-- Selected Intern Display -->
             <div id="selectedIntern" class="mb-8 {{ old('intern_id') ? '' : 'hidden' }}">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <i class="fas fa-user-check text-green-500 mr-2"></i>
-                    Data Anak Magang Terpilih
-                </h3>
-                <div class="bg-gradient-to-br from-green-50 to-teal-50 border-2 border-green-200 rounded-xl p-6" <div
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user-check text-green-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 font-heading">
+                        Data Peserta Terpilih
+                    </h3>
+                </div>
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6" <div
                     class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-gray-600 text-sm mb-1">Nama Lengkap</label>
@@ -86,56 +98,73 @@
 
     <!-- Input Manual Section -->
     <div id="manualInputSection" class="{{ old('intern_id') ? '' : 'hidden' }}">
-        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-            <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
-            Informasi Periode Magang
-        </h3>
+        <div class="flex items-center gap-3 mb-6 pt-8 border-t border-gray-100">
+            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-calendar-alt text-blue-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 font-heading">
+                Informasi Periode Magang
+            </h3>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-                <label for="periode_awal" class="block text-gray-700 font-medium mb-2">
+            <div class="space-y-2">
+                <label for="periode_awal" class="block text-sm font-semibold text-gray-700">
                     Periode Awal <span class="text-red-500">*</span>
                 </label>
                 <input type="date" name="periode_awal" id="periode_awal" value="{{ old('periode_awal') }}"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('periode_awal') border-red-500 @enderror"
+                    class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('periode_awal') border-red-300 bg-red-50 @enderror"
                     required>
                 @error('periode_awal')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                        <i class="fas fa-exclamation-circle text-xs"></i>
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
 
-            <div>
-                <label for="periode_akhir" class="block text-gray-700 font-medium mb-2">
+            <div class="space-y-2">
+                <label for="periode_akhir" class="block text-sm font-semibold text-gray-700">
                     Periode Akhir <span class="text-red-500">*</span>
                 </label>
                 <input type="date" name="periode_akhir" id="periode_akhir" value="{{ old('periode_akhir') }}"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('periode_akhir') border-red-500 @enderror"
+                    class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('periode_akhir') border-red-300 bg-red-50 @enderror"
                     required>
                 @error('periode_akhir')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                        <i class="fas fa-exclamation-circle text-xs"></i>
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
 
-            <div>
-                <label for="unit_magang" class="block text-gray-700 font-medium mb-2">
+            <div class="space-y-2">
+                <label for="unit_magang" class="block text-sm font-semibold text-gray-700">
                     Unit Magang <span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="unit_magang" id="unit_magang" value="{{ old('unit_magang') }}"
                     placeholder="Contoh: IT Department"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('unit_magang') border-red-500 @enderror"
+                    class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('unit_magang') border-red-300 bg-red-50 @enderror"
                     required>
                 @error('unit_magang')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
+                        <i class="fas fa-exclamation-circle text-xs"></i>
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
         </div>
 
-        <div class="mt-6 flex space-x-4">
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
-                <i class="fas fa-save"></i> Simpan
+        <div class="mt-10 pt-8 border-t border-gray-100 flex flex-wrap gap-3">
+            <button type="submit"
+                class="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40">
+                <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                <i class="fas fa-check text-sm"></i>
+                <span>Simpan Data</span>
             </button>
             <a href="{{ route('accepted-interns.index') }}"
-                class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded">
-                <i class="fas fa-arrow-left"></i> Kembali
+                class="group bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2">
+                <i class="fas fa-arrow-left text-sm"></i>
+                <span>Kembali</span>
             </a>
         </div>
     </div>
