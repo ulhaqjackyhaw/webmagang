@@ -96,21 +96,21 @@
     </div>
 
     <script>
-            function togglePassword() {
-                const passwordInput = document.getElementById('password');
-                const toggleIcon = document.getElementById('toggleIcon');
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
 
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    toggleIcon.classList.remove('fa-eye');
-                    toggleIcon.classList.add('fa-eye-slash');
-                    toggleIcon.classList.add('text-blue-600');
-                } else {
-                    passwordInput.type = 'password';
-                    toggleIcon.classList.remove('fa-eye-slash');
-                    toggleIcon.classList.add('fa-eye');
-                    toggleIcon.classList.remove('text-blue-600');
-                }
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+                toggleIcon.classList.add('text-blue-600');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+                toggleIcon.classList.remove('text-blue-600');
             }
-        </script>
-    @endsection
+        }
+    </script>
+@endsection
