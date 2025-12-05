@@ -11,13 +11,16 @@
                     Database Peserta Magang
                 </h1>
                 <p class="text-gray-500 text-lg font-light flex items-center gap-2">
-                    <span class="w-1 h-4 bg-blue-500 rounded-full"></span>
+                    <span class="w-1 h-4 rounded-full" style="background-color: #20B2AA;"></span>
                     Data peserta magang yang telah terdaftar
                 </p>
             </div>
             <div class="flex flex-wrap gap-3">
                 <a href="{{ route('accepted-interns.create') }}"
-                    class="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-3 rounded-xl font-medium smooth-transition flex items-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40">
+                    class="group relative overflow-hidden text-white px-6 py-3 rounded-xl font-medium smooth-transition flex items-center gap-2 shadow-lg hover:shadow-xl"
+                    style="background: linear-gradient(to right, #20B2AA, #1a8f89); box-shadow: 0 10px 15px -3px rgba(32, 178, 170, 0.3);"
+                    onmouseover="this.style.background='linear-gradient(to right, #1a8f89, #157a74)'; this.style.boxShadow='0 20px 25px -5px rgba(32, 178, 170, 0.4)';"
+                    onmouseout="this.style.background='linear-gradient(to right, #20B2AA, #1a8f89)'; this.style.boxShadow='0 10px 15px -3px rgba(32, 178, 170, 0.3)';">
                     <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
                     <i class="fas fa-plus text-sm group-hover:rotate-90 smooth-transition"></i>
                     <span>Tambah Data</span>
@@ -41,11 +44,12 @@
 
         <!-- Statistics Section -->
         <div class="mb-6">
-            <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-lg p-6 text-white mb-4">
+            <div class="rounded-lg shadow-lg p-6 text-white mb-4"
+                style="background: linear-gradient(to right, #20B2AA, #1a8f89);">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-bold">Total Peserta Magang</h2>
-                        <p class="text-blue-100">Keseluruhan peserta yang terdaftar</p>
+                        <p class="text-white text-opacity-90">Keseluruhan peserta yang terdaftar</p>
                     </div>
                     <div class="bg-white bg-opacity-20 rounded-full px-8 py-4">
                         <p class="text-5xl font-bold">{{ $totalInterns }}</p>
@@ -56,7 +60,7 @@
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-bold text-gray-800">
-                        <i class="fas fa-building text-blue-600"></i> Daftar Unit Magang
+                        <i class="fas fa-building" style="color: #20B2AA;"></i> Daftar Unit Magang
                     </h3>
                     @if ($selectedUnit)
                         <a href="{{ route('accepted-interns.index') }}"
@@ -69,22 +73,22 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                     @forelse($unitStats as $stat)
                         <a href="{{ route('accepted-interns.index', ['unit' => $stat->unit_magang]) }}"
-                            class="group border-2 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer
-                            {{ $selectedUnit == $stat->unit_magang ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300' }}">
+                            class="group border-2 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer {{ $selectedUnit == $stat->unit_magang ? 'bg-opacity-10' : 'border-gray-200' }}"
+                            style="{{ $selectedUnit == $stat->unit_magang ? 'border-color: #20B2AA; background-color: rgba(32, 178, 170, 0.1);' : '' }}"
+                            onmouseover="if (!'{{ $selectedUnit == $stat->unit_magang }}') this.style.borderColor='#20B2AA';"
+                            onmouseout="if (!'{{ $selectedUnit == $stat->unit_magang }}') this.style.borderColor='#e5e7eb';">
                             <div class="flex flex-col items-center text-center">
-                                <div
-                                    class="w-16 h-16 rounded-full flex items-center justify-center mb-2
-                                {{ $selectedUnit == $stat->unit_magang ? 'bg-blue-500' : 'bg-gray-100 group-hover:bg-blue-100' }}">
-                                    <i
-                                        class="fas fa-users 
-                                    {{ $selectedUnit == $stat->unit_magang ? 'text-white' : 'text-gray-600 group-hover:text-blue-600' }} 
-                                    text-2xl"></i>
+                                <div class="w-16 h-16 rounded-full flex items-center justify-center mb-2 transition-all"
+                                    style="background-color: {{ $selectedUnit == $stat->unit_magang ? '#20B2AA' : '#f3f4f6' }};"
+                                    onmouseover="if (!'{{ $selectedUnit == $stat->unit_magang }}') this.style.backgroundColor='rgba(32, 178, 170, 0.2)';"
+                                    onmouseout="if (!'{{ $selectedUnit == $stat->unit_magang }}') this.style.backgroundColor='#f3f4f6';">
+                                    <i class="fas fa-users text-2xl transition-colors"
+                                        style="color: {{ $selectedUnit == $stat->unit_magang ? '#ffffff' : '#4b5563' }};"></i>
                                 </div>
                                 <h4 class="font-semibold text-gray-800 mb-1 line-clamp-2">{{ $stat->unit_magang }}</h4>
                                 <div class="flex items-center">
-                                    <span
-                                        class="text-2xl font-bold 
-                                    {{ $selectedUnit == $stat->unit_magang ? 'text-blue-600' : 'text-gray-700' }}">
+                                    <span class="text-2xl font-bold"
+                                        style="color: {{ $selectedUnit == $stat->unit_magang ? '#20B2AA' : '#374151' }};">
                                         {{ $stat->total }}
                                     </span>
                                     <span class="text-xs text-gray-500 ml-1">peserta</span>
@@ -108,7 +112,7 @@
                     <!-- Year Filter -->
                     <div>
                         <label for="year" class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-calendar-alt text-blue-500 mr-1"></i> Tahun
+                            <i class="fas fa-calendar-alt mr-1" style="color: #20B2AA;"></i> Tahun
                         </label>
                         <select name="year" id="year"
                             class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
@@ -124,10 +128,12 @@
                     <!-- Month Filter -->
                     <div>
                         <label for="month" class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-calendar text-blue-500 mr-1"></i> Bulan
+                            <i class="fas fa-calendar mr-1" style="color: #20B2AA;"></i> Bulan
                         </label>
                         <select name="month" id="month"
-                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
+                            onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
+                            onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                             <option value="">Semua Bulan</option>
                             <option value="1" {{ $selectedMonth == 1 ? 'selected' : '' }}>Januari</option>
                             <option value="2" {{ $selectedMonth == 2 ? 'selected' : '' }}>Februari</option>
@@ -147,7 +153,9 @@
                     <!-- Action Buttons -->
                     <div class="flex items-end gap-2">
                         <button type="submit"
-                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200">
+                            class="flex-1 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200"
+                            style="background-color: #20B2AA;" onmouseover="this.style.backgroundColor='#1a8f89';"
+                            onmouseout="this.style.backgroundColor='#20B2AA';">
                             <i class="fas fa-filter mr-1"></i> Terapkan
                         </button>
                         @if ($selectedYear || $selectedMonth)
@@ -171,7 +179,9 @@
                     <i class="fas fa-search text-gray-400"></i>
                 </div>
                 <input type="text" id="searchInput"
-                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
+                    onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
+                    onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
                     placeholder="Cari nama, NIM, kampus, unit magang, atau periode...">
             </div>
         </div>
@@ -181,8 +191,8 @@
             <div class="bg-gray-50 px-6 py-4 border-b">
                 <h3 class="text-lg font-semibold text-gray-800">
                     @if ($selectedUnit)
-                        <i class="fas fa-filter text-blue-600"></i>
-                        Data Peserta di Unit: <span class="text-blue-600">{{ $selectedUnit }}</span>
+                        <i class="fas fa-filter" style="color: #20B2AA;"></i>
+                        Data Peserta di Unit: <span style="color: #20B2AA;">{{ $selectedUnit }}</span>
                     @else
                         <i class="fas fa-list text-gray-600"></i> Semua Data Peserta Magang
                     @endif
@@ -231,7 +241,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                     <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
-                                        class="text-blue-600 hover:text-blue-900" title="Lihat Detail">
+                                        class="hover:opacity-80 transition-opacity" style="color: #20B2AA;"
+                                        title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
