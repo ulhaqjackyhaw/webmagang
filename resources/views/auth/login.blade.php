@@ -14,12 +14,12 @@
                 <!-- Logo/Icon -->
                 <div class="text-center mb-8">
                     <div
-                        class="inline-flex items-center justify-center w-60 h-30 bg-white bg-opacity-90 rounded-2xl shadow-lg mb-4 transform hover:rotate-6 transition-transform duration-300 overflow-hidden">
+                        class="inline-flex items-center justify-center w-60 h-30 bg-white bg-opacity-90 rounded-2xl shadow-lg mb-3 transform hover:rotate-6 transition-transform duration-300 overflow-hidden">
                         <img src="/images/company-logo.png" alt="Company Logo" class="w-40 h-20 object-contain" />
                     </div>
-                    <h1 class="text-4xl font-bold text-white tracking-wide mb-2 drop-shadow-lg">MAJORPORT</h1>
-                    <p class="text-base text-white font-medium mb-2 drop-shadow-md">Sistem Manajemen Magang Injourney
-                        Airport</p>
+                    <h1 class="text-4xl font-bold text-white tracking-wide mb-1 drop-shadow-lg">URSHIPORTS</h1>
+                    <p class="text-sm text-white font-medium drop-shadow-md">Your Internship Programme</p>
+                    <p class="text-sm text-white font-medium drop-shadow-md">at Injourney Airports Kantor Regional I</p>
                 </div>
 
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">

@@ -223,7 +223,7 @@ class InternController extends Controller
 
         if ($validated['status'] === 'approved') {
             // Redirect to WhatsApp for approved
-            $message = "Halo {$intern->nama}, selamat! Pengajuan magang Anda telah disetujui. Silakan hubungi kami untuk informasi lebih lanjut.";
+            $message = "Halo {$intern->nama}, perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
             $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
 
             return redirect($waUrl);

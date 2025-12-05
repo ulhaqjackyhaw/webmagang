@@ -169,7 +169,7 @@
                             <span
                                 class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
                             <i class="fas fa-check-circle text-sm"></i>
-                            <span>Approve & Hubungi via WhatsApp</span>
+                            <span>Konfirmasi Pengajuan Via WhatsApp</span>
                         </button>
                     </form>
                     <button type="button" onclick="openRejectModal()"

@@ -96,8 +96,8 @@
 
 <body class="bg-gray-100">
     @auth
-        <nav class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white shadow-2xl relative"
-            style="z-index: 1000; overflow: visible;">
+        <nav class="text-white shadow-2xl relative"
+            style="z-index: 1000; overflow: visible; background: linear-gradient(to right, #20B2AA, #1a8f89, #20B2AA);">
             <!-- Decorative elements -->
             <div class="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -mt-32 -ml-32 pointer-events-none">
             </div>
@@ -112,7 +112,7 @@
                             <div class="bg-white bg-opacity-20 p-2 rounded-xl backdrop-blur-sm">
                                 <i class="fas fa-graduation-cap text-xl"></i>
                             </div>
-                            <h1 class="text-xl font-bold">Sistem Magang</h1>
+                            <h1 class="text-xl font-bold">URSHIPORTS</h1>
                         </div>
                         <div class="hidden md:flex space-x-2">
                             <a href="{{ route('dashboard') }}"

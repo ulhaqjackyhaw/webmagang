@@ -4,13 +4,15 @@
 
 @section('content')
     <!-- Welcome Section with Gradient -->
-    <div
-        class="mb-8 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 rounded-2xl shadow-xl p-8 text-white relative overflow-hidden">
+    <div class="mb-8 rounded-2xl shadow-xl p-8 text-white relative overflow-hidden"
+        style="background: linear-gradient(to right, #20B2AA, #1a8f89, #20B2AA);">
         <div class="absolute top-0 right-0 -mt-4 -mr-4 w-40 h-40 bg-white opacity-10 rounded-full"></div>
         <div class="absolute bottom-0 left-0 -mb-8 -ml-8 w-48 h-48 bg-white opacity-5 rounded-full"></div>
         <div class="relative z-10">
             <h1 class="text-4xl font-bold mb-2 animate-fade-in">Selamat Datang, {{ auth()->user()->name }}! 👋</h1>
-            <p class="text-blue-100 text-lg">Dashboard Sistem Manajemen Magang</p>
+            <p class="text-white text-opacity-90 text-lg">Dashboard URSHIPORTS(Your Internship Programme at Injourney
+                Airports Kantor
+                Regional I)</p>
             <div class="mt-4 inline-flex items-center bg-white bg-opacity-20 rounded-full px-4 py-2 backdrop-blur-sm">
                 <i class="fas fa-user-tag mr-2"></i>
                 <span class="font-semibold">{{ ucfirst(auth()->user()->role) }}</span>
@@ -21,8 +23,8 @@
     <!-- Statistics Cards with Modern Design -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Total Apply Card -->
-        <div
-            class="group bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 p-6 text-white relative overflow-hidden">
+        <div class="group rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 p-6 text-white relative overflow-hidden"
+            style="background: linear-gradient(to bottom right, #20B2AA, #1a8f89);">
             <div
                 class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-10 rounded-full group-hover:scale-150 transition-transform duration-500">
             </div>
@@ -32,11 +34,11 @@
                         <i class="fas fa-users text-2xl"></i>
                     </div>
                     <div class="text-right">
-                        <p class="text-blue-100 text-sm font-medium">Total Apply</p>
+                        <p class="text-white text-opacity-90 text-sm font-medium">Total Apply</p>
                         <p class="text-4xl font-bold mt-1">{{ $stats['total'] }}</p>
                     </div>
                 </div>
-                <div class="flex items-center text-blue-100 text-sm">
+                <div class="flex items-center text-white text-opacity-90 text-sm">
                     <i class="fas fa-chart-line mr-2"></i>
                     <span>Total Pendaftar Magang</span>
                 </div>
@@ -118,8 +120,8 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h2 class="text-2xl font-bold text-gray-800 flex items-center">
-                    <i class="fas fa-bolt text-yellow-500 mr-3"></i>
-                    Menu Cepat
+                    <i class="fas fa-list text-yellow-500 mr-3"></i>
+                    Menu
                 </h2>
                 <p class="text-gray-600 text-sm mt-1">Akses fitur utama dengan cepat</p>
             </div>
@@ -128,23 +130,25 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @if (auth()->user()->role === 'tu')
                 <a href="{{ route('interns.create') }}"
-                    class="group relative bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-500 hover:to-blue-600 border-2 border-blue-200 hover:border-blue-600 rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden">
-                    <div
-                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-300 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500">
+                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                    style="background: linear-gradient(to bottom right, rgba(32, 178, 170, 0.1), rgba(32, 178, 170, 0.2)); border-color: #20B2AA;">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
+                        style="background-color: #20B2AA;">
                     </div>
                     <div class="relative z-10">
-                        <div
-                            class="bg-blue-500 group-hover:bg-white w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                            style="background-color: #20B2AA;">
                             <i
-                                class="fas fa-plus-circle text-white group-hover:text-blue-600 text-2xl transition-colors duration-300"></i>
+                                class="fas fa-plus-circle text-white text-2xl transition-colors duration-300 group-hover:text-[#20B2AA]"></i>
                         </div>
                         <h3
                             class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
                             Tambah Data Magang</h3>
-                        <p class="text-gray-600 group-hover:text-blue-100 text-sm transition-colors duration-300">Input data
-                            peserta magang baru</p>
-                        <div
-                            class="mt-4 flex items-center text-blue-600 group-hover:text-white text-sm font-medium transition-colors duration-300">
+                        <p
+                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                            Input data peserta magang baru</p>
+                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                            style="color: #20B2AA;">
                             <span>Mulai Input</span>
                             <i
                                 class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
@@ -154,22 +158,25 @@
             @endif
 
             <a href="{{ route('interns.index') }}"
-                class="group relative bg-gradient-to-br from-green-50 to-green-100 hover:from-green-500 hover:to-green-600 border-2 border-green-200 hover:border-green-600 rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden">
-                <div
-                    class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-green-300 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500">
+                class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                style="background: linear-gradient(to bottom right, rgba(32, 178, 170, 0.1), rgba(32, 178, 170, 0.2)); border-color: #20B2AA;">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
+                    style="background-color: #20B2AA;">
                 </div>
                 <div class="relative z-10">
-                    <div
-                        class="bg-green-500 group-hover:bg-white w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg">
+                    <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                        style="background-color: #20B2AA;">
                         <i
-                            class="fas fa-list text-white group-hover:text-green-600 text-2xl transition-colors duration-300"></i>
+                            class="fas fa-list text-white text-2xl transition-colors duration-300 group-hover:text-[#20B2AA]"></i>
                     </div>
                     <h3 class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
                         Lihat Data Pengajuan Magang</h3>
-                    <p class="text-gray-600 group-hover:text-green-100 text-sm transition-colors duration-300">Lihat semua
+                    <p
+                        class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                        Lihat semua
                         data pengajuan magang</p>
-                    <div
-                        class="mt-4 flex items-center text-green-600 group-hover:text-white text-sm font-medium transition-colors duration-300">
+                    <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                        style="color: #20B2AA;">
                         <span>Buka Data</span>
                         <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
                     </div>
@@ -178,23 +185,25 @@
 
             @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                 <a href="{{ route('accepted-interns.index') }}"
-                    class="group relative bg-gradient-to-br from-teal-50 to-teal-100 hover:from-teal-500 hover:to-teal-600 border-2 border-teal-200 hover:border-teal-600 rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden">
-                    <div
-                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-teal-300 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500">
+                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                    style="background: linear-gradient(to bottom right, rgba(32, 178, 170, 0.1), rgba(32, 178, 170, 0.2)); border-color: #20B2AA;">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
+                        style="background-color: #20B2AA;">
                     </div>
                     <div class="relative z-10">
-                        <div
-                            class="bg-teal-500 group-hover:bg-white w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                            style="background-color: #20B2AA;">
                             <i
-                                class="fas fa-database text-white group-hover:text-teal-600 text-2xl transition-colors duration-300"></i>
+                                class="fas fa-database text-white text-2xl transition-colors duration-300 group-hover:text-[#20B2AA]"></i>
                         </div>
                         <h3
                             class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
                             Database Peserta Magang</h3>
-                        <p class="text-gray-600 group-hover:text-teal-100 text-sm transition-colors duration-300">Data
-                            peserta magang terdaftar</p>
-                        <div
-                            class="mt-4 flex items-center text-teal-600 group-hover:text-white text-sm font-medium transition-colors duration-300">
+                        <p
+                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                            Data peserta magang terdaftar</p>
+                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                            style="color: #20B2AA;">
                             <span>Lihat Database</span>
                             <i
                                 class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
@@ -203,23 +212,25 @@
                 </a>
 
                 <a href="{{ route('interns.export') }}?status=all"
-                    class="group relative bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-500 hover:to-purple-600 border-2 border-purple-200 hover:border-purple-600 rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden">
-                    <div
-                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-purple-300 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500">
+                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                    style="background: linear-gradient(to bottom right, rgba(32, 178, 170, 0.1), rgba(32, 178, 170, 0.2)); border-color: #20B2AA;">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
+                        style="background-color: #20B2AA;">
                     </div>
                     <div class="relative z-10">
-                        <div
-                            class="bg-purple-500 group-hover:bg-white w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                            style="background-color: #20B2AA;">
                             <i
-                                class="fas fa-file-excel text-white group-hover:text-purple-600 text-2xl transition-colors duration-300"></i>
+                                class="fas fa-file-excel text-white text-2xl transition-colors duration-300 group-hover:text-[#20B2AA]"></i>
                         </div>
                         <h3
                             class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
                             Export Data Apply(Diterima/Ditolak)</h3>
-                        <p class="text-gray-600 group-hover:text-purple-100 text-sm transition-colors duration-300">Export
-                            ke Excel</p>
-                        <div
-                            class="mt-4 flex items-center text-purple-600 group-hover:text-white text-sm font-medium transition-colors duration-300">
+                        <p
+                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                            Export ke Excel</p>
+                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                            style="color: #20B2AA;">
                             <span>Download Excel</span>
                             <i
                                 class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
