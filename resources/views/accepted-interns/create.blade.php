@@ -22,25 +22,59 @@
     </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10 fade-in" style="animation-delay: 0.1s">
+        <!-- List of Available Interns -->
         <div class="mb-8">
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-search text-teal-600"></i>
+                    <i class="fas fa-users text-teal-600"></i>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 font-heading">
-                    Cari Peserta Magang
+                    Peserta Magang yang Sudah Diterima
                 </h3>
             </div>
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fas fa-search text-gray-400"></i>
+
+            @if ($availableInterns->count() > 0)
+                <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
+                    @foreach ($availableInterns as $intern)
+                        <div onclick='selectIntern(@json($intern))'
+                            class="group p-4 border-2 border-gray-200 hover:border-teal-500 rounded-xl cursor-pointer smooth-transition hover:shadow-lg bg-white hover:bg-teal-50">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="font-bold text-gray-900 text-lg group-hover:text-teal-700 mb-1">
+                                        {{ $intern->nama }}
+                                    </div>
+                                    <div class="text-sm text-gray-600 space-y-1">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-id-card text-gray-400 w-4"></i>
+                                            <span>NIM: {{ $intern->nim }}</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-university text-gray-400 w-4"></i>
+                                            <span>{{ $intern->asal_kampus }}</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-book text-gray-400 w-4"></i>
+                                            <span>{{ $intern->program_studi }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div
+                                        class="w-10 h-10 bg-teal-500 group-hover:bg-teal-600 rounded-full flex items-center justify-center smooth-transition">
+                                        <i class="fas fa-chevron-right text-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <input type="text" id="searchInput" placeholder="Ketik nama, NIM, atau kampus untuk mencari..."
-                    class="input-modern w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white focus:border-transparent smooth-transition">
-                <div id="searchResults"
-                    class="hidden absolute z-10 w-full mt-2 bg-white border-2 border-gray-100 rounded-xl shadow-2xl max-h-96 overflow-y-auto">
+            @else
+                <div class="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                    <i class="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-500 text-lg">Tidak ada peserta yang sudah diterima dan belum terdaftar</p>
+                    <p class="text-gray-400 text-sm mt-2">Semua peserta yang diterima sudah terdaftar di database</p>
                 </div>
-            </div>
+            @endif
         </div>
 
         <form id="internForm" action="{{ route('accepted-interns.store') }}" method="POST">
@@ -172,60 +206,7 @@
     </div>
 
     <script>
-        let debounceTimer;
-        const searchInput = document.getElementById('searchInput');
-        const searchResults = document.getElementById('searchResults');
-
-        searchInput.addEventListener('input', function() {
-            clearTimeout(debounceTimer);
-            const query = this.value.trim();
-
-            if (query.length < 2) {
-                searchResults.classList.add('hidden');
-                return;
-            }
-
-            debounceTimer = setTimeout(() => {
-                fetch(`{{ route('accepted-interns.search') }}?q=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        displaySearchResults(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            }, 300);
-        });
-
-        function displaySearchResults(interns) {
-            if (interns.length === 0) {
-                searchResults.innerHTML =
-                    '<div class="p-4 text-gray-500 text-center">Tidak ada data ditemukan</div>';
-                searchResults.classList.remove('hidden');
-                return;
-            }
-
-            let html = '<div class="divide-y">';
-            interns.forEach(intern => {
-                html += `
-                    <div class="p-4 hover:bg-gray-50 cursor-pointer" onclick='selectIntern(${JSON.stringify(intern)})'>
-                        <div class="font-semibold text-gray-900">${intern.nama}</div>
-                        <div class="text-sm text-gray-600">NIM: ${intern.nim} | ${intern.asal_kampus}</div>
-                        <div class="text-xs text-gray-500">${intern.program_studi}</div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-
-            searchResults.innerHTML = html;
-            searchResults.classList.remove('hidden');
-        }
-
         function selectIntern(intern) {
-            // Hide search results
-            searchResults.classList.add('hidden');
-            searchInput.value = '';
-
             // Set hidden input
             document.getElementById('intern_id').value = intern.id;
 
@@ -240,20 +221,22 @@
             // Show sections
             document.getElementById('selectedIntern').classList.remove('hidden');
             document.getElementById('manualInputSection').classList.remove('hidden');
+
+            // Scroll to selected section
+            document.getElementById('selectedIntern').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
         }
 
         function clearSelection() {
             document.getElementById('intern_id').value = '';
             document.getElementById('selectedIntern').classList.add('hidden');
             document.getElementById('manualInputSection').classList.add('hidden');
-            searchInput.focus();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
-
-        // Close search results when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) {
-                searchResults.classList.add('hidden');
-            }
-        });
     </script>
 @endsection

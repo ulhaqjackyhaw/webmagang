@@ -60,7 +60,15 @@ class AcceptedInternController extends Controller
      */
     public function create()
     {
-        return view('accepted-interns.create');
+        // Get approved interns yang belum ada di accepted_interns
+        $availableInterns = Intern::where('status', 'approved')
+            ->whereNotIn('id', function ($query) {
+                $query->select('intern_id')->from('accepted_interns');
+            })
+            ->latest()
+            ->get();
+
+        return view('accepted-interns.create', compact('availableInterns'));
     }
 
     /**
