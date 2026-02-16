@@ -44,7 +44,6 @@
                         required>
                         <option value="">Pilih Role</option>
                         <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="tu" {{ old('role', $user->role) === 'tu' ? 'selected' : '' }}>TU</option>
                         <option value="hc" {{ old('role', $user->role) === 'hc' ? 'selected' : '' }}>HC</option>
                     </select>
                     @error('role')

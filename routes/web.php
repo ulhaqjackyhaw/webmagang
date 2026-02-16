@@ -6,11 +6,17 @@ use App\Http\Controllers\InternController;
 use App\Http\Controllers\AcceptedInternController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicInternController;
+use App\Http\Controllers\FormulirTemplateController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Public routes (Landing page for intern registration)
+Route::get('/', [PublicInternController::class, 'index'])->name('public.landing');
+Route::get('/daftar', [PublicInternController::class, 'create'])->name('public.register');
+Route::post('/daftar', [PublicInternController::class, 'store'])->name('public.store');
+Route::get('/berhasil', [PublicInternController::class, 'success'])->name('public.success');
+// Public download formulir
+Route::get('/download-formulir/{id}', [PublicInternController::class, 'downloadFormulir'])->name('public.download-formulir');
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -28,18 +34,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/change-password', [ProfileController::class, 'editPassword'])->name('profile.edit-password');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
-    // Interns routes (TU and HC can access)
-    Route::middleware(['role:tu,hc,admin'])->group(function () {
+    // Interns routes (HC and Admin only - TU role removed)
+    Route::middleware(['role:hc,admin'])->group(function () {
         // Export route must be before resource routes
         Route::get('/interns/export', [InternController::class, 'export'])
-            ->name('interns.export')
-            ->middleware('role:hc,admin');
+            ->name('interns.export');
 
         Route::post('/interns/{id}/status', [InternController::class, 'updateStatus'])
-            ->name('interns.updateStatus')
-            ->middleware('role:hc,admin');
+            ->name('interns.updateStatus');
 
-        Route::resource('interns', InternController::class);
+        Route::resource('interns', InternController::class)->except(['create', 'store']);
     });
 
     // Accepted Interns routes (HC and Admin only)
@@ -51,6 +55,11 @@ Route::middleware(['auth'])->group(function () {
             ->name('accepted-interns.search');
 
         Route::resource('accepted-interns', AcceptedInternController::class);
+    });
+
+    // Formulir Template routes (HC and Admin only)
+    Route::middleware(['role:hc,admin'])->group(function () {
+        Route::resource('formulir-templates', FormulirTemplateController::class);
     });
 
     // Users management (Admin only)

@@ -15,15 +15,6 @@
                 </p>
             </div>
             <div class="flex flex-wrap gap-3">
-                @if (auth()->user()->role === 'tu')
-                    <a href="{{ route('interns.create') }}"
-                        class="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-3 rounded-xl font-medium smooth-transition flex items-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40">
-                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
-                        <i class="fas fa-plus text-sm group-hover:rotate-90 smooth-transition"></i>
-                        <span>Tambah Data</span>
-                    </a>
-                @endif
-
                 @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                     <div class="relative inline-block text-left">
                         <button onclick="toggleDropdown(event)" type="button"
@@ -203,7 +194,7 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    @if (auth()->user()->role === 'tu' && $intern->created_by === auth()->id())
+                                    @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                                         <a href="{{ route('interns.edit', $intern->id) }}"
                                             class="text-green-600 hover:text-green-900" title="Edit">
                                             <i class="fas fa-edit"></i>

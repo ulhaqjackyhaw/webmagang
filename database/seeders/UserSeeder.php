@@ -22,20 +22,14 @@ class UserSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        // TU user
-        User::create([
-            'name' => 'Tata Usaha',
-            'email' => 'tu@magang.com',
-            'password' => Hash::make('PasswordnyaHC2025'),
-            'role' => 'tu',
-        ]);
-
         // HC user
         User::create([
             'name' => 'Human Capital',
             'email' => 'hc@magang.com',
-            'password' => Hash::make('PasswordnyaTU2025'),
+            'password' => Hash::make('PasswordnyaHC2025'),
             'role' => 'hc',
         ]);
+
+        // TU role has been removed - registration is now public via landing page
     }
 }

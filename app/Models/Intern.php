@@ -17,6 +17,7 @@ class Intern extends Model
         'file_proposal',
         'file_cv',
         'file_surat',
+        'file_formulir',
         'status',
         'rejection_reason',
         'created_by'

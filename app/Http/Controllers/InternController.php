@@ -16,15 +16,8 @@ class InternController extends Controller
      */
     public function index(Request $request)
     {
-        $user = Auth::user();
-
-        $query = Intern::query();
-
-        if ($user->role === 'tu') {
-            $query->where('created_by', $user->id);
-        } else {
-            $query->with('creator');
-        }
+        // Only HC and Admin can access - show all interns with creator info
+        $query = Intern::with('creator');
 
         // Filter by year if provided
         $selectedYear = $request->get('year');
@@ -50,48 +43,9 @@ class InternController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create and Store methods removed - registration is now only via public form
+     * @see PublicInternController for public registration
      */
-    public function create()
-    {
-        return view('interns.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'nim' => 'required|string|max:255',
-            'asal_kampus' => 'required|string|max:255',
-            'program_studi' => 'required|string|max:255',
-            'email_kampus' => 'nullable|email|max:255',
-            'no_wa' => 'required|string|max:20',
-            'file_proposal' => 'required|file|mimes:pdf,doc,docx|max:2048',
-            'file_cv' => 'required|file|mimes:pdf,doc,docx|max:2048',
-            'file_surat' => 'required|file|mimes:pdf,doc,docx|max:2048',
-        ]);
-
-        $data = $validated;
-        $data['created_by'] = Auth::id();
-
-        // Upload files
-        if ($request->hasFile('file_proposal')) {
-            $data['file_proposal'] = $request->file('file_proposal')->store('proposals', 'public');
-        }
-        if ($request->hasFile('file_cv')) {
-            $data['file_cv'] = $request->file('file_cv')->store('cvs', 'public');
-        }
-        if ($request->hasFile('file_surat')) {
-            $data['file_surat'] = $request->file('file_surat')->store('surats', 'public');
-        }
-
-        Intern::create($data);
-
-        return redirect()->route('interns.index')->with('success', 'Data magang berhasil ditambahkan!');
-    }
 
     /**
      * Display the specified resource.
@@ -109,11 +63,7 @@ class InternController extends Controller
     {
         $intern = Intern::findOrFail($id);
 
-        // Only TU can edit their own data
-        if (Auth::user()->role === 'tu' && $intern->created_by !== Auth::id()) {
-            abort(403);
-        }
-
+        // Only HC and Admin can edit
         return view('interns.edit', compact('intern'));
     }
 
@@ -124,10 +74,7 @@ class InternController extends Controller
     {
         $intern = Intern::findOrFail($id);
 
-        // Only TU can edit their own data
-        if (Auth::user()->role === 'tu' && $intern->created_by !== Auth::id()) {
-            abort(403);
-        }
+        // Only HC and Admin can edit
 
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
@@ -175,10 +122,7 @@ class InternController extends Controller
     {
         $intern = Intern::findOrFail($id);
 
-        // Only TU can delete their own data or admin
-        if (Auth::user()->role === 'tu' && $intern->created_by !== Auth::id()) {
-            abort(403);
-        }
+        // Only HC and Admin can delete
 
         // Delete files
         if ($intern->file_proposal) {

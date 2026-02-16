@@ -120,7 +120,7 @@
                                 <i class="fas fa-home"></i>
                                 <span>Dashboard</span>
                             </a>
-                            @if (auth()->user()->role === 'tu' || auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
+                            @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                                 <a href="{{ route('interns.index') }}"
                                     class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 backdrop-blur-sm">
                                     <i class="fas fa-users"></i>
@@ -132,6 +132,13 @@
                                     class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 backdrop-blur-sm">
                                     <i class="fas fa-database"></i>
                                     <span>Database Magang</span>
+                                </a>
+                            @endif
+                            @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
+                                <a href="{{ route('formulir-templates.index') }}"
+                                    class="hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 backdrop-blur-sm">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Manajemen Formulir</span>
                                 </a>
                             @endif
                             @if (auth()->user()->role === 'admin')

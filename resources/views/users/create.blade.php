@@ -43,7 +43,6 @@
                         required>
                         <option value="">Pilih Role</option>
                         <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="tu" {{ old('role') === 'tu' ? 'selected' : '' }}>TU</option>
                         <option value="hc" {{ old('role') === 'hc' ? 'selected' : '' }}>HC</option>
                     </select>
                     @error('role')

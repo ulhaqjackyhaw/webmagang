@@ -128,35 +128,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @if (auth()->user()->role === 'tu')
-                <a href="{{ route('interns.create') }}"
-                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
-                    style="background: linear-gradient(to bottom right, rgba(32, 178, 170, 0.1), rgba(32, 178, 170, 0.2)); border-color: #20B2AA;">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
-                        style="background-color: #20B2AA;">
-                    </div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
-                            style="background-color: #20B2AA;">
-                            <i
-                                class="fas fa-plus-circle text-white text-2xl transition-colors duration-300 group-hover:text-[#20B2AA]"></i>
-                        </div>
-                        <h3
-                            class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
-                            Tambah Data Magang</h3>
-                        <p
-                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
-                            Input data peserta magang baru</p>
-                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
-                            style="color: #20B2AA;">
-                            <span>Mulai Input</span>
-                            <i
-                                class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                </a>
-            @endif
-
             <a href="{{ route('interns.index') }}"
                 class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
                 style="background: linear-gradient(to bottom right, rgba(32, 178, 170, 0.1), rgba(32, 178, 170, 0.2)); border-color: #20B2AA;">
