@@ -92,6 +92,15 @@
                         <i class="fas fa-shield-alt mr-1"></i>
                         Sistem ini dilindungi dan aman
                     </p>
+
+                    <!-- Back to Landing Button -->
+                    <div class="mt-4">
+                        <a href="{{ route('public.landing') }}"
+                            class="inline-flex items-center gap-2 px-6 py-2.5 bg-white bg-opacity-20 backdrop-blur-md border border-white border-opacity-30 rounded-xl text-white font-medium hover:bg-opacity-30 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Kembali ke Halaman Utama</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

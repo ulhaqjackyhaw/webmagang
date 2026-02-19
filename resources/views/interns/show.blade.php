@@ -75,7 +75,7 @@
 
             <div class="space-y-2">
                 <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Dibuat Oleh</label>
-                <p class="text-gray-900 font-semibold text-lg">{{ $intern->creator->name }}</p>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->creator?->name ?? 'Pendaftar Publik' }}</p>
             </div>
 
             <div class="space-y-2">
@@ -102,7 +102,23 @@
                 Dokumen Lampiran
             </h3>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            @if ($intern->file_formulir)
+                <a href="{{ asset('storage/' . $intern->file_formulir) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-orange-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-orange-50 to-orange-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">Formulir</p>
+                            <p class="text-orange-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
+                        </div>
+                        <i
+                            class="fas fa-external-link-alt text-orange-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
+                    </div>
+                </a>
+            @endif
+
             @if ($intern->file_proposal)
                 <a href="{{ asset('storage/' . $intern->file_proposal) }}" target="_blank"
                     class="group border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100">
