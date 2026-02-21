@@ -217,7 +217,7 @@
                     </div>
 
                     <!-- Data Akademik -->
-                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="300">
+                    <div class="glass rounded-2xl p-8 relative z-[100]" data-aos="fade-up" data-aos-delay="300">
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
                             <i class="fas fa-graduation-cap text-accent-cyan"></i> Data Akademik
                         </h3>
@@ -225,9 +225,9 @@
                             <div>
                                 <label for="asal_kampus" class="block text-sm font-medium text-slate-300 mb-2">Asal
                                     Kampus *</label>
-                                <select name="asal_kampus" id="asal_kampus" required
-                                    onchange="toggleKampusLainnya(this.value)"
-                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all">
+
+                                <!-- Hidden select for form submission -->
+                                <select name="asal_kampus" id="asal_kampus" required class="hidden">
                                     <option value="">-- Pilih Universitas/Kampus --</option>
                                     @foreach ($universities as $university)
                                         <option value="{{ $university }}"
@@ -238,6 +238,31 @@
                                     <option value="Lainnya" {{ old('asal_kampus') == 'Lainnya' ? 'selected' : '' }}>
                                         Lainnya (Tulis Sendiri)</option>
                                 </select>
+
+                                <!-- Custom Searchable Dropdown -->
+                                <div class="searchable-select-container relative" id="kampus_dropdown_container">
+                                    <div id="kampus_selected"
+                                        class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white cursor-pointer flex items-center justify-between hover:border-accent-cyan transition-all">
+                                        <span id="kampus_selected_text" class="truncate">-- Pilih Universitas/Kampus
+                                            --</span>
+                                        <i class="fas fa-chevron-down text-slate-400 transition-transform"
+                                            id="kampus_arrow"></i>
+                                    </div>
+                                    <div id="kampus_dropdown"
+                                        class="absolute z-[9999] w-full mt-2 bg-slate-800 border border-slate-600 rounded-xl shadow-2xl hidden max-h-72 overflow-hidden">
+                                        <div class="p-3 border-b border-slate-700">
+                                            <div class="relative">
+                                                <i
+                                                    class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                                <input type="text" id="kampus_search" placeholder="Cari kampus..."
+                                                    class="w-full pl-10 pr-4 py-2.5 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:border-accent-cyan focus:outline-none transition-all" />
+                                            </div>
+                                        </div>
+                                        <div id="kampus_options" class="overflow-y-auto max-h-52">
+                                            <!-- Options will be populated by JS -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div id="kampus_lainnya_wrapper" style="display: none;">
                                 <label for="kampus_lainnya" class="block text-sm font-medium text-slate-300 mb-2">Nama
@@ -427,7 +452,7 @@
             const lainnyaWrapper = document.getElementById('kampus_lainnya_wrapper');
             const lainnyaInput = document.getElementById('kampus_lainnya');
             const prodiWrapper = document.getElementById('program_studi_wrapper');
-            
+
             if (value === 'Lainnya') {
                 lainnyaWrapper.style.display = 'block';
                 lainnyaInput.required = true;
@@ -440,8 +465,131 @@
             }
         }
 
-        // Initialize on page load (for old() values)
+        // Searchable Dropdown for Kampus
+        class SearchableSelect {
+            constructor(selectId, containerId) {
+                this.select = document.getElementById(selectId);
+                this.container = document.getElementById(containerId);
+                this.selectedDisplay = document.getElementById('kampus_selected');
+                this.selectedText = document.getElementById('kampus_selected_text');
+                this.dropdown = document.getElementById('kampus_dropdown');
+                this.searchInput = document.getElementById('kampus_search');
+                this.optionsContainer = document.getElementById('kampus_options');
+                this.arrow = document.getElementById('kampus_arrow');
+                this.isOpen = false;
+                this.options = [];
+
+                this.init();
+            }
+
+            init() {
+                // Build options from select
+                this.buildOptions();
+
+                // Set initial selected value
+                this.updateSelectedDisplay();
+
+                // Event listeners
+                this.selectedDisplay.addEventListener('click', () => this.toggle());
+                this.searchInput.addEventListener('input', (e) => this.filterOptions(e.target.value));
+                this.searchInput.addEventListener('click', (e) => e.stopPropagation());
+
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!this.container.contains(e.target)) {
+                        this.close();
+                    }
+                });
+
+                // Keyboard navigation
+                this.searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') this.close();
+                });
+            }
+
+            buildOptions() {
+                this.options = Array.from(this.select.options).map(opt => ({
+                    value: opt.value,
+                    text: opt.text,
+                    selected: opt.selected
+                }));
+                this.renderOptions(this.options);
+            }
+
+            renderOptions(options) {
+                this.optionsContainer.innerHTML = options.map(opt => `
+                    <div class="kampus-option px-4 py-3 cursor-pointer hover:bg-accent-cyan/20 transition-colors ${opt.value === this.select.value ? 'bg-accent-cyan/30 text-accent-cyan' : 'text-slate-200'}"
+                        data-value="${opt.value}">
+                        ${opt.text}
+                    </div>
+                `).join('');
+
+                // Add click listeners to options
+                this.optionsContainer.querySelectorAll('.kampus-option').forEach(optEl => {
+                    optEl.addEventListener('click', () => this.selectOption(optEl.dataset.value));
+                });
+            }
+
+            filterOptions(keyword) {
+                const filtered = this.options.filter(opt =>
+                    opt.text.toLowerCase().includes(keyword.toLowerCase()) ||
+                    opt.value === '' ||
+                    opt.value === 'Lainnya'
+                );
+                this.renderOptions(filtered);
+            }
+
+            selectOption(value) {
+                this.select.value = value;
+                this.updateSelectedDisplay();
+                this.close();
+
+                // Trigger change event for toggleKampusLainnya
+                toggleKampusLainnya(value);
+            }
+
+            updateSelectedDisplay() {
+                const selectedOption = this.options.find(opt => opt.value === this.select.value);
+                if (selectedOption) {
+                    this.selectedText.textContent = selectedOption.text;
+                    if (this.select.value) {
+                        this.selectedText.classList.remove('text-slate-400');
+                        this.selectedText.classList.add('text-white');
+                    } else {
+                        this.selectedText.classList.add('text-slate-400');
+                        this.selectedText.classList.remove('text-white');
+                    }
+                }
+            }
+
+            toggle() {
+                this.isOpen ? this.close() : this.open();
+            }
+
+            open() {
+                this.isOpen = true;
+                this.dropdown.classList.remove('hidden');
+                this.arrow.classList.add('rotate-180');
+                this.selectedDisplay.classList.add('border-accent-cyan', 'ring-2', 'ring-accent-cyan/25');
+                this.searchInput.value = '';
+                this.renderOptions(this.options);
+                setTimeout(() => this.searchInput.focus(), 50);
+            }
+
+            close() {
+                this.isOpen = false;
+                this.dropdown.classList.add('hidden');
+                this.arrow.classList.remove('rotate-180');
+                this.selectedDisplay.classList.remove('border-accent-cyan', 'ring-2', 'ring-accent-cyan/25');
+            }
+        }
+
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize searchable select
+            new SearchableSelect('asal_kampus', 'kampus_dropdown_container');
+
+            // Check for old() values
             const kampusSelect = document.getElementById('asal_kampus');
             if (kampusSelect.value === 'Lainnya') {
                 toggleKampusLainnya('Lainnya');
