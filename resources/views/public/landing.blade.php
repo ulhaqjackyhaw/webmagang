@@ -96,9 +96,8 @@
     <nav class="fixed top-0 inset-x-0 z-50 glass">
         <div class="container mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-3 hover:opacity-90 transition">
-                <img src="{{ asset('images/company-logo.png') }}" alt="Injourney Airports" class="h-12" />
                 <div>
-                    <span class="text-xl font-bold tracking-tight">URSHIPORTS</span>
+                    <span class="text-2xl font-bold tracking-tight">URSHIPORTS</span>
                     <p class="text-xs text-slate-400">Your Internship Programme at Injourney Airports</p>
                 </div>
             </a>

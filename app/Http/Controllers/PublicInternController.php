@@ -23,7 +23,39 @@ class PublicInternController extends Controller
     public function create()
     {
         $formulirs = FormulirTemplate::where('is_active', true)->latest()->get();
-        return view('public.register', compact('formulirs'));
+        $universities = $this->getUniversitiesFromCsv();
+        return view('public.register', compact('formulirs', 'universities'));
+    }
+
+    /**
+     * Load universities from CSV file
+     */
+    private function getUniversitiesFromCsv()
+    {
+        $universities = [];
+        $csvPath = base_path('perguruan-tinggi.csv');
+
+        if (file_exists($csvPath)) {
+            $file = fopen($csvPath, 'r');
+
+            // Skip header row
+            fgetcsv($file);
+
+            // Read each row
+            while (($row = fgetcsv($file)) !== false) {
+                if (isset($row[1]) && !empty(trim($row[1]))) {
+                    $universities[] = trim($row[1]);
+                }
+            }
+
+            fclose($file);
+
+            // Sort alphabetically and remove duplicates
+            $universities = array_unique($universities);
+            sort($universities);
+        }
+
+        return $universities;
     }
 
     /**
@@ -35,6 +67,7 @@ class PublicInternController extends Controller
             'nama' => 'required|string|max:255',
             'nim' => 'required|string|max:255',
             'asal_kampus' => 'required|string|max:255',
+            'kampus_lainnya' => 'required_if:asal_kampus,Lainnya|nullable|string|max:255',
             'program_studi' => 'required|string|max:255',
             'email_kampus' => 'nullable|email|max:255',
             'no_wa' => 'required|string|max:20',
@@ -49,6 +82,7 @@ class PublicInternController extends Controller
             'nama.required' => 'Nama wajib diisi.',
             'nim.required' => 'NIM wajib diisi.',
             'asal_kampus.required' => 'Asal kampus wajib diisi.',
+            'kampus_lainnya.required_if' => 'Nama kampus wajib diisi jika memilih Lainnya.',
             'program_studi.required' => 'Program studi wajib diisi.',
             'email_kampus.email' => 'Format email tidak valid.',
             'no_wa.required' => 'Nomor WhatsApp wajib diisi.',
@@ -72,6 +106,11 @@ class PublicInternController extends Controller
         $data = $validated;
         $data['created_by'] = null; // Public registration, no user logged in
 
+        // Handle "Lainnya" selection - use custom kampus name
+        if ($request->asal_kampus === 'Lainnya' && $request->kampus_lainnya) {
+            $data['asal_kampus'] = $request->kampus_lainnya;
+        }
+
         // Upload files
         if ($request->hasFile('file_formulir')) {
             $data['file_formulir'] = $request->file('file_formulir')->store('formulirs', 'public');
@@ -86,8 +125,8 @@ class PublicInternController extends Controller
             $data['file_surat'] = $request->file('file_surat')->store('surats', 'public');
         }
 
-        // Remove checkbox values before saving (we don't need to store them)
-        unset($data['persetujuan_sehat'], $data['persetujuan_penempatan'], $data['persetujuan_data']);
+        // Remove checkbox values and kampus_lainnya before saving
+        unset($data['persetujuan_sehat'], $data['persetujuan_penempatan'], $data['persetujuan_data'], $data['kampus_lainnya']);
 
         Intern::create($data);
 
