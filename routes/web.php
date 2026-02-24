@@ -7,7 +7,7 @@ use App\Http\Controllers\AcceptedInternController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicInternController;
-use App\Http\Controllers\FormulirTemplateController;
+// use App\Http\Controllers\FormulirTemplateController; // Dihilangkan - formulir tidak digunakan
 use Illuminate\Support\Facades\Route;
 
 // Public routes (Landing page for intern registration)
@@ -15,8 +15,8 @@ Route::get('/', [PublicInternController::class, 'index'])->name('public.landing'
 Route::get('/daftar', [PublicInternController::class, 'create'])->name('public.register');
 Route::post('/daftar', [PublicInternController::class, 'store'])->name('public.store');
 Route::get('/berhasil', [PublicInternController::class, 'success'])->name('public.success');
-// Public download formulir
-Route::get('/download-formulir/{id}', [PublicInternController::class, 'downloadFormulir'])->name('public.download-formulir');
+// Public download formulir - Dihilangkan karena formulir tidak digunakan
+// Route::get('/download-formulir/{id}', [PublicInternController::class, 'downloadFormulir'])->name('public.download-formulir');
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -57,10 +57,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('accepted-interns', AcceptedInternController::class);
     });
 
-    // Formulir Template routes (HC and Admin only)
-    Route::middleware(['role:hc,admin'])->group(function () {
-        Route::resource('formulir-templates', FormulirTemplateController::class);
-    });
+    // Formulir Template routes (HC and Admin only) - Dihilangkan karena formulir tidak digunakan
+    // Route::middleware(['role:hc,admin'])->group(function () {
+    //     Route::resource('formulir-templates', FormulirTemplateController::class);
+    // });
 
     // Users management (Admin only)
     Route::middleware(['role:admin'])->group(function () {

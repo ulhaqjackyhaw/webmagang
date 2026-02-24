@@ -167,10 +167,11 @@
                         <ul class="space-y-4 text-slate-300">
                             <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i>
                                 Lengkapi data diri</li>
-                            <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i>
+                            {{-- Formulir upload dihilangkan karena sudah input data kampus by ketik --}}
+                            {{-- <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i>
                                 Download formulir dan isi</li>
                             <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i> Upload
-                                formulir yang sudah diisi</li>
+                                formulir yang sudah diisi</li> --}}
                             <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i> Upload
                                 CV, Proposal, Surat Magang Resmi</li>
                         </ul>
@@ -282,8 +283,8 @@
                         </div>
                     </div>
 
-                    <!-- Download Formulir -->
-                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="400">
+                    {{-- Download Formulir - Dihilangkan karena sudah input data kampus by ketik --}}
+                    {{-- <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="400">
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
                             <i class="fas fa-download text-accent-cyan"></i> Download Formulir
                         </h3>
@@ -326,7 +327,7 @@
                                 </div>
                             </div>
                         @endif
-                    </div>
+                    </div> --}}
 
                     <!-- Upload Dokumen -->
                     <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="500">
@@ -340,7 +341,8 @@
                         </p>
 
                         <div class="space-y-6">
-                            <div>
+                            {{-- File Formulir - Dihilangkan karena sudah input data kampus by ketik --}}
+                            {{-- <div>
                                 <label for="file_formulir"
                                     class="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
                                     <i class="fas fa-file-signature text-accent-cyan"></i> Formulir Pendaftaran yang
@@ -349,7 +351,7 @@
                                 <input type="file" name="file_formulir" id="file_formulir" required
                                     accept=".pdf,.doc,.docx"
                                     class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
-                            </div>
+                            </div> --}}
 
                             <!-- Sisanya (CV, Proposal, Surat) pola sama, copy-paste dan ganti name/id/label -->
                             <div>

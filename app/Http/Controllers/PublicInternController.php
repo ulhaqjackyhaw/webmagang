@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Intern;
-use App\Models\FormulirTemplate;
+// use App\Models\FormulirTemplate; // Dihilangkan - formulir tidak digunakan
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,9 +22,9 @@ class PublicInternController extends Controller
      */
     public function create()
     {
-        $formulirs = FormulirTemplate::where('is_active', true)->latest()->get();
+        // $formulirs = FormulirTemplate::where('is_active', true)->latest()->get(); // Dihilangkan - formulir tidak digunakan
         $universities = $this->getUniversitiesFromCsv();
-        return view('public.register', compact('formulirs', 'universities'));
+        return view('public.register', compact('universities'));
     }
 
     /**
@@ -71,7 +71,7 @@ class PublicInternController extends Controller
             'program_studi' => 'required|string|max:255',
             'email_kampus' => 'nullable|email|max:255',
             'no_wa' => 'required|string|max:20',
-            'file_formulir' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            // 'file_formulir' => 'required|file|mimes:pdf,doc,docx|max:2048', // Dihilangkan - formulir tidak digunakan
             'file_proposal' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'file_cv' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'file_surat' => 'required|file|mimes:pdf,doc,docx|max:2048',
@@ -86,9 +86,10 @@ class PublicInternController extends Controller
             'program_studi.required' => 'Program studi wajib diisi.',
             'email_kampus.email' => 'Format email tidak valid.',
             'no_wa.required' => 'Nomor WhatsApp wajib diisi.',
-            'file_formulir.required' => 'File formulir pendaftaran wajib diupload.',
-            'file_formulir.mimes' => 'File formulir harus berformat PDF, DOC, atau DOCX.',
-            'file_formulir.max' => 'Ukuran file formulir maksimal 2MB.',
+            // Dihilangkan - formulir tidak digunakan
+            // 'file_formulir.required' => 'File formulir pendaftaran wajib diupload.',
+            // 'file_formulir.mimes' => 'File formulir harus berformat PDF, DOC, atau DOCX.',
+            // 'file_formulir.max' => 'Ukuran file formulir maksimal 2MB.',
             'file_proposal.required' => 'File proposal wajib diupload.',
             'file_proposal.mimes' => 'File proposal harus berformat PDF, DOC, atau DOCX.',
             'file_proposal.max' => 'Ukuran file proposal maksimal 2MB.',
@@ -112,9 +113,10 @@ class PublicInternController extends Controller
         }
 
         // Upload files
-        if ($request->hasFile('file_formulir')) {
-            $data['file_formulir'] = $request->file('file_formulir')->store('formulirs', 'public');
-        }
+        // Dihilangkan - formulir tidak digunakan
+        // if ($request->hasFile('file_formulir')) {
+        //     $data['file_formulir'] = $request->file('file_formulir')->store('formulirs', 'public');
+        // }
         if ($request->hasFile('file_proposal')) {
             $data['file_proposal'] = $request->file('file_proposal')->store('proposals', 'public');
         }
@@ -143,20 +145,21 @@ class PublicInternController extends Controller
 
     /**
      * Download formulir template (public access)
+     * Dihilangkan - formulir tidak digunakan
      */
-    public function downloadFormulir($id)
-    {
-        $formulir = FormulirTemplate::findOrFail($id);
+    // public function downloadFormulir($id)
+    // {
+    //     $formulir = FormulirTemplate::findOrFail($id);
 
-        // Only allow download if formulir is active
-        if (!$formulir->is_active) {
-            abort(404);
-        }
+    //     // Only allow download if formulir is active
+    //     if (!$formulir->is_active) {
+    //         abort(404);
+    //     }
 
-        // Get file extension from original file path
-        $extension = pathinfo($formulir->file_path, PATHINFO_EXTENSION);
-        $fileName = $formulir->nama_formulir . '.' . $extension;
+    //     // Get file extension from original file path
+    //     $extension = pathinfo($formulir->file_path, PATHINFO_EXTENSION);
+    //     $fileName = $formulir->nama_formulir . '.' . $extension;
 
-        return Storage::disk('public')->download($formulir->file_path, $fileName);
-    }
+    //     return Storage::disk('public')->download($formulir->file_path, $fileName);
+    // }
 }

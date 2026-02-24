@@ -180,11 +180,13 @@
                     <p class="text-lg text-slate-200 leading-relaxed mb-6">
                         <span class="font-bold text-accent-cyan">URSHIPORTS</span> adalah singkatan dari <span
                             class="font-semibold text-white">Your Internship Programme at Injourney Airports</span>,
-                        sebuah platform digital yang memfasilitasi pendaftaran program magang resmi di lingkungan PT Angkasa Pura
+                        sebuah platform digital yang memfasilitasi pendaftaran program magang resmi di lingkungan PT
+                        Angkasa Pura
                         Indonesia khususnya Kantor Regional 1.
                     </p>
                     <p class="text-lg text-slate-200 leading-relaxed mb-6">
-                        Sistem ini dirancang untuk mempermudah proses pendaftaran magang, mulai dari tahap seleksi awal hingga pengumuman akhir
+                        Sistem ini dirancang untuk mempermudah proses pendaftaran magang, mulai dari tahap seleksi awal
+                        hingga pengumuman akhir
                         mengenai status penerimaan calon peserta magang secara transparan dan sistematis.
                     </p>
                     <p class="text-lg text-slate-200 leading-relaxed">
@@ -344,10 +346,11 @@
                         <ul class="space-y-5 text-slate-300">
                             <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
                                 Lengkapi data diri</li>
-                            <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
+                            {{-- Formulir upload dihilangkan karena sudah input data kampus by ketik --}}
+                            {{-- <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
                                 Download formulir dan isi</li>
                             <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
-                                Upload formulir yang sudah diisi</li>
+                                Upload formulir yang sudah diisi</li> --}}
                             <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
                                 Upload CV, Proposal, Surat Magang Resmi</li>
                         </ul>
