@@ -24,16 +24,16 @@ class AcceptedInternController extends Controller
             $query->where('unit_magang', $selectedUnit);
         }
 
-        // Filter by year if provided
-        $selectedYear = $request->get('year');
-        if ($selectedYear) {
-            $query->whereYear('periode_awal', $selectedYear);
+        // Filter by periode if provided
+        $selectedPeriode = $request->get('periode');
+        if ($selectedPeriode) {
+            $query->where('periode_magang', $selectedPeriode);
         }
 
-        // Filter by month if provided
-        $selectedMonth = $request->get('month');
-        if ($selectedMonth) {
-            $query->whereMonth('periode_awal', $selectedMonth);
+        // Filter by status if provided
+        $selectedStatus = $request->get('status');
+        if ($selectedStatus) {
+            $query->where('approval_status', $selectedStatus);
         }
 
         $acceptedInterns = $query->latest()->get();
@@ -46,13 +46,14 @@ class AcceptedInternController extends Controller
 
         $totalInterns = AcceptedIntern::count();
 
-        // Get available years from data
-        $availableYears = AcceptedIntern::selectRaw('YEAR(periode_awal) as year')
+        // Get available periodes from data
+        $availablePeriodes = AcceptedIntern::select('periode_magang')
             ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
+            ->whereNotNull('periode_magang')
+            ->orderBy('periode_magang')
+            ->pluck('periode_magang');
 
-        return view('accepted-interns.index', compact('acceptedInterns', 'unitStats', 'totalInterns', 'selectedUnit', 'selectedYear', 'selectedMonth', 'availableYears'));
+        return view('accepted-interns.index', compact('acceptedInterns', 'unitStats', 'totalInterns', 'selectedUnit', 'selectedPeriode', 'availablePeriodes', 'selectedStatus'));
     }
 
     /**
@@ -96,12 +97,11 @@ class AcceptedInternController extends Controller
     {
         $validated = $request->validate([
             'intern_id' => 'required|exists:interns,id',
-            'periode_awal' => 'required|date',
-            'periode_akhir' => 'required|date|after:periode_awal',
             'unit_magang' => 'required|string|max:255',
-        ], [
-            'periode_akhir.after' => 'Periode akhir harus setelah periode awal.',
         ]);
+
+        // Get intern data for periode_magang
+        $intern = \App\Models\Intern::findOrFail($validated['intern_id']);
 
         // Check if intern already exists in accepted_interns
         $exists = AcceptedIntern::where('intern_id', $validated['intern_id'])->exists();
@@ -109,9 +109,16 @@ class AcceptedInternController extends Controller
             return back()->withErrors(['intern_id' => 'Anak magang ini sudah terdaftar dalam database.'])->withInput();
         }
 
-        $validated['created_by'] = Auth::id();
+        // Map fields - periode taken from intern registration
+        $data = [
+            'intern_id' => $validated['intern_id'],
+            'periode_magang' => $intern->periode_magang,
+            'unit_magang' => $validated['unit_magang'],
+            'created_by' => Auth::id(),
+            'approval_status' => 'pending',
+        ];
 
-        AcceptedIntern::create($validated);
+        AcceptedIntern::create($data);
 
         return redirect()->route('accepted-interns.index')->with('success', 'Data anak magang berhasil ditambahkan ke database!');
     }
@@ -142,11 +149,7 @@ class AcceptedInternController extends Controller
         $acceptedIntern = AcceptedIntern::findOrFail($id);
 
         $validated = $request->validate([
-            'periode_awal' => 'required|date',
-            'periode_akhir' => 'required|date|after:periode_awal',
             'unit_magang' => 'required|string|max:255',
-        ], [
-            'periode_akhir.after' => 'Periode akhir harus setelah periode awal.',
         ]);
 
         $acceptedIntern->update($validated);
@@ -200,5 +203,138 @@ class AcceptedInternController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Error export: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Send to Div Head for approval
+     */
+    public function sendToApproval(string $id)
+    {
+        $acceptedIntern = AcceptedIntern::findOrFail($id);
+
+        if ($acceptedIntern->approval_status !== 'pending') {
+            return back()->with('error', 'Data ini sudah dikirim untuk approval sebelumnya.');
+        }
+
+        $acceptedIntern->update([
+            'approval_status' => 'sent_to_divhead',
+            'sent_to_divhead_at' => now(),
+        ]);
+
+        return back()->with('success', 'Data berhasil dikirim ke Div Head untuk approval.');
+    }
+
+    /**
+     * Database Magang - Only shows fully approved interns
+     */
+    public function databaseMagang(Request $request)
+    {
+        $query = AcceptedIntern::with(['intern', 'creator', 'approverDivHead', 'approverDeputy'])
+            ->where('approval_status', 'approved_deputy');
+
+        // Filter by unit if provided
+        $selectedUnit = $request->get('unit');
+        if ($selectedUnit) {
+            $query->where('unit_magang', $selectedUnit);
+        }
+
+        // Filter by periode if provided
+        $selectedPeriode = $request->get('periode');
+        if ($selectedPeriode) {
+            $query->where('periode_magang', $selectedPeriode);
+        }
+
+        $acceptedInterns = $query->latest()->get();
+
+        // Get statistics by unit (only for approved)
+        $unitStats = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->selectRaw('unit_magang, COUNT(*) as total')
+            ->groupBy('unit_magang')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        $totalInterns = AcceptedIntern::where('approval_status', 'approved_deputy')->count();
+
+        // Get available periodes from approved data
+        $availablePeriodes = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->select('periode_magang')
+            ->distinct()
+            ->whereNotNull('periode_magang')
+            ->orderBy('periode_magang')
+            ->pluck('periode_magang');
+
+        // Get available units
+        $availableUnits = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->distinct('unit_magang')
+            ->pluck('unit_magang');
+
+        return view('database-magang.index', compact(
+            'acceptedInterns',
+            'unitStats',
+            'totalInterns',
+            'selectedUnit',
+            'selectedPeriode',
+            'availablePeriodes',
+            'availableUnits'
+        ));
+    }
+
+    /**
+     * Export Database Magang
+     */
+    public function exportDatabaseMagang(Request $request)
+    {
+        try {
+            $selectedUnit = $request->get('unit');
+            $selectedPeriode = $request->get('periode');
+
+            $query = AcceptedIntern::with('intern')
+                ->where('approval_status', 'approved_deputy');
+
+            if ($selectedUnit) {
+                $query->where('unit_magang', $selectedUnit);
+            }
+
+            if ($selectedPeriode) {
+                $query->where('periode_magang', $selectedPeriode);
+            }
+
+            $acceptedInterns = $query->latest()->get();
+
+            // Get statistics by unit
+            $unitStats = AcceptedIntern::where('approval_status', 'approved_deputy')
+                ->selectRaw('unit_magang, COUNT(*) as total')
+                ->groupBy('unit_magang')
+                ->orderBy('total', 'desc')
+                ->get();
+
+            $totalInterns = AcceptedIntern::where('approval_status', 'approved_deputy')->count();
+
+            $filename = $selectedUnit
+                ? 'database-magang-final-' . str_replace(' ', '-', strtolower($selectedUnit)) . '.xlsx'
+                : 'database-magang-final-semua.xlsx';
+
+            return Excel::download(
+                new AcceptedInternsExport($acceptedInterns, $unitStats, $totalInterns, $selectedUnit),
+                $filename
+            );
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error export: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Generate Letter to Campus
+     */
+    public function generateLetter(string $id)
+    {
+        $acceptedIntern = AcceptedIntern::with('intern')->findOrFail($id);
+
+        if ($acceptedIntern->approval_status !== 'approved_deputy') {
+            return back()->with('error', 'Surat hanya dapat digenerate untuk data yang sudah disetujui final.');
+        }
+
+        // For now, return a view that can be printed as PDF
+        return view('letters.internship', compact('acceptedIntern'));
     }
 }

@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
 @section('title', 'Edit Data Magang')
+@section('page-title', 'Edit Data Magang')
 
 @section('content')
     <!-- Header Section -->

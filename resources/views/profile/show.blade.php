@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
 @section('title', 'Profile Saya')
+@section('page-title', 'Profil Saya')
 
 @section('content')
     <!-- Header Section -->
@@ -43,10 +44,15 @@
                             class="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full text-sm font-bold shadow-lg">
                             <i class="fas fa-user-tie mr-1"></i> Human Capital
                         </span>
-                    @else
+                    @elseif($user->role === 'div_head')
                         <span
                             class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-sm font-bold shadow-lg">
-                            <i class="fas fa-user-check mr-1"></i> Tata Usaha
+                            <i class="fas fa-user-shield mr-1"></i> Division Head
+                        </span>
+                    @elseif($user->role === 'deputy')
+                        <span
+                            class="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full text-sm font-bold shadow-lg">
+                            <i class="fas fa-user-cog mr-1"></i> Deputy HC
                         </span>
                     @endif
                 </div>
@@ -94,8 +100,10 @@
                                 Administrator
                             @elseif($user->role === 'hc')
                                 Human Capital
-                            @else
-                                Tata Usaha
+                            @elseif($user->role === 'div_head')
+                                Division Head
+                            @elseif($user->role === 'deputy')
+                                Deputy HC
                             @endif
                         </p>
                     </div>

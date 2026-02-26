@@ -1,7 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
-@section('title', 'Detail Data Magang')
-
+@section('title', 'Detail Data Magang')@section('page-title', 'Detail Pengajuan Magang')
 @section('content')
     <!-- Header Section -->
     <div class="mb-8 fade-in">
@@ -51,6 +50,16 @@
             <div class="space-y-2">
                 <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">No WhatsApp</label>
                 <p class="text-gray-900 font-semibold text-lg">{{ $intern->no_wa }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Jenis Kelamin</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->jenis_kelamin ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Periode Magang</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $intern->periode_magang ?? '-' }}</p>
             </div>
 
             <div class="space-y-2">
@@ -177,27 +186,196 @@
                 </a>
 
                 @if ((auth()->user()->role === 'hc' || auth()->user()->role === 'admin') && $intern->status === 'pending')
-                    <form action="{{ route('interns.updateStatus', $intern->id) }}" method="POST" class="inline">
-                        @csrf
-                        <input type="hidden" name="status" value="approved">
-                        <button type="submit"
-                            class="group relative overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40">
-                            <span
-                                class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
-                            <i class="fas fa-check-circle text-sm"></i>
-                            <span>Konfirmasi Pengajuan Via WhatsApp</span>
-                        </button>
-                    </form>
                     <button type="button" onclick="openRejectModal()"
                         class="group relative overflow-hidden bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40">
                         <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
                         <i class="fas fa-times-circle text-sm"></i>
-                        <span>Tolak Lamaran</span>
+                        <span>Tolak Pengajuan</span>
                     </button>
                 @endif
             </div>
+
+            @if (
+                (auth()->user()->role === 'hc' || auth()->user()->role === 'admin') &&
+                    ($intern->status === 'pending' || ($intern->status === 'approved' && !$intern->acceptedIntern)))
+                <!-- Inline Form Terima Pengajuan -->
+                <div class="mt-6 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Terima Pengajuan Magang</h3>
+                            <p class="text-sm text-gray-500">Pilih unit penempatan untuk {{ $intern->nama }}</p>
+                        </div>
+                    </div>
+
+                    <form id="acceptForm" action="{{ route('interns.accept', $intern->id) }}" method="POST">
+                        @csrf
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2 text-sm">
+                                    <i class="fas fa-calendar-alt text-green-500 mr-1"></i> Periode Magang
+                                </label>
+                                <div
+                                    class="px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 font-medium text-sm">
+                                    {{ $intern->periode_magang ?? 'Belum dipilih' }}
+                                </div>
+                            </div>
+                            <div>
+                                <label for="unit_magang_select" class="block text-gray-700 font-medium mb-2 text-sm">
+                                    <i class="fas fa-building text-green-500 mr-1"></i> Unit Magang <span
+                                        class="text-red-500">*</span>
+                                </label>
+                                <select id="unit_magang_select" onchange="handleUnitChange(this)"
+                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                                    required>
+                                    <option value="">-- Pilih Unit Magang --</option>
+                                    <option value="Communication & Legal Reg I">Communication & Legal Reg I</option>
+                                    <option value="Procurement Reg I">Procurement Reg I</option>
+                                    <option value="Finance, Asset & Risk Management Reg I">Finance, Asset & Risk Management
+                                        Reg I</option>
+                                    <option value="Human Capital Solution & Business Support Reg I">Human Capital Solution
+                                        & Business Support Reg I</option>
+                                    <option value="CSR & GS Reg I">CSR & GS Reg I</option>
+                                    <option value="Airport Commercial Development Reg I">Airport Commercial Development Reg
+                                        I</option>
+                                    <option value="Airport Operation Control Center CGK">Airport Operation Control Center
+                                        CGK</option>
+                                    <option value="Communication & Legal CGK">Communication & Legal CGK</option>
+                                    <option value="Quality & Safety Management System CGK">Quality & Safety Management
+                                        System CGK</option>
+                                    <option value="Airport Customer Experience CGK">Airport Customer Experience CGK
+                                    </option>
+                                    <option value="Airside Operation Services CGK">Airside Operation Services CGK</option>
+                                    <option value="Airport Rescue & Fire Fighting CGK">Airport Rescue & Fire Fighting CGK
+                                    </option>
+                                    <option value="Airport Security Services CGK">Airport Security Services CGK</option>
+                                    <option value="Landside Operation Services & Support CGK">Landside Operation Services &
+                                        Support CGK</option>
+                                    <option value="Aero Business CGK">Aero Business CGK</option>
+                                    <option value="Non-Aero Business CGK">Non-Aero Business CGK</option>
+                                    <option value="Airport Electrical Services CGK">Airport Electrical Services CGK
+                                    </option>
+                                    <option value="Airport Mechanical Services CGK">Airport Mechanical Services CGK
+                                    </option>
+                                    <option value="Airport Electronics Services CGK">Airport Electronics Services CGK
+                                    </option>
+                                    <option value="Airport Technology Services CGK">Airport Technology Services CGK
+                                    </option>
+                                    <option value="Airside Facility & Support Services CGK">Airside Facility & Support
+                                        Services CGK</option>
+                                    <option value="Airport Building Facility Services CGK">Airport Building Facility
+                                        Services CGK</option>
+                                    <option value="Asset Management CGK">Asset Management CGK</option>
+                                    <option value="General Services & CSR CGK">General Services & CSR CGK</option>
+                                    <option value="Procurement CGK">Procurement CGK</option>
+                                    <option value="Terminal 1 CGK">Terminal 1 CGK</option>
+                                    <option value="Terminal 2 CGK">Terminal 2 CGK</option>
+                                    <option value="Terminal 3 CGK">Terminal 3 CGK</option>
+                                    <option value="Airport Operation & Services - BDO">Airport Operation & Services - BDO
+                                    </option>
+                                    <option value="Airport Technical - BDO">Airport Technical - BDO</option>
+                                    <option value="Airport Commercial - BDO">Airport Commercial - BDO</option>
+                                    <option value="Bussiness Support - BDO">Bussiness Support - BDO</option>
+                                    <option value="other">Lainnya (Tulis Sendiri)</option>
+                                </select>
+                                <input type="text" name="unit_magang" id="unit_magang"
+                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm mt-2 hidden"
+                                    placeholder="Tulis nama unit...">
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" onclick="openConfirmModal()"
+                                class="group relative overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-2.5 rounded-lg font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30">
+                                <i class="fas fa-check text-sm"></i>
+                                <span>Terima & Proses</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
+
+    <!-- Modal Konfirmasi Terima Pengajuan -->
+    @if (
+        (auth()->user()->role === 'hc' || auth()->user()->role === 'admin') &&
+            ($intern->status === 'pending' || ($intern->status === 'approved' && !$intern->acceptedIntern)))
+        <div id="confirmModal"
+            class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl">
+                <div class="p-6">
+                    <!-- Header -->
+                    <div class="flex items-center gap-4 mb-6">
+                        <div
+                            class="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg">
+                            <i class="fas fa-paper-plane text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">Konfirmasi Penerimaan</h3>
+                            <p class="text-sm text-gray-500">Data akan diteruskan ke Div Head</p>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 mb-4">
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-user text-blue-500 w-5"></i>
+                                <div>
+                                    <p class="text-xs text-gray-500">Nama Peserta</p>
+                                    <p class="font-semibold text-gray-800">{{ $intern->nama }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-calendar text-blue-500 w-5"></i>
+                                <div>
+                                    <p class="text-xs text-gray-500">Periode Magang</p>
+                                    <p class="font-semibold text-gray-800">
+                                        {{ $intern->periode_magang ?? 'Belum dipilih' }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-building text-blue-500 w-5"></i>
+                                <div>
+                                    <p class="text-xs text-gray-500">Unit Penempatan</p>
+                                    <p class="font-semibold text-gray-800" id="confirmUnitDisplay">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-info-circle text-amber-500 mt-0.5"></i>
+                            <div class="text-sm text-amber-700">
+                                <p class="font-semibold mb-1">Perhatian!</p>
+                                <p>Setelah dikonfirmasi, data peserta magang akan:</p>
+                                <ul class="list-disc list-inside mt-1 space-y-1">
+                                    <li>Diterima dan masuk daftar "Data Anak Magang"</li>
+                                    <li>Diteruskan ke <strong>Div Head</strong> untuk persetujuan</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-end gap-3">
+                        <button type="button" onclick="closeConfirmModal()"
+                            class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-all">
+                            <i class="fas fa-arrow-left mr-2"></i>Kembali
+                        </button>
+                        <button type="button" onclick="submitAcceptForm()"
+                            class="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-lg font-semibold shadow-lg transition-all flex items-center gap-2">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Ya, Terima & Kirim ke Div Head</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Modal Alasan Penolakan -->
     <div id="rejectModal"
@@ -274,12 +452,63 @@
             document.getElementById('previewFrame').src = '';
         }
 
+        function handleUnitChange(selectEl) {
+            const inputEl = document.getElementById('unit_magang');
+            if (selectEl.value === 'other') {
+                inputEl.classList.remove('hidden');
+                inputEl.value = '';
+                inputEl.required = true;
+                inputEl.focus();
+            } else {
+                inputEl.classList.add('hidden');
+                inputEl.value = selectEl.value;
+                inputEl.required = false;
+            }
+        }
+
         function openRejectModal() {
             document.getElementById('rejectModal').classList.remove('hidden');
         }
 
         function closeRejectModal() {
             document.getElementById('rejectModal').classList.add('hidden');
+        }
+
+        function openConfirmModal() {
+            // Validate unit selection first
+            const selectEl = document.getElementById('unit_magang_select');
+            const inputEl = document.getElementById('unit_magang');
+
+            let selectedUnit = '';
+            if (selectEl.value === 'other') {
+                if (!inputEl.value.trim()) {
+                    inputEl.focus();
+                    alert('Silakan masukkan unit penempatan terlebih dahulu!');
+                    return;
+                }
+                selectedUnit = inputEl.value.trim();
+            } else if (selectEl.value) {
+                selectedUnit = selectEl.value;
+            } else {
+                alert('Silakan pilih unit penempatan terlebih dahulu!');
+                selectEl.focus();
+                return;
+            }
+
+            // Update modal display
+            document.getElementById('confirmUnitDisplay').textContent = selectedUnit;
+
+            // Show modal
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+
+        function submitAcceptForm() {
+            // Submit the accept form
+            document.getElementById('acceptForm').submit();
         }
 
         // Close modal when clicking outside
@@ -289,11 +518,30 @@
             }
         });
 
+        const rejectModal = document.getElementById('rejectModal');
+        if (rejectModal) {
+            rejectModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeRejectModal();
+                }
+            });
+        }
+
+        const confirmModal = document.getElementById('confirmModal');
+        if (confirmModal) {
+            confirmModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeConfirmModal();
+                }
+            });
+        }
+
         // Close modal with ESC key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closePreview();
                 closeRejectModal();
+                closeConfirmModal();
             }
         });
     </script>

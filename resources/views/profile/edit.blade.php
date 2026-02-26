@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
 @section('title', 'Edit Profile')
+@section('page-title', 'Edit Profil')
 
 @section('content')
     <!-- Header Section -->
@@ -69,8 +70,11 @@
                                     <span class="text-red-600"><i class="fas fa-crown mr-1"></i> Administrator</span>
                                 @elseif($user->role === 'hc')
                                     <span class="text-blue-600"><i class="fas fa-user-tie mr-1"></i> Human Capital</span>
-                                @else
-                                    <span class="text-green-600"><i class="fas fa-user-check mr-1"></i> Tata Usaha</span>
+                                @elseif($user->role === 'div_head')
+                                    <span class="text-green-600"><i class="fas fa-user-shield mr-1"></i> Division
+                                        Head</span>
+                                @elseif($user->role === 'deputy')
+                                    <span class="text-orange-600"><i class="fas fa-user-cog mr-1"></i> Deputy HC</span>
                                 @endif
                             </p>
                         </div>

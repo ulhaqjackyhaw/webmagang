@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
-@section('title', 'Tambah Data ke Database Magang')
+@section('title', 'Tambah Data Monitoring')
+@section('page-title', 'Monitoring Approval')
 
 @section('content')
     <!-- Header Section -->
@@ -12,7 +13,7 @@
             </div>
             <div>
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-900 font-heading">
-                    Tambah ke Database Magang
+                    Tambah Data Monitoring
                 </h1>
             </div>
         </div>
@@ -140,45 +141,64 @@
                 Informasi Periode Magang
             </h3>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-                <label for="periode_awal" class="block text-sm font-semibold text-gray-700">
-                    Periode Awal <span class="text-red-500">*</span>
+                <label class="block text-sm font-semibold text-gray-700">
+                    Periode Magang
                 </label>
-                <input type="date" name="periode_awal" id="periode_awal" value="{{ old('periode_awal') }}"
-                    class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('periode_awal') border-red-300 bg-red-50 @enderror"
-                    required>
-                @error('periode_awal')
-                    <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <i class="fas fa-exclamation-circle text-xs"></i>
-                        {{ $message }}
-                    </p>
-                @enderror
+                <div id="periode_display" class="px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-700">
+                    Pilih intern terlebih dahulu
+                </div>
+                <p class="text-xs text-gray-500">Periode dari pendaftaran awal, tidak dapat diubah</p>
             </div>
 
             <div class="space-y-2">
-                <label for="periode_akhir" class="block text-sm font-semibold text-gray-700">
-                    Periode Akhir <span class="text-red-500">*</span>
-                </label>
-                <input type="date" name="periode_akhir" id="periode_akhir" value="{{ old('periode_akhir') }}"
-                    class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('periode_akhir') border-red-300 bg-red-50 @enderror"
-                    required>
-                @error('periode_akhir')
-                    <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
-                        <i class="fas fa-exclamation-circle text-xs"></i>
-                        {{ $message }}
-                    </p>
-                @enderror
-            </div>
-
-            <div class="space-y-2">
-                <label for="unit_magang" class="block text-sm font-semibold text-gray-700">
+                <label for="unit_magang_select" class="block text-sm font-semibold text-gray-700">
                     Unit Magang <span class="text-red-500">*</span>
                 </label>
+                <select id="unit_magang_select" onchange="handleUnitChange(this)"
+                    class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('unit_magang') border-red-300 bg-red-50 @enderror">
+                    <option value="">-- Pilih Unit Magang --</option>
+                    <option value="Communication & Legal Reg I">Communication & Legal Reg I</option>
+                    <option value="Procurement Reg I">Procurement Reg I</option>
+                    <option value="Finance, Asset & Risk Management Reg I">Finance, Asset & Risk Management Reg I</option>
+                    <option value="Human Capital Solution & Business Support Reg I">Human Capital Solution & Business
+                        Support Reg I</option>
+                    <option value="CSR & GS Reg I">CSR & GS Reg I</option>
+                    <option value="Airport Commercial Development Reg I">Airport Commercial Development Reg I</option>
+                    <option value="Airport Operation Control Center CGK">Airport Operation Control Center CGK</option>
+                    <option value="Communication & Legal CGK">Communication & Legal CGK</option>
+                    <option value="Quality & Safety Management System CGK">Quality & Safety Management System CGK</option>
+                    <option value="Airport Customer Experience CGK">Airport Customer Experience CGK</option>
+                    <option value="Airside Operation Services CGK">Airside Operation Services CGK</option>
+                    <option value="Airport Rescue & Fire Fighting CGK">Airport Rescue & Fire Fighting CGK</option>
+                    <option value="Airport Security Services CGK">Airport Security Services CGK</option>
+                    <option value="Landside Operation Services & Support CGK">Landside Operation Services & Support CGK
+                    </option>
+                    <option value="Aero Business CGK">Aero Business CGK</option>
+                    <option value="Non-Aero Business CGK">Non-Aero Business CGK</option>
+                    <option value="Airport Electrical Services CGK">Airport Electrical Services CGK</option>
+                    <option value="Airport Mechanical Services CGK">Airport Mechanical Services CGK</option>
+                    <option value="Airport Electronics Services CGK">Airport Electronics Services CGK</option>
+                    <option value="Airport Technology Services CGK">Airport Technology Services CGK</option>
+                    <option value="Airside Facility & Support Services CGK">Airside Facility & Support Services CGK
+                    </option>
+                    <option value="Airport Building Facility Services CGK">Airport Building Facility Services CGK</option>
+                    <option value="Asset Management CGK">Asset Management CGK</option>
+                    <option value="General Services & CSR CGK">General Services & CSR CGK</option>
+                    <option value="Procurement CGK">Procurement CGK</option>
+                    <option value="Terminal 1 CGK">Terminal 1 CGK</option>
+                    <option value="Terminal 2 CGK">Terminal 2 CGK</option>
+                    <option value="Terminal 3 CGK">Terminal 3 CGK</option>
+                    <option value="Airport Operation & Services - BDO">Airport Operation & Services - BDO</option>
+                    <option value="Airport Technical - BDO">Airport Technical - BDO</option>
+                    <option value="Airport Commercial - BDO">Airport Commercial - BDO</option>
+                    <option value="Bussiness Support - BDO">Bussiness Support - BDO</option>
+                    <option value="other">Lainnya (Tulis Sendiri)</option>
+                </select>
                 <input type="text" name="unit_magang" id="unit_magang" value="{{ old('unit_magang') }}"
-                    placeholder="Contoh: IT Department"
-                    class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition @error('unit_magang') border-red-300 bg-red-50 @enderror"
-                    required>
+                    placeholder="Tulis nama unit..."
+                    class="input-modern w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent smooth-transition hidden @error('unit_magang') border-red-300 bg-red-50 @enderror">
                 @error('unit_magang')
                     <p class="text-red-500 text-sm mt-1 flex items-center gap-1">
                         <i class="fas fa-exclamation-circle text-xs"></i>
@@ -218,6 +238,9 @@
             document.getElementById('display_email_kampus').textContent = intern.email_kampus || '-';
             document.getElementById('display_no_wa').textContent = intern.no_wa;
 
+            // Display periode_magang from intern
+            document.getElementById('periode_display').textContent = intern.periode_magang || 'Belum dipilih';
+
             // Show sections
             document.getElementById('selectedIntern').classList.remove('hidden');
             document.getElementById('manualInputSection').classList.remove('hidden');
@@ -233,10 +256,29 @@
             document.getElementById('intern_id').value = '';
             document.getElementById('selectedIntern').classList.add('hidden');
             document.getElementById('manualInputSection').classList.add('hidden');
+            document.getElementById('periode_display').textContent = 'Pilih intern terlebih dahulu';
+            // Reset unit selection
+            document.getElementById('unit_magang_select').value = '';
+            document.getElementById('unit_magang').value = '';
+            document.getElementById('unit_magang').classList.add('hidden');
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
+        }
+
+        function handleUnitChange(selectEl) {
+            const inputEl = document.getElementById('unit_magang');
+            if (selectEl.value === 'other') {
+                inputEl.classList.remove('hidden');
+                inputEl.value = '';
+                inputEl.required = true;
+                inputEl.focus();
+            } else {
+                inputEl.classList.add('hidden');
+                inputEl.value = selectEl.value;
+                inputEl.required = false;
+            }
         }
     </script>
 @endsection

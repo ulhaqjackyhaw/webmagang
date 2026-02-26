@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
-@section('title', 'Database Magang Diterima')
+@section('title', 'Monitoring Approval Magang')
+@section('page-title', 'Monitoring Approval')
 
 @section('content')
     <!-- Header Section with Modern Design -->
@@ -8,11 +9,11 @@
         <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
             <div>
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-900 font-heading mb-2">
-                    Database Peserta Magang
+                    Monitoring Approval Magang
                 </h1>
                 <p class="text-gray-500 text-lg font-light flex items-center gap-2">
                     <span class="w-1 h-4 rounded-full" style="background-color: #20B2AA;"></span>
-                    Data peserta magang yang telah terdaftar
+                    Pantau proses approval peserta magang
                 </p>
             </div>
             <div class="flex flex-wrap gap-3">
@@ -109,44 +110,43 @@
             <form method="GET" action="{{ route('accepted-interns.index') }}"
                 class="bg-white rounded-xl shadow-md p-6 mb-4">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Year Filter -->
+                    <!-- Periode Filter -->
                     <div>
-                        <label for="year" class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-calendar-alt mr-1" style="color: #20B2AA;"></i> Tahun
+                        <label for="periode" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-calendar-alt mr-1" style="color: #20B2AA;"></i> Periode Magang
                         </label>
-                        <select name="year" id="year"
-                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
-                            <option value="">Semua Tahun</option>
-                            @foreach ($availableYears as $year)
-                                <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }}>
-                                    {{ $year }}
+                        <select name="periode" id="periode"
+                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
+                            onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
+                            onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
+                            <option value="">Semua Periode</option>
+                            @foreach ($availablePeriodes as $periode)
+                                <option value="{{ $periode }}" {{ $selectedPeriode == $periode ? 'selected' : '' }}>
+                                    {{ $periode }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- Month Filter -->
+                    <!-- Status Filter -->
                     <div>
-                        <label for="month" class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-calendar mr-1" style="color: #20B2AA;"></i> Bulan
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-tasks mr-1" style="color: #20B2AA;"></i> Status Approval
                         </label>
-                        <select name="month" id="month"
+                        <select name="status" id="status"
                             class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
                             onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
                             onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
-                            <option value="">Semua Bulan</option>
-                            <option value="1" {{ $selectedMonth == 1 ? 'selected' : '' }}>Januari</option>
-                            <option value="2" {{ $selectedMonth == 2 ? 'selected' : '' }}>Februari</option>
-                            <option value="3" {{ $selectedMonth == 3 ? 'selected' : '' }}>Maret</option>
-                            <option value="4" {{ $selectedMonth == 4 ? 'selected' : '' }}>April</option>
-                            <option value="5" {{ $selectedMonth == 5 ? 'selected' : '' }}>Mei</option>
-                            <option value="6" {{ $selectedMonth == 6 ? 'selected' : '' }}>Juni</option>
-                            <option value="7" {{ $selectedMonth == 7 ? 'selected' : '' }}>Juli</option>
-                            <option value="8" {{ $selectedMonth == 8 ? 'selected' : '' }}>Agustus</option>
-                            <option value="9" {{ $selectedMonth == 9 ? 'selected' : '' }}>September</option>
-                            <option value="10" {{ $selectedMonth == 10 ? 'selected' : '' }}>Oktober</option>
-                            <option value="11" {{ $selectedMonth == 11 ? 'selected' : '' }}>November</option>
-                            <option value="12" {{ $selectedMonth == 12 ? 'selected' : '' }}>Desember</option>
+                            <option value="">Semua Status</option>
+                            <option value="sent_to_divhead"
+                                {{ ($selectedStatus ?? '') == 'sent_to_divhead' ? 'selected' : '' }}>Terkirim ke Div Head
+                            </option>
+                            <option value="sent_to_deputy"
+                                {{ ($selectedStatus ?? '') == 'sent_to_deputy' ? 'selected' : '' }}>Terkirim ke Deputy
+                            </option>
+                            <option value="approved_deputy"
+                                {{ ($selectedStatus ?? '') == 'approved_deputy' ? 'selected' : '' }}>Disetujui Deputy
+                                (Final)</option>
                         </select>
                     </div>
 
@@ -158,7 +158,7 @@
                             onmouseout="this.style.backgroundColor='#20B2AA';">
                             <i class="fas fa-filter mr-1"></i> Terapkan
                         </button>
-                        @if ($selectedYear || $selectedMonth)
+                        @if ($selectedPeriode || ($selectedStatus ?? null))
                             <a href="{{ route('accepted-interns.index', $selectedUnit ? ['unit' => $selectedUnit] : []) }}"
                                 class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-200">
                                 <i class="fas fa-times"></i>
@@ -185,202 +185,271 @@
                     placeholder="Cari nama, NIM, kampus, unit magang, atau periode...">
             </div>
         </div>
+    </div>
 
-        <!-- Table Section -->
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <div class="bg-gray-50 px-6 py-4 border-b">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    @if ($selectedUnit)
-                        <i class="fas fa-filter" style="color: #20B2AA;"></i>
-                        Data Peserta di Unit: <span style="color: #20B2AA;">{{ $selectedUnit }}</span>
-                    @else
-                        <i class="fas fa-list text-gray-600"></i> Semua Data Peserta Magang
-                    @endif
-                </h3>
+    <!-- Mobile Card View -->
+    <div class="mobile-card space-y-4">
+        @forelse($acceptedInterns as $index => $acceptedIntern)
+            <div class="searchable-card bg-white rounded-xl shadow-md p-4"
+                data-search="{{ strtolower($acceptedIntern->intern->nama . ' ' . $acceptedIntern->intern->asal_kampus . ' ' . $acceptedIntern->unit_magang) }}">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-900 text-lg">{{ $acceptedIntern->intern->nama }}</h3>
+                        <p class="text-gray-500 text-sm">{{ $acceptedIntern->intern->asal_kampus }}</p>
+                    </div>
+                    <span
+                        class="px-3 py-1 text-xs font-semibold rounded-full {{ $acceptedIntern->approval_status_color ?? 'bg-gray-100 text-gray-800' }}">
+                        {{ $acceptedIntern->approval_status_label ?? 'Pending' }}
+                    </span>
+                </div>
+
+                <div class="space-y-2 text-sm border-t border-gray-100 pt-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-building text-gray-400 w-4"></i>
+                        <span class="text-gray-600 font-medium"
+                            style="color: #20B2AA;">{{ $acceptedIntern->unit_magang }}</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-100">
+                    <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
+                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                        style="background-color: #20B2AA;">
+                        <i class="fas fa-eye mr-1"></i> Lihat
+                    </a>
+                    <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
+                        class="flex-1 text-center bg-yellow-50 text-yellow-600 hover:bg-yellow-100 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </a>
+                    <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                        class="flex-1 text-center bg-red-50 text-red-600 hover:bg-red-100 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                        <i class="fas fa-trash mr-1"></i> Hapus
+                    </button>
+                </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIM
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Kampus
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit
-                                Magang</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Periode
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($acceptedInterns as $index => $acceptedIntern)
-                            <tr class="searchable-row">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {{ $acceptedIntern->intern->nama }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $acceptedIntern->intern->nim }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $acceptedIntern->intern->asal_kampus }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $acceptedIntern->unit_magang }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $acceptedIntern->periode_awal->format('d/m/Y') }} -
-                                    {{ $acceptedIntern->periode_akhir->format('d/m/Y') }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
-                                        class="hover:opacity-80 transition-opacity" style="color: #20B2AA;"
-                                        title="Lihat Detail">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
-                                        class="text-yellow-600 hover:text-yellow-900" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
-                                        class="text-red-600 hover:text-red-900" title="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr id="emptyRow">
-                                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                    @if ($selectedUnit)
-                                        Tidak ada data peserta magang di unit <strong>{{ $selectedUnit }}</strong>
-                                    @else
-                                        Belum ada data peserta magang yang terdaftar
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforelse
-                        <!-- No Results Row (hidden by default) -->
-                        <tr id="noResultsRow" class="hidden">
-                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                <i class="fas fa-search text-gray-400 text-3xl mb-2"></i>
-                                <p class="font-semibold">Tidak ada data yang cocok dengan pencarian Anda</p>
-                                <p class="text-sm">Coba gunakan kata kunci yang berbeda</p>
+        @empty
+            <div class="bg-white rounded-xl shadow-md p-8 text-center text-gray-500">
+                <i class="fas fa-inbox text-gray-300 text-4xl mb-3"></i>
+                @if ($selectedUnit)
+                    <p>Tidak ada data peserta magang di unit <strong>{{ $selectedUnit }}</strong></p>
+                @else
+                    <p>Belum ada data peserta magang yang terdaftar</p>
+                @endif
+            </div>
+        @endforelse
+        <div id="noResultsCard" class="hidden bg-white rounded-xl shadow-md p-8 text-center text-gray-500">
+            <i class="fas fa-search text-gray-300 text-4xl mb-3"></i>
+            <p class="font-semibold">Tidak ada data yang cocok</p>
+            <p class="text-sm">Coba gunakan kata kunci yang berbeda</p>
+        </div>
+    </div>
+
+    <!-- Desktop Table View -->
+    <div class="desktop-table bg-white rounded-lg shadow">
+        <div class="bg-gray-50 px-6 py-4 border-b">
+            <h3 class="text-lg font-semibold text-gray-800">
+                @if ($selectedUnit)
+                    <i class="fas fa-filter" style="color: #20B2AA;"></i>
+                    Data Peserta di Unit: <span style="color: #20B2AA;">{{ $selectedUnit }}</span>
+                @else
+                    <i class="fas fa-list text-gray-600"></i> Semua Data Peserta Magang
+                @endif
+            </h3>
+        </div>
+        <div class="overflow-x-auto" style="max-width: 100%;">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Kampus</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit
+                            Magang</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($acceptedInterns as $index => $acceptedIntern)
+                        <tr class="searchable-row">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {{ $acceptedIntern->intern->nama }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $acceptedIntern->intern->asal_kampus }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $acceptedIntern->unit_magang }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span
+                                    class="px-2 py-1 text-xs rounded-full {{ $acceptedIntern->approval_status_color ?? 'bg-gray-100 text-gray-800' }}">
+                                    {{ $acceptedIntern->approval_status_label ?? 'Pending' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
+                                    class="hover:opacity-80 transition-opacity" style="color: #20B2AA;"
+                                    title="Lihat Detail">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
+                                    class="text-yellow-600 hover:text-yellow-900" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                                    class="text-red-600 hover:text-red-900" title="Hapus">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr id="emptyRow">
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                @if ($selectedUnit)
+                                    Tidak ada data peserta magang di unit <strong>{{ $selectedUnit }}</strong>
+                                @else
+                                    Belum ada data peserta magang yang terdaftar
+                                @endif
+                            </td>
+                        </tr>
+                    @endforelse
+                    <tr id="noResultsRow" class="hidden">
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            <i class="fas fa-search text-gray-400 text-3xl mb-2"></i>
+                            <p class="font-semibold">Tidak ada data yang cocok dengan pencarian Anda</p>
+                            <p class="text-sm">Coba gunakan kata kunci yang berbeda</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+    </div>
 
-        <!-- Modal Konfirmasi Hapus -->
-        <div id="deleteModal"
-            class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl w-full max-w-md transform transition-all">
-                <div class="p-6">
-                    <!-- Icon Warning -->
-                    <div class="flex justify-center mb-4">
-                        <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle text-red-600 text-4xl"></i>
-                        </div>
+    <!-- Modal Konfirmasi Hapus -->
+    <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md transform transition-all">
+            <div class="p-6">
+                <!-- Icon Warning -->
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-4xl"></i>
                     </div>
+                </div>
 
-                    <!-- Title & Message -->
-                    <h3 class="text-2xl font-bold text-gray-800 text-center mb-2">Konfirmasi Hapus</h3>
-                    <p class="text-gray-600 text-center mb-6">
-                        Apakah Anda yakin ingin menghapus data ini? <br>
-                        <span class="text-red-600 font-semibold">Tindakan ini tidak dapat dibatalkan!</span>
-                    </p>
+                <!-- Title & Message -->
+                <h3 class="text-2xl font-bold text-gray-800 text-center mb-2">Konfirmasi Hapus</h3>
+                <p class="text-gray-600 text-center mb-6">
+                    Apakah Anda yakin ingin menghapus data ini? <br>
+                    <span class="text-red-600 font-semibold">Tindakan ini tidak dapat dibatalkan!</span>
+                </p>
 
-                    <!-- Form Hidden -->
-                    <form id="deleteForm" method="POST" action="">
-                        @csrf
-                        @method('DELETE')
-                    </form>
+                <!-- Form Hidden -->
+                <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                </form>
 
-                    <!-- Action Buttons -->
-                    <div class="flex gap-3">
-                        <button type="button" onclick="closeDeleteModal()"
-                            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-all duration-200">
-                            <i class="fas fa-times mr-2"></i>Batal
-                        </button>
-                        <button type="button" onclick="confirmDelete()"
-                            class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
-                            <i class="fas fa-trash mr-2"></i>Hapus
-                        </button>
-                    </div>
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                    <button type="button" onclick="confirmDelete()"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-trash mr-2"></i>Hapus
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            const deleteModal = document.getElementById('deleteModal');
-            const deleteForm = document.getElementById('deleteForm');
-            const searchInput = document.getElementById('searchInput');
-            const searchableRows = document.querySelectorAll('.searchable-row');
-            const noResultsRow = document.getElementById('noResultsRow');
-            const emptyRow = document.getElementById('emptyRow');
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteForm = document.getElementById('deleteForm');
+        const searchInput = document.getElementById('searchInput');
+        const searchableRows = document.querySelectorAll('.searchable-row');
+        const searchableCards = document.querySelectorAll('.searchable-card');
+        const noResultsRow = document.getElementById('noResultsRow');
+        const noResultsCard = document.getElementById('noResultsCard');
+        const emptyRow = document.getElementById('emptyRow');
 
-            /**
-             * Search/Filter Table Rows
-             */
-            if (searchInput) {
-                searchInput.addEventListener('keyup', function() {
-                    const searchTerm = this.value.toLowerCase().trim();
-                    let visibleCount = 0;
+        /**
+         * Search/Filter Table Rows and Cards
+         */
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                let visibleRowCount = 0;
+                let visibleCardCount = 0;
 
-                    searchableRows.forEach(function(row) {
-                        const text = row.textContent.toLowerCase();
-                        if (text.includes(searchTerm)) {
-                            row.style.display = '';
-                            visibleCount++;
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    });
-
-                    // Show/hide no results message
-                    if (searchableRows.length > 0) {
-                        if (visibleCount === 0 && searchTerm !== '') {
-                            noResultsRow.classList.remove('hidden');
-                        } else {
-                            noResultsRow.classList.add('hidden');
-                        }
+                searchableRows.forEach(function(row) {
+                    const text = row.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        row.style.display = '';
+                        visibleRowCount++;
+                    } else {
+                        row.style.display = 'none';
                     }
                 });
-            }
 
-            function openDeleteModal(internId) {
-                deleteForm.action = `/accepted-interns/${internId}`;
-                deleteModal.classList.remove('hidden');
-            }
+                searchableCards.forEach(function(card) {
+                    const text = card.getAttribute('data-search') || card.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        card.style.display = '';
+                        visibleCardCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
 
-            function closeDeleteModal() {
-                deleteModal.classList.add('hidden');
-            }
+                if (searchableRows.length > 0) {
+                    if (visibleRowCount === 0 && searchTerm !== '') {
+                        noResultsRow.classList.remove('hidden');
+                    } else {
+                        noResultsRow.classList.add('hidden');
+                    }
+                }
 
-            function confirmDelete() {
-                deleteForm.submit();
-            }
-
-            // Close modal with ESC key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeDeleteModal();
+                if (searchableCards.length > 0) {
+                    if (visibleCardCount === 0 && searchTerm !== '') {
+                        noResultsCard.classList.remove('hidden');
+                    } else {
+                        noResultsCard.classList.add('hidden');
+                    }
                 }
             });
+        }
 
-            // Close modal when clicking outside
-            deleteModal.addEventListener('click', function(e) {
-                if (e.target === deleteModal) {
-                    closeDeleteModal();
-                }
-            });
-        </script>
-    @endsection
+        function openDeleteModal(internId) {
+            deleteForm.action = `/accepted-interns/${internId}`;
+            deleteModal.classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            deleteModal.classList.add('hidden');
+        }
+
+        function confirmDelete() {
+            deleteForm.submit();
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+    </script>
+@endsection

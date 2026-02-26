@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
 @section('title', 'Tambah Formulir')
+@section('page-title', 'Tambah Formulir')
 
 @section('content')
     <div class="mb-8 fade-in">

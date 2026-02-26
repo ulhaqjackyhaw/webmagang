@@ -107,10 +107,6 @@
                     class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">Keuntungan</a>
                 <a href="#requirements"
                     class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">Persyaratan</a>
-                <a href="{{ route('login') }}"
-                    class="px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-medium transition-all hover:shadow-lg hover:shadow-cyan-500/20">
-                    Login →
-                </a>
             </div>
 
             <!-- Mobile menu button (gunakan Alpine nanti) -->
@@ -216,11 +212,99 @@
         </div>
     </section>
 
+    <!-- Airport Gallery Slider -->
+    <section id="gallery" class="py-24 relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-4xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-accent-cyan font-semibold text-sm tracking-widest uppercase mb-4">Galeri Bandara</h2>
+                <h3 class="text-4xl md:text-5xl font-bold mb-6">Fasilitas PT Angkasa Pura Indonesia Kantor Regional 1
+                </h3>
+                <p class="text-slate-400 text-lg">Lihat suasana dan fasilitas tempat Anda akan magang</p>
+            </div>
+
+            <!-- Slider Container -->
+            <div class="relative" data-aos="fade-up" data-aos-delay="100">
+                <div class="airport-slider relative rounded-3xl overflow-hidden glass">
+                    <!-- Slides -->
+                    <div class="slides-container relative aspect-video">
+                        <div class="slide absolute inset-0 opacity-100 transition-opacity duration-1000">
+                            <img src="{{ asset('images/foto bandara (1).jpeg') }}" alt="Bandara 1"
+                                class="w-full h-full object-contain bg-slate-900" />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent">
+                            </div>
+                            <div class="absolute bottom-8 left-8 right-8">
+                                <h4 class="text-2xl font-bold text-white mb-2">Terminal Internasional</h4>
+                                <p class="text-slate-300">Fasilitas modern dengan standar internasional</p>
+                            </div>
+                        </div>
+                        <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000">
+                            <img src="{{ asset('images/foto bandara (2).jpeg') }}" alt="Bandara 2"
+                                class="w-full h-full object-contain bg-slate-900" />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent">
+                            </div>
+                            <div class="absolute bottom-8 left-8 right-8">
+                                <h4 class="text-2xl font-bold text-white mb-2">Area Komersial</h4>
+                                <p class="text-slate-300">Pusat perbelanjaan dan kuliner berkualitas</p>
+                            </div>
+                        </div>
+                        <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000">
+                            <img src="{{ asset('images/foto bandara (3).jpeg') }}" alt="Bandara 3"
+                                class="w-full h-full object-contain bg-slate-900" />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent">
+                            </div>
+                            <div class="absolute bottom-8 left-8 right-8">
+                                <h4 class="text-2xl font-bold text-white mb-2">Check-in Counter</h4>
+                                <p class="text-slate-300">Layanan check-in yang efisien dan ramah</p>
+                            </div>
+                        </div>
+                        <div class="slide absolute inset-0 opacity-0 transition-opacity duration-1000">
+                            <img src="{{ asset('images/foto bandara (4).jpeg') }}" alt="Bandara 4"
+                                class="w-full h-full object-contain bg-slate-900" />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent">
+                            </div>
+                            <div class="absolute bottom-8 left-8 right-8">
+                                <h4 class="text-2xl font-bold text-white mb-2">Arrival Hall</h4>
+                                <p class="text-slate-300">Area kedatangan yang nyaman dan sejuk</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Arrows -->
+                    <button onclick="prevSlide()"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full glass flex items-center justify-center text-white hover:bg-accent-cyan/20 transition-all z-10">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button onclick="nextSlide()"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full glass flex items-center justify-center text-white hover:bg-accent-cyan/20 transition-all z-10">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+
+                    <!-- Dots Indicator -->
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+                        <button onclick="goToSlide(0)"
+                            class="slide-dot w-3 h-3 rounded-full bg-accent-cyan transition-all"></button>
+                        <button onclick="goToSlide(1)"
+                            class="slide-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/50 transition-all"></button>
+                        <button onclick="goToSlide(2)"
+                            class="slide-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/50 transition-all"></button>
+                        <button onclick="goToSlide(3)"
+                            class="slide-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/50 transition-all"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Benefits - Bento Grid style -->
     <section id="benefits" class="py-24 bg-slate-950/50">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-4xl mx-auto mb-16" data-aos="fade-up">
-                <h2 class="text-accent-cyan font-semibold text-sm tracking-widest uppercase mb-4">Kenapa Bergabung?</h2>
+                <h2 class="text-accent-cyan font-semibold text-sm tracking-widest uppercase mb-4">Kenapa Bergabung?
+                </h2>
                 <h3 class="text-4xl md:text-5xl font-bold mb-6">Keuntungan Program Magang</h3>
                 <p class="text-slate-400 text-lg">Investasi terbaik untuk masa depan dimulai dari sini.</p>
             </div>
@@ -388,11 +472,10 @@
             <div class="flex justify-center gap-8 mb-8">
                 <a href="#benefits" class="text-slate-400 hover:text-accent-cyan">Keuntungan</a>
                 <a href="#requirements" class="text-slate-400 hover:text-accent-cyan">Persyaratan</a>
-                <a href="{{ route('login') }}" class="text-slate-400 hover:text-accent-cyan">Login</a>
             </div>
 
             <p class="text-slate-600 text-sm">
-                © 2026 URSHIPORTS. All rights reserved. Powered by Human Capital Division.<br />
+                © 2026 URSHIPORTS. All rights reserved. Powered by Human Capital Development REG I.<br />
                 <span class="font-medium text-slate-500">Injourney Airports Kantor Regional I</span>
             </p>
         </div>
@@ -403,6 +486,71 @@
         AOS.init({
             once: true,
             duration: 800
+        });
+
+        // Airport Gallery Slider
+        let currentSlide = 0;
+        const totalSlides = 4;
+        let autoSlideInterval;
+
+        function updateSlides() {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.slide-dot');
+
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.remove('opacity-0');
+                    slide.classList.add('opacity-100');
+                } else {
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('opacity-0');
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.remove('bg-white/30');
+                    dot.classList.add('bg-accent-cyan');
+                } else {
+                    dot.classList.remove('bg-accent-cyan');
+                    dot.classList.add('bg-white/30');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlides();
+            resetAutoSlide();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlides();
+            resetAutoSlide();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlides();
+            resetAutoSlide();
+        }
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlides();
+            }, 5000); // Change slide every 5 seconds
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        // Start auto-slide when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            startAutoSlide();
         });
     </script>
 

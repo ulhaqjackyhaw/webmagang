@@ -15,21 +15,43 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Admin user
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@magang.com',
-            'password' => Hash::make('4DM1NHC2025'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@magang.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('4DM1NHC2025'),
+                'role' => 'admin',
+            ]
+        );
 
         // HC user
-        User::create([
-            'name' => 'Human Capital',
-            'email' => 'hc@magang.com',
-            'password' => Hash::make('PasswordnyaHC2025'),
-            'role' => 'hc',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'hc@magang.com'],
+            [
+                'name' => 'Human Capital',
+                'password' => Hash::make('PasswordnyaHC2025'),
+                'role' => 'hc',
+            ]
+        );
 
-        // TU role has been removed - registration is now public via landing page
+        // Div Head user
+        User::updateOrCreate(
+            ['email' => 'divhead@magang.com'],
+            [
+                'name' => 'Division Head',
+                'password' => Hash::make('DivHead2025'),
+                'role' => 'div_head',
+            ]
+        );
+
+        // Deputy user
+        User::updateOrCreate(
+            ['email' => 'deputy@magang.com'],
+            [
+                'name' => 'Deputy HC',
+                'password' => Hash::make('Deputy2025'),
+                'role' => 'deputy',
+            ]
+        );
     }
 }

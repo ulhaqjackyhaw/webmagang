@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
-@section('title', 'Detail Data Database Magang')
+@section('title', 'Detail Monitoring Approval')
+@section('page-title', 'Monitoring Approval')
 
 @section('content')
     <!-- Header Section -->
@@ -12,12 +13,12 @@
             </div>
             <div>
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-900 font-heading">
-                    Detail Database Magang
+                    Detail Monitoring
                 </h1>
             </div>
         </div>
         <p class="text-gray-500 text-lg font-light ml-16">
-            Informasi lengkap peserta magang terdaftar
+            Informasi lengkap dan status approval peserta
         </p>
     </div>
 
@@ -72,26 +73,10 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="space-y-2">
-                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Periode Awal</label>
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Periode Magang</label>
                 <p class="text-gray-900 font-semibold text-lg flex items-center gap-2">
                     <i class="fas fa-calendar text-blue-500 text-sm"></i>
-                    {{ $acceptedIntern->periode_awal->format('d F Y') }}
-                </p>
-            </div>
-
-            <div class="space-y-2">
-                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Periode Akhir</label>
-                <p class="text-gray-900 font-semibold text-lg flex items-center gap-2">
-                    <i class="fas fa-calendar text-blue-500 text-sm"></i>
-                    {{ $acceptedIntern->periode_akhir->format('d F Y') }}
-                </p>
-            </div>
-
-            <div class="space-y-2">
-                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Durasi</label>
-                <p class="text-gray-900 font-semibold text-lg flex items-center gap-2">
-                    <i class="fas fa-clock text-green-500 text-sm"></i>
-                    {{ $acceptedIntern->periode_awal->diffInDays($acceptedIntern->periode_akhir) }} hari
+                    {{ $acceptedIntern->periode_magang ?? ($acceptedIntern->intern->periode_magang ?? '-') }}
                 </p>
             </div>
 
@@ -101,6 +86,21 @@
                     <i class="fas fa-building text-purple-500 text-sm"></i>
                     {{ $acceptedIntern->unit_magang }}
                 </p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Status Approval</label>
+                <span
+                    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold {{ $acceptedIntern->approval_status_color }}">
+                    @if ($acceptedIntern->approval_status === 'approved_deputy')
+                        <i class="fas fa-check-circle"></i>
+                    @elseif($acceptedIntern->approval_status === 'rejected')
+                        <i class="fas fa-times-circle"></i>
+                    @else
+                        <i class="fas fa-clock"></i>
+                    @endif
+                    {{ $acceptedIntern->approval_status_label }}
+                </span>
             </div>
 
             <div class="space-y-2">

@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
 @section('title', 'Edit User')
+@section('page-title', 'Edit User')
 
 @section('content')
     <div class="mb-6">

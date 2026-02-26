@@ -77,6 +77,17 @@
             box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.25);
         }
 
+        /* Uppercase input text */
+        input[type="text"],
+        input[type="email"] {
+            text-transform: uppercase;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder {
+            text-transform: none;
+        }
+
         .file-input::-webkit-file-upload-button {
             background: linear-gradient(135deg, #22d3ee, #06b6d4);
             color: #0f172a;
@@ -124,6 +135,13 @@
 
             <div class="p-8 md:p-12">
 
+                <!-- Instruksi Pengisian -->
+                <div class="bg-cyan-900/30 border border-cyan-500/50 text-cyan-100 px-6 py-4 rounded-2xl mb-10 backdrop-blur-sm flex items-center gap-3"
+                    data-aos="fade-up">
+                    <i class="fas fa-info-circle text-accent-cyan text-xl"></i>
+                    <span class="font-medium">Mohon melakukan pengisian data dengan benar</span>
+                </div>
+
                 @if ($errors->any())
                     <div class="bg-red-900/40 border border-red-500/50 text-red-200 px-6 py-4 rounded-2xl mb-10 backdrop-blur-sm"
                         role="alert">
@@ -137,7 +155,7 @@
                 @endif
 
                 <!-- Requirements Info - Bento style -->
-                <div class="grid md:grid-cols-2 gap-8 mb-12" data-aos="fade-up" data-aos-delay="100">
+                {{-- <div class="grid md:grid-cols-2 gap-8 mb-12" data-aos="fade-up" data-aos-delay="100">
                     <div class="glass rounded-2xl p-8">
                         <div class="flex items-center gap-4 mb-6">
                             <div
@@ -168,19 +186,131 @@
                             <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i>
                                 Lengkapi data diri</li>
                             {{-- Formulir upload dihilangkan karena sudah input data kampus by ketik --}}
-                            {{-- <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i>
+                {{-- <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i>
                                 Download formulir dan isi</li>
                             <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i> Upload
                                 formulir yang sudah diisi</li> --}}
-                            <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i> Upload
+                {{-- <li class="flex items-start gap-3"><i class="fas fa-check text-accent-cyan mt-1"></i> Upload
                                 CV, Proposal, Surat Magang Resmi</li>
                         </ul>
                     </div>
-                </div>
+                </div> --}}
 
                 <form action="{{ route('public.store') }}" method="POST" enctype="multipart/form-data"
                     class="space-y-10">
                     @csrf
+
+                    <!-- Periode Magang -->
+                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="150">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                            <i class="fas fa-calendar-alt text-accent-cyan"></i> Periode Pendaftaran Magang Kantor
+                            Regional I
+                        </h3>
+                        <p class="text-slate-400 text-sm mb-6">Pilih periode pelaksanaan magang yang Anda inginkan *</p>
+
+                        <input type="hidden" name="periode_magang" id="periode_magang"
+                            value="{{ old('periode_magang') }}" required />
+
+                        <div class="space-y-6">
+                            <!-- Periode Pendaftaran Juni 2026 -->
+                            <div class="bg-slate-800/30 rounded-xl p-5 border border-slate-700">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-lg bg-cyan-500/20 text-accent-cyan flex items-center justify-center">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white">Pendaftaran Juni 2026</h4>
+                                        <p class="text-xs text-slate-400">Pilih salah satu periode pelaksanaan</p>
+                                    </div>
+                                </div>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <button type="button" onclick="selectPeriode('Juli - September 2026')"
+                                        class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
+                                        data-periode="Juli - September 2026">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p
+                                                    class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
+                                                    Juli - September 2026</p>
+                                                <p class="text-xs text-slate-400 mt-1">3 bulan pelaksanaan</p>
+                                            </div>
+                                            <i
+                                                class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
+                                        </div>
+                                    </button>
+                                    <button type="button" onclick="selectPeriode('Oktober - Desember 2026')"
+                                        class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
+                                        data-periode="Oktober - Desember 2026">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p
+                                                    class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
+                                                    Oktober - Desember 2026</p>
+                                                <p class="text-xs text-slate-400 mt-1">3 bulan pelaksanaan</p>
+                                            </div>
+                                            <i
+                                                class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Periode Pendaftaran Desember 2026 -->
+                            <div class="bg-slate-800/30 rounded-xl p-5 border border-slate-700">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-lg bg-cyan-500/20 text-accent-cyan flex items-center justify-center">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white">Pendaftaran Desember 2026</h4>
+                                        <p class="text-xs text-slate-400">Pilih salah satu periode pelaksanaan</p>
+                                    </div>
+                                </div>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <button type="button" onclick="selectPeriode('Januari - Maret 2027')"
+                                        class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
+                                        data-periode="Januari - Maret 2027">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p
+                                                    class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
+                                                    Januari - Maret 2027</p>
+                                                <p class="text-xs text-slate-400 mt-1">3 bulan pelaksanaan</p>
+                                            </div>
+                                            <i
+                                                class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
+                                        </div>
+                                    </button>
+                                    <button type="button" onclick="selectPeriode('April - Juni 2027')"
+                                        class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
+                                        data-periode="April - Juni 2027">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p
+                                                    class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
+                                                    April - Juni 2027</p>
+                                                <p class="text-xs text-slate-400 mt-1">3 bulan pelaksanaan</p>
+                                            </div>
+                                            <i
+                                                class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selected Period Display -->
+                        <div id="selected-periode-display" class="mt-6 hidden">
+                            <div
+                                class="bg-accent-cyan/10 border border-accent-cyan/30 rounded-xl px-5 py-3 flex items-center gap-3">
+                                <i class="fas fa-check-circle text-accent-cyan"></i>
+                                <span class="text-accent-cyan font-medium">Periode dipilih: <span
+                                        id="selected-periode-text"></span></span>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Data Pribadi -->
                     <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="200">
@@ -189,22 +319,48 @@
                         </h3>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
-                                <label for="nama" class="block text-sm font-medium text-slate-300 mb-2">Nama Lengkap
+                                <label for="nama" class="block text-sm font-medium text-slate-300 mb-2">Nama
+                                    Lengkap
                                     *</label>
-                                <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required
+                                <input type="text" name="nama" id="nama" value="{{ old('nama') }}"
+                                    required
                                     class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Jenis Kelamin *</label>
+                                <div class="flex gap-4">
+                                    <label class="flex-1 cursor-pointer">
+                                        <input type="radio" name="jenis_kelamin" value="Laki-laki"
+                                            {{ old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '' }} required
+                                            class="hidden peer" />
+                                        <div
+                                            class="px-5 py-3 bg-slate-800/50 border-2 border-slate-600 rounded-xl text-white text-center peer-checked:border-accent-cyan peer-checked:bg-accent-cyan/10 hover:border-slate-500 transition-all">
+                                            <i class="fas fa-mars mr-2"></i> Laki-laki
+                                        </div>
+                                    </label>
+                                    <label class="flex-1 cursor-pointer">
+                                        <input type="radio" name="jenis_kelamin" value="Perempuan"
+                                            {{ old('jenis_kelamin') == 'Perempuan' ? 'checked' : '' }} required
+                                            class="hidden peer" />
+                                        <div
+                                            class="px-5 py-3 bg-slate-800/50 border-2 border-slate-600 rounded-xl text-white text-center peer-checked:border-accent-cyan peer-checked:bg-accent-cyan/10 hover:border-slate-500 transition-all">
+                                            <i class="fas fa-venus mr-2"></i> Perempuan
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
                             <div>
                                 <label for="nim" class="block text-sm font-medium text-slate-300 mb-2">NIM
                                     *</label>
-                                <input type="text" name="nim" id="nim" value="{{ old('nim') }}" required
+                                <input type="text" name="nim" id="nim" value="{{ old('nim') }}"
+                                    required
                                     class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
                             </div>
                             <div>
                                 <label for="no_wa" class="block text-sm font-medium text-slate-300 mb-2">Nomor
                                     WhatsApp *</label>
-                                <input type="text" name="no_wa" id="no_wa" value="{{ old('no_wa') }}" required
-                                    placeholder="Contoh: 081234567890"
+                                <input type="text" name="no_wa" id="no_wa" value="{{ old('no_wa') }}"
+                                    required placeholder="Contoh: 081234567890"
                                     class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
                             </div>
                             <div>
@@ -596,7 +752,48 @@
             if (kampusSelect.value === 'Lainnya') {
                 toggleKampusLainnya('Lainnya');
             }
+
+            // Check for old() periode value
+            const periodeValue = document.getElementById('periode_magang').value;
+            if (periodeValue) {
+                selectPeriode(periodeValue);
+            }
+
+            // Auto uppercase for text inputs
+            const uppercaseInputs = document.querySelectorAll('input[type="text"], input[type="email"]');
+            uppercaseInputs.forEach(function(input) {
+                input.addEventListener('input', function() {
+                    this.value = this.value.toUpperCase();
+                });
+            });
         });
+
+        // Select periode magang
+        function selectPeriode(periode) {
+            // Update hidden input
+            document.getElementById('periode_magang').value = periode;
+
+            // Remove selected state from all buttons
+            document.querySelectorAll('.periode-btn').forEach(btn => {
+                btn.classList.remove('border-accent-cyan', 'bg-accent-cyan/10');
+                btn.classList.add('border-slate-600', 'bg-slate-800/50');
+                btn.querySelector('.periode-check').classList.add('opacity-0');
+                btn.querySelector('.periode-check').classList.remove('opacity-100');
+            });
+
+            // Add selected state to clicked button
+            const selectedBtn = document.querySelector(`.periode-btn[data-periode="${periode}"]`);
+            if (selectedBtn) {
+                selectedBtn.classList.remove('border-slate-600', 'bg-slate-800/50');
+                selectedBtn.classList.add('border-accent-cyan', 'bg-accent-cyan/10');
+                selectedBtn.querySelector('.periode-check').classList.remove('opacity-0');
+                selectedBtn.querySelector('.periode-check').classList.add('opacity-100');
+            }
+
+            // Show selected display
+            document.getElementById('selected-periode-display').classList.remove('hidden');
+            document.getElementById('selected-periode-text').textContent = periode;
+        }
     </script>
 </body>
 

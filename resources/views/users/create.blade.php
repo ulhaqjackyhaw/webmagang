@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
 @section('title', 'Tambah User')
+@section('page-title', 'Tambah User')
 
 @section('content')
     <div class="mb-6">

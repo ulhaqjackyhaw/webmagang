@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
 @section('title', 'Ganti Password')
+@section('page-title', 'Ganti Password')
 
 @section('content')
     <!-- Header Section -->

@@ -46,9 +46,7 @@ class AcceptedInternsExport implements
             'Email Kampus',
             'No WhatsApp',
             'Unit Magang',
-            'Periode Awal',
-            'Periode Akhir',
-            'Durasi (Hari)',
+            'Periode Magang',
             'Tanggal Terdaftar',
         ];
     }
@@ -58,9 +56,7 @@ class AcceptedInternsExport implements
         static $no = 0;
         $no++;
 
-        $periodeAwal = $acceptedIntern->periode_awal;
-        $periodeAkhir = $acceptedIntern->periode_akhir;
-        $durasi = $periodeAwal->diffInDays($periodeAkhir);
+        $periodeMagang = $acceptedIntern->periode_magang ?? $acceptedIntern->intern->periode_magang ?? '-';
 
         return [
             $no,
@@ -71,9 +67,7 @@ class AcceptedInternsExport implements
             $acceptedIntern->intern->email_kampus ?? '-',
             $acceptedIntern->intern->no_wa,
             $acceptedIntern->unit_magang,
-            $periodeAwal->format('d-m-Y'),
-            $periodeAkhir->format('d-m-Y'),
-            $durasi,
+            $periodeMagang,
             $acceptedIntern->created_at->format('d-m-Y H:i'),
         ];
     }

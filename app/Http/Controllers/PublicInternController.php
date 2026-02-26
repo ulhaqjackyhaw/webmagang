@@ -65,6 +65,8 @@ class PublicInternController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'periode_magang' => 'required|string|max:100',
             'nim' => 'required|string|max:255',
             'asal_kampus' => 'required|string|max:255',
             'kampus_lainnya' => 'required_if:asal_kampus,Lainnya|nullable|string|max:255',
@@ -80,6 +82,9 @@ class PublicInternController extends Controller
             'persetujuan_data' => 'required|accepted',
         ], [
             'nama.required' => 'Nama wajib diisi.',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+            'jenis_kelamin.in' => 'Jenis kelamin tidak valid.',
+            'periode_magang.required' => 'Periode magang wajib dipilih.',
             'nim.required' => 'NIM wajib diisi.',
             'asal_kampus.required' => 'Asal kampus wajib diisi.',
             'kampus_lainnya.required_if' => 'Nama kampus wajib diisi jika memilih Lainnya.',
@@ -107,9 +112,17 @@ class PublicInternController extends Controller
         $data = $validated;
         $data['created_by'] = null; // Public registration, no user logged in
 
+        // Convert text fields to uppercase
+        $uppercaseFields = ['nama', 'nim', 'program_studi', 'email_kampus', 'asal_kampus'];
+        foreach ($uppercaseFields as $field) {
+            if (isset($data[$field])) {
+                $data[$field] = strtoupper($data[$field]);
+            }
+        }
+
         // Handle "Lainnya" selection - use custom kampus name
         if ($request->asal_kampus === 'Lainnya' && $request->kampus_lainnya) {
-            $data['asal_kampus'] = $request->kampus_lainnya;
+            $data['asal_kampus'] = strtoupper($request->kampus_lainnya);
         }
 
         // Upload files

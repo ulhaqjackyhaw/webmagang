@@ -19,27 +19,22 @@ class InternController extends Controller
         // Only HC and Admin can access - show all interns with creator info
         $query = Intern::with('creator');
 
-        // Filter by year if provided
-        $selectedYear = $request->get('year');
-        if ($selectedYear) {
-            $query->whereYear('created_at', $selectedYear);
-        }
-
-        // Filter by month if provided
-        $selectedMonth = $request->get('month');
-        if ($selectedMonth) {
-            $query->whereMonth('created_at', $selectedMonth);
+        // Filter by periode if provided
+        $selectedPeriode = $request->get('periode');
+        if ($selectedPeriode) {
+            $query->where('periode_magang', $selectedPeriode);
         }
 
         $interns = $query->latest()->get();
 
-        // Get available years from data
-        $availableYears = Intern::selectRaw('YEAR(created_at) as year')
+        // Get available periodes from data
+        $availablePeriodes = Intern::select('periode_magang')
             ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
+            ->whereNotNull('periode_magang')
+            ->orderBy('periode_magang')
+            ->pluck('periode_magang');
 
-        return view('interns.index', compact('interns', 'selectedYear', 'selectedMonth', 'availableYears'));
+        return view('interns.index', compact('interns', 'selectedPeriode', 'availablePeriodes'));
     }
 
     /**
@@ -141,43 +136,60 @@ class InternController extends Controller
     }
 
     /**
-     * Update status (for HC role)
+     * Update status (for HC role) - Just reject, no WhatsApp
      */
     public function updateStatus(Request $request, string $id)
     {
         $intern = Intern::findOrFail($id);
 
         $validated = $request->validate([
-            'status' => 'required|in:approved,rejected',
-            'rejection_reason' => 'required_if:status,rejected|nullable|string|max:500'
+            'status' => 'required|in:rejected',
+            'rejection_reason' => 'required|string|max:500'
         ], [
-            'rejection_reason.required_if' => 'Alasan penolakan wajib diisi saat menolak data.'
+            'rejection_reason.required' => 'Alasan penolakan wajib diisi saat menolak data.'
         ]);
 
         $intern->update([
-            'status' => $validated['status'],
-            'rejection_reason' => $validated['status'] === 'rejected' ? $validated['rejection_reason'] : null
+            'status' => 'rejected',
+            'rejection_reason' => $validated['rejection_reason']
         ]);
 
-        // Format phone number
-        $phone = preg_replace('/[^0-9]/', '', $intern->no_wa);
-        if (substr($phone, 0, 1) === '0') {
-            $phone = '62' . substr($phone, 1);
+        return redirect()->route('interns.index')->with('success', 'Pengajuan magang telah ditolak.');
+    }
+
+    /**
+     * Accept intern and create AcceptedIntern entry
+     */
+    public function acceptIntern(Request $request, string $id)
+    {
+        $intern = Intern::findOrFail($id);
+
+        // Validate input - only unit_magang, periode already from registration
+        $validated = $request->validate([
+            'unit_magang' => 'required|string|max:255',
+        ]);
+
+        // Check if intern already exists in accepted_interns
+        $exists = \App\Models\AcceptedIntern::where('intern_id', $intern->id)->exists();
+        if ($exists) {
+            return back()->withErrors(['error' => 'Anak magang ini sudah diproses sebelumnya.'])->withInput();
         }
 
-        if ($validated['status'] === 'approved') {
-            // Redirect to WhatsApp for approved
-            $message = "Halo {$intern->nama}, perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
-            $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
+        // Create AcceptedIntern entry - automatically sent to Div Head
+        // Periode taken from intern registration data
+        \App\Models\AcceptedIntern::create([
+            'intern_id' => $intern->id,
+            'periode_magang' => $intern->periode_magang,
+            'unit_magang' => $validated['unit_magang'],
+            'created_by' => Auth::id(),
+            'approval_status' => 'sent_to_divhead', // Automatically sent to Div Head
+            'sent_to_divhead_at' => now(),
+        ]);
 
-            return redirect($waUrl);
-        } else {
-            // Redirect to WhatsApp for rejected
-            $message = "Halo {$intern->nama}, mohon maaf pengajuan magang Anda ditolak.\n\nAlasan: {$validated['rejection_reason']}\n\nAnda dapat mengajukan kembali setelah memperbaiki kekurangan yang ada. Terima kasih.";
-            $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
+        // Update intern status to approved (accepted by HC)
+        $intern->update(['status' => 'approved']);
 
-            return redirect($waUrl);
-        }
+        return redirect()->route('accepted-interns.index')->with('success', 'Pengajuan magang diterima dan sudah diteruskan ke Div Head untuk persetujuan.');
     }
 
     /**
@@ -200,5 +212,62 @@ class InternController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Error export: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Mark document as checked
+     */
+    public function markDocumentChecked(string $id)
+    {
+        $intern = Intern::findOrFail($id);
+
+        $intern->update([
+            'document_checked' => true,
+            'document_checked_at' => now(),
+        ]);
+
+        return back()->with('success', 'Dokumen telah ditandai sebagai sudah dicek.');
+    }
+
+    /**
+     * Send WhatsApp message to intern
+     */
+    public function sendWhatsApp(Request $request, string $id)
+    {
+        $intern = Intern::findOrFail($id);
+
+        $type = $request->get('type', 'custom');
+
+        // Format phone number
+        $phone = preg_replace('/[^0-9]/', '', $intern->no_wa);
+        if (substr($phone, 0, 1) === '0') {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        // Build message based on type
+        switch ($type) {
+            case 'received':
+                $message = "Halo {$intern->nama}, perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
+                break;
+            case 'approved':
+                $message = "Halo {$intern->nama}, selamat! Pengajuan magang Anda telah DISETUJUI.\n\nSilakan menunggu informasi lebih lanjut mengenai penempatan unit dan jadwal magang Anda.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS)";
+                break;
+            case 'rejected':
+                $message = "Halo {$intern->nama}, mohon maaf pengajuan magang Anda TIDAK DAPAT kami terima saat ini.\n\n" . ($intern->rejection_reason ? "Alasan: {$intern->rejection_reason}\n\n" : "") . "Anda dapat mengajukan kembali setelah memenuhi persyaratan yang ada.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS)";
+                break;
+            case 'placement':
+                $acceptedIntern = $intern->acceptedIntern;
+                $unit = $acceptedIntern ? $acceptedIntern->unit_magang : '[Unit Magang]';
+                $periode = $acceptedIntern ? ($acceptedIntern->periode_magang ?? $intern->periode_magang) : ($intern->periode_magang ?? '[Periode Magang]');
+                $message = "Halo {$intern->nama}, berikut informasi penempatan magang Anda:\n\nUnit Magang: {$unit}\nPeriode: {$periode}\n\nSilakan hadir sesuai jadwal yang telah ditentukan.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS)";
+                break;
+            default:
+                $message = $request->get('message', "Halo {$intern->nama}, ");
+                break;
+        }
+
+        $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
+
+        return redirect($waUrl);
     }
 }
