@@ -66,7 +66,8 @@ class ApprovalController extends Controller
         $acceptedIntern->update([
             'approval_status' => 'rejected',
             'rejection_reason' => $request->rejection_reason,
-            'approved_by_divhead' => Auth::id(),
+            'rejected_by' => Auth::id(),
+            'rejected_at' => now(),
         ]);
 
         return back()->with('success', 'Pengajuan telah ditolak.');
@@ -129,7 +130,8 @@ class ApprovalController extends Controller
         $acceptedIntern->update([
             'approval_status' => 'rejected',
             'rejection_reason' => $request->rejection_reason,
-            'approved_by_deputy' => Auth::id(),
+            'rejected_by' => Auth::id(),
+            'rejected_at' => now(),
         ]);
 
         return back()->with('success', 'Pengajuan telah ditolak.');

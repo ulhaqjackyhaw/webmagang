@@ -171,7 +171,7 @@
         <div class="bg-white rounded-2xl shadow-xl p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                 <i class="fas fa-venus-mars text-pink-500 mr-2"></i>
-                Distribusi Gender
+                Distribusi Gender (Peserta Final)
             </h3>
             <div class="relative h-64">
                 <canvas id="genderChart"></canvas>
@@ -192,7 +192,7 @@
         <div class="bg-white rounded-2xl shadow-xl p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                 <i class="fas fa-graduation-cap text-indigo-500 mr-2"></i>
-                Top 10 Program Studi
+                Top 10 Program Studi (Peserta Final)
             </h3>
             <div class="relative h-64">
                 <canvas id="prodiChart"></canvas>
@@ -203,7 +203,7 @@
         <div class="bg-white rounded-2xl shadow-xl p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                 <i class="fas fa-university text-teal-500 mr-2"></i>
-                Top 10 Asal Kampus
+                Top 10 Asal Kampus (Peserta Final)
             </h3>
             <div class="relative h-64">
                 <canvas id="kampusChart"></canvas>
@@ -214,10 +214,21 @@
         <div class="bg-white rounded-2xl shadow-xl p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                 <i class="fas fa-chart-line text-green-500 mr-2"></i>
-                Trend Pendaftaran Bulanan
+                Trend Approval Final Bulanan
             </h3>
             <div class="relative h-64">
                 <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Unit Magang Chart -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 lg:col-span-2">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-building text-orange-500 mr-2"></i>
+                Distribusi Unit Magang (Peserta Final)
+            </h3>
+            <div class="relative h-64">
+                <canvas id="unitChart"></canvas>
             </div>
         </div>
     </div>
@@ -487,7 +498,7 @@
                 data: {
                     labels: {!! json_encode($monthlyTrend->pluck('month_name')) !!},
                     datasets: [{
-                        label: 'Pendaftar',
+                        label: 'Approval Final',
                         data: {!! json_encode($monthlyTrend->pluck('total')) !!},
                         borderColor: '#22C55E',
                         backgroundColor: 'rgba(34, 197, 94, 0.1)',
@@ -511,6 +522,49 @@
                         x: {
                             grid: {
                                 display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Unit Magang Chart
+            const unitCtx = document.getElementById('unitChart').getContext('2d');
+            new Chart(unitCtx, {
+                type: 'bar',
+                data: {
+                    labels: {!! json_encode($unitData->pluck('unit_magang')) !!},
+                    datasets: [{
+                        label: 'Jumlah',
+                        data: {!! json_encode($unitData->pluck('total')) !!},
+                        backgroundColor: '#F97316',
+                        borderRadius: 6,
+                        barThickness: 30
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10
+                                }
                             }
                         },
                         y: {

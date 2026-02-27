@@ -16,7 +16,7 @@ class AcceptedInternController extends Controller
      */
     public function index(Request $request)
     {
-        $query = AcceptedIntern::with(['intern', 'creator']);
+        $query = AcceptedIntern::with(['intern', 'creator', 'rejector']);
 
         // Filter by unit if provided
         $selectedUnit = $request->get('unit');
@@ -280,6 +280,61 @@ class AcceptedInternController extends Controller
     }
 
     /**
+     * Show Database Magang Detail
+     */
+    public function showDatabaseMagang($id)
+    {
+        $acceptedIntern = AcceptedIntern::with(['intern', 'creator', 'approverDivHead', 'approverDeputy'])
+            ->where('approval_status', 'approved_deputy')
+            ->findOrFail($id);
+
+        return view('database-magang.show', compact('acceptedIntern'));
+    }
+
+    /**
+     * Edit Database Magang
+     */
+    public function editDatabaseMagang($id)
+    {
+        $acceptedIntern = AcceptedIntern::with('intern')
+            ->where('approval_status', 'approved_deputy')
+            ->findOrFail($id);
+
+        return view('database-magang.edit', compact('acceptedIntern'));
+    }
+
+    /**
+     * Update Database Magang
+     */
+    public function updateDatabaseMagang(Request $request, $id)
+    {
+        $acceptedIntern = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->findOrFail($id);
+
+        $validated = $request->validate([
+            'unit_magang' => 'required|string|max:255',
+            'periode_magang' => 'nullable|string|max:255',
+        ]);
+
+        $acceptedIntern->update($validated);
+
+        return redirect()->route('database-magang.show', $id)->with('success', 'Data peserta magang berhasil diupdate!');
+    }
+
+    /**
+     * Delete Database Magang
+     */
+    public function destroyDatabaseMagang($id)
+    {
+        $acceptedIntern = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->findOrFail($id);
+
+        $acceptedIntern->delete();
+
+        return redirect()->route('database-magang.index')->with('success', 'Data peserta magang berhasil dihapus!');
+    }
+
+    /**
      * Export Database Magang
      */
     public function exportDatabaseMagang(Request $request)
@@ -336,5 +391,23 @@ class AcceptedInternController extends Controller
 
         // For now, return a view that can be printed as PDF
         return view('letters.internship', compact('acceptedIntern'));
+    }
+
+    /**
+     * Mark rejection WhatsApp as sent
+     */
+    public function markRejectionWaSent(string $id)
+    {
+        $acceptedIntern = AcceptedIntern::findOrFail($id);
+
+        if ($acceptedIntern->approval_status !== 'rejected') {
+            return back()->with('error', 'Data ini tidak dalam status ditolak.');
+        }
+
+        $acceptedIntern->update([
+            'rejection_wa_sent' => true
+        ]);
+
+        return back()->with('success', 'Status WhatsApp penolakan telah diupdate.');
     }
 }

@@ -14,7 +14,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // Basic stats
+        // Basic stats from public applications (Intern table)
         $stats = [
             'total' => Intern::count(),
             'pending' => Intern::where('status', 'pending')->count(),
@@ -35,23 +35,40 @@ class DashboardController extends Controller
             'rejected' => AcceptedIntern::where('approval_status', 'rejected')->count(),
         ];
 
-        // Chart data - Program Studi Distribution
-        $programStudiData = Intern::select('program_studi', DB::raw('count(*) as total'))
-            ->whereNotNull('program_studi')
-            ->groupBy('program_studi')
+        // Chart data from FINAL APPROVED interns (database-magang / approved_deputy)
+        // Gender Distribution - from final approved interns
+        $genderData = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->join('interns', 'accepted_interns.intern_id', '=', 'interns.id')
+            ->select('interns.jenis_kelamin', DB::raw('count(*) as total'))
+            ->whereNotNull('interns.jenis_kelamin')
+            ->groupBy('interns.jenis_kelamin')
+            ->get()
+            ->pluck('total', 'jenis_kelamin');
+
+        $stats['male'] = $genderData['Laki-laki'] ?? 0;
+        $stats['female'] = $genderData['Perempuan'] ?? 0;
+
+        // Program Studi Distribution - from final approved interns
+        $programStudiData = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->join('interns', 'accepted_interns.intern_id', '=', 'interns.id')
+            ->select('interns.program_studi', DB::raw('count(*) as total'))
+            ->whereNotNull('interns.program_studi')
+            ->groupBy('interns.program_studi')
             ->orderByDesc('total')
             ->limit(10)
             ->get();
 
-        // Asal Kampus Distribution
-        $kampusData = Intern::select('asal_kampus', DB::raw('count(*) as total'))
-            ->whereNotNull('asal_kampus')
-            ->groupBy('asal_kampus')
+        // Asal Kampus Distribution - from final approved interns
+        $kampusData = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->join('interns', 'accepted_interns.intern_id', '=', 'interns.id')
+            ->select('interns.asal_kampus', DB::raw('count(*) as total'))
+            ->whereNotNull('interns.asal_kampus')
+            ->groupBy('interns.asal_kampus')
             ->orderByDesc('total')
             ->limit(10)
             ->get();
 
-        // Unit Magang Distribution
+        // Unit Magang Distribution - from final approved interns
         $unitData = AcceptedIntern::where('approval_status', 'approved_deputy')
             ->select('unit_magang', DB::raw('count(*) as total'))
             ->whereNotNull('unit_magang')
@@ -59,13 +76,15 @@ class DashboardController extends Controller
             ->orderByDesc('total')
             ->get();
 
-        // Monthly registration trend (last 6 months)
-        $monthlyTrend = Intern::select(
-            DB::raw('YEAR(created_at) as year'),
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('count(*) as total')
-        )
-            ->where('created_at', '>=', now()->subMonths(6))
+        // Monthly trend - from final approved interns (based on approved_deputy_at date)
+        $monthlyTrend = AcceptedIntern::where('approval_status', 'approved_deputy')
+            ->whereNotNull('approved_deputy_at')
+            ->where('approved_deputy_at', '>=', now()->subMonths(6))
+            ->select(
+                DB::raw('YEAR(approved_deputy_at) as year'),
+                DB::raw('MONTH(approved_deputy_at) as month'),
+                DB::raw('count(*) as total')
+            )
             ->groupBy('year', 'month')
             ->orderBy('year')
             ->orderBy('month')

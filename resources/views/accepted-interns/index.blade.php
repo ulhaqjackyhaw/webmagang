@@ -138,15 +138,24 @@
                             onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
                             onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                             <option value="">Semua Status</option>
+                            <option value="pending" {{ ($selectedStatus ?? '') == 'pending' ? 'selected' : '' }}>Menunggu
+                                Dikirim
+                            </option>
                             <option value="sent_to_divhead"
                                 {{ ($selectedStatus ?? '') == 'sent_to_divhead' ? 'selected' : '' }}>Terkirim ke Div Head
+                            </option>
+                            <option value="approved_divhead"
+                                {{ ($selectedStatus ?? '') == 'approved_divhead' ? 'selected' : '' }}>Disetujui Div Head
                             </option>
                             <option value="sent_to_deputy"
                                 {{ ($selectedStatus ?? '') == 'sent_to_deputy' ? 'selected' : '' }}>Terkirim ke Deputy
                             </option>
                             <option value="approved_deputy"
                                 {{ ($selectedStatus ?? '') == 'approved_deputy' ? 'selected' : '' }}>Disetujui Deputy
-                                (Final)</option>
+                                (Final)
+                            </option>
+                            <option value="rejected" {{ ($selectedStatus ?? '') == 'rejected' ? 'selected' : '' }}>Ditolak
+                            </option>
                         </select>
                     </div>
 
@@ -212,19 +221,50 @@
                 </div>
 
                 <div class="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-100">
-                    <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
-                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                        style="background-color: #20B2AA;">
-                        <i class="fas fa-eye mr-1"></i> Lihat
-                    </a>
-                    <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
-                        class="flex-1 text-center bg-yellow-50 text-yellow-600 hover:bg-yellow-100 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                        <i class="fas fa-edit mr-1"></i> Edit
-                    </a>
-                    <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
-                        class="flex-1 text-center bg-red-50 text-red-600 hover:bg-red-100 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                        <i class="fas fa-trash mr-1"></i> Hapus
-                    </button>
+                    @if ($acceptedIntern->approval_status === 'rejected')
+                        {{-- Rejected: Show WhatsApp rejection and Delete buttons --}}
+                        @if (!$acceptedIntern->rejection_wa_sent)
+                            @php
+                                $phoneWaReject = preg_replace('/[^0-9]/', '', $acceptedIntern->intern->no_wa ?? '');
+                                if (str_starts_with($phoneWaReject, '0')) {
+                                    $phoneWaReject = '62' . substr($phoneWaReject, 1);
+                                }
+                                $rejectionSource = $acceptedIntern->rejection_source ?? 'Tim';
+                                $messageWaReject =
+                                    'Halo ' .
+                                    $acceptedIntern->intern->nama .
+                                    ", perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I.\n\nMohon maaf, setelah melalui proses seleksi, pengajuan magang kamu tidak dapat kami terima dengan alasan:\n\n\"" .
+                                    ($acceptedIntern->rejection_reason ?? 'Tidak memenuhi kriteria') .
+                                    "\"\n\nDitolak oleh: " .
+                                    $rejectionSource .
+                                    "\n\nTerima kasih atas minat dan partisipasinya.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS)";
+                            @endphp
+                            <a href="https://wa.me/{{ $phoneWaReject }}?text={{ urlencode($messageWaReject) }}"
+                                target="_blank" onclick="markRejectionWaSent({{ $acceptedIntern->id }})"
+                                class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-green-500">
+                                <i class="fab fa-whatsapp mr-1"></i> WA Penolakan
+                            </a>
+                        @endif
+                        <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                            class="flex-1 text-center bg-red-500 text-white hover:bg-red-600 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <i class="fas fa-trash mr-1"></i> Hapus
+                        </button>
+                    @else
+                        {{-- Normal status: Show view, edit, delete buttons --}}
+                        <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
+                            class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                            style="background-color: #20B2AA;">
+                            <i class="fas fa-eye mr-1"></i> Lihat
+                        </a>
+                        <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
+                            class="flex-1 text-center bg-yellow-50 text-yellow-600 hover:bg-yellow-100 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <i class="fas fa-edit mr-1"></i> Edit
+                        </a>
+                        <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                            class="flex-1 text-center bg-red-50 text-red-600 hover:bg-red-100 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <i class="fas fa-trash mr-1"></i> Hapus
+                        </button>
+                    @endif
                 </div>
             </div>
         @empty
@@ -291,19 +331,54 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
-                                    class="hover:opacity-80 transition-opacity" style="color: #20B2AA;"
-                                    title="Lihat Detail">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
-                                    class="text-yellow-600 hover:text-yellow-900" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
-                                    class="text-red-600 hover:text-red-900" title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                @if ($acceptedIntern->approval_status === 'rejected')
+                                    {{-- Rejected: Show WhatsApp rejection and Delete buttons --}}
+                                    @if (!$acceptedIntern->rejection_wa_sent)
+                                        @php
+                                            $phoneWaRejectTable = preg_replace(
+                                                '/[^0-9]/',
+                                                '',
+                                                $acceptedIntern->intern->no_wa ?? '',
+                                            );
+                                            if (str_starts_with($phoneWaRejectTable, '0')) {
+                                                $phoneWaRejectTable = '62' . substr($phoneWaRejectTable, 1);
+                                            }
+                                            $rejectionSourceTable = $acceptedIntern->rejection_source ?? 'Tim';
+                                            $messageWaRejectTable =
+                                                'Halo ' .
+                                                $acceptedIntern->intern->nama .
+                                                ", perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I.\n\nMohon maaf, setelah melalui proses seleksi, pengajuan magang kamu tidak dapat kami terima dengan alasan:\n\n\"" .
+                                                ($acceptedIntern->rejection_reason ?? 'Tidak memenuhi kriteria') .
+                                                "\"\n\nDitolak oleh: " .
+                                                $rejectionSourceTable .
+                                                "\n\nTerima kasih atas minat dan partisipasinya.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS)";
+                                        @endphp
+                                        <a href="https://wa.me/{{ $phoneWaRejectTable }}?text={{ urlencode($messageWaRejectTable) }}"
+                                            target="_blank" onclick="markRejectionWaSent({{ $acceptedIntern->id }})"
+                                            class="text-green-500 hover:text-green-700" title="Kirim WA Penolakan">
+                                            <i class="fab fa-whatsapp text-lg"></i>
+                                        </a>
+                                    @endif
+                                    <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                                        class="text-red-600 hover:text-red-900" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                @else
+                                    {{-- Normal status: Show view, edit, delete buttons --}}
+                                    <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
+                                        class="hover:opacity-80 transition-opacity" style="color: #20B2AA;"
+                                        title="Lihat Detail">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('accepted-interns.edit', $acceptedIntern->id) }}"
+                                        class="text-yellow-600 hover:text-yellow-900" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                                        class="text-red-600 hover:text-red-900" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -436,6 +511,24 @@
 
         function confirmDelete() {
             deleteForm.submit();
+        }
+
+        function markRejectionWaSent(internId) {
+            // Send POST request to mark rejection WhatsApp as sent
+            fetch(`/accepted-interns/${internId}/mark-rejection-wa-sent`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }).then(response => {
+                // Reload the page after marking as sent to update the UI
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }).catch(error => {
+                console.error('Error marking rejection WA sent:', error);
+            });
         }
 
         // Close modal with ESC key

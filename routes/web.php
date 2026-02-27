@@ -72,6 +72,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/accepted-interns/{id}/generate-letter', [AcceptedInternController::class, 'generateLetter'])
             ->name('accepted-interns.generateLetter');
 
+        // Mark rejection WhatsApp as sent
+        Route::post('/accepted-interns/{id}/mark-rejection-wa-sent', [AcceptedInternController::class, 'markRejectionWaSent'])
+            ->name('accepted-interns.markRejectionWaSent');
+
         Route::resource('accepted-interns', AcceptedInternController::class);
     });
 
@@ -107,6 +111,14 @@ Route::middleware(['auth'])->group(function () {
             ->name('database-magang.index');
         Route::get('/database-magang/export', [AcceptedInternController::class, 'exportDatabaseMagang'])
             ->name('database-magang.export');
+        Route::get('/database-magang/{id}', [AcceptedInternController::class, 'showDatabaseMagang'])
+            ->name('database-magang.show');
+        Route::get('/database-magang/{id}/edit', [AcceptedInternController::class, 'editDatabaseMagang'])
+            ->name('database-magang.edit');
+        Route::put('/database-magang/{id}', [AcceptedInternController::class, 'updateDatabaseMagang'])
+            ->name('database-magang.update');
+        Route::delete('/database-magang/{id}', [AcceptedInternController::class, 'destroyDatabaseMagang'])
+            ->name('database-magang.destroy');
     });
 
     // Users management (Admin only)

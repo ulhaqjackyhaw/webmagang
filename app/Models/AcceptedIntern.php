@@ -19,6 +19,9 @@ class AcceptedIntern extends Model
         'approved_by_divhead',
         'approved_by_deputy',
         'rejection_reason',
+        'rejected_by',
+        'rejected_at',
+        'rejection_wa_sent',
         'created_by'
     ];
 
@@ -27,6 +30,8 @@ class AcceptedIntern extends Model
         'approved_divhead_at' => 'datetime',
         'sent_to_deputy_at' => 'datetime',
         'approved_deputy_at' => 'datetime',
+        'rejected_at' => 'datetime',
+        'rejection_wa_sent' => 'boolean',
     ];
 
     public function intern(): BelongsTo
@@ -47,6 +52,29 @@ class AcceptedIntern extends Model
     public function approverDeputy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by_deputy');
+    }
+
+    public function rejector(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'rejected_by');
+    }
+
+    /**
+     * Get rejection source label (who rejected)
+     */
+    public function getRejectionSourceAttribute(): string
+    {
+        if (!$this->rejector) {
+            return 'Unknown';
+        }
+
+        return match ($this->rejector->role) {
+            'hc' => 'HC',
+            'div_head' => 'Div Head',
+            'deputy' => 'Deputy',
+            'admin' => 'Admin',
+            default => $this->rejector->name
+        };
     }
 
     /**

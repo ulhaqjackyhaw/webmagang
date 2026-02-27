@@ -181,10 +181,33 @@
                 </div>
 
                 <div class="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-100">
-                    <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
-                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-green-600">
-                        <i class="fas fa-eye mr-1"></i> Lihat Detail
+                    @php
+                        $phoneWa = preg_replace('/[^0-9]/', '', $acceptedIntern->intern->no_wa ?? '');
+                        if (str_starts_with($phoneWa, '0')) {
+                            $phoneWa = '62' . substr($phoneWa, 1);
+                        }
+                        $messageWa =
+                            'Halo ' .
+                            $acceptedIntern->intern->nama .
+                            ", perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
+                    @endphp
+                    <a href="https://wa.me/{{ $phoneWa }}?text={{ urlencode($messageWa) }}" target="_blank"
+                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-green-500">
+                        <i class="fab fa-whatsapp mr-1"></i> Kirim WA Surat
                     </a>
+                    <a href="{{ route('database-magang.show', $acceptedIntern->id) }}"
+                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-600">
+                        <i class="fas fa-eye mr-1"></i> Detail
+                    </a>
+                    <a href="{{ route('database-magang.edit', $acceptedIntern->id) }}"
+                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-yellow-500">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </a>
+                    <button type="button"
+                        onclick="showDeleteModal('{{ route('database-magang.destroy', $acceptedIntern->id) }}', '{{ $acceptedIntern->intern->nama }}')"
+                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-red-500">
+                        <i class="fas fa-trash mr-1"></i> Hapus
+                    </button>
                 </div>
             </div>
         @empty
@@ -262,10 +285,40 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
-                                    class="text-green-600 hover:text-green-800" title="Lihat Detail">
-                                    <i class="fas fa-eye"></i>
-                                </a>
+                                <div class="flex items-center gap-3">
+                                    @php
+                                        $phoneWaTable = preg_replace(
+                                            '/[^0-9]/',
+                                            '',
+                                            $acceptedIntern->intern->no_wa ?? '',
+                                        );
+                                        if (str_starts_with($phoneWaTable, '0')) {
+                                            $phoneWaTable = '62' . substr($phoneWaTable, 1);
+                                        }
+                                        $messageWaTable =
+                                            'Halo ' .
+                                            $acceptedIntern->intern->nama .
+                                            ", perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
+                                    @endphp
+                                    <a href="https://wa.me/{{ $phoneWaTable }}?text={{ urlencode($messageWaTable) }}"
+                                        target="_blank" class="text-green-500 hover:text-green-700"
+                                        title="Kirim WA Surat ke Kampus">
+                                        <i class="fab fa-whatsapp text-lg"></i>
+                                    </a>
+                                    <a href="{{ route('database-magang.show', $acceptedIntern->id) }}"
+                                        class="text-blue-600 hover:text-blue-800" title="Lihat Detail">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('database-magang.edit', $acceptedIntern->id) }}"
+                                        class="text-yellow-600 hover:text-yellow-800" title="Edit Data">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button"
+                                        onclick="showDeleteModal('{{ route('database-magang.destroy', $acceptedIntern->id) }}', '{{ $acceptedIntern->intern->nama }}')"
+                                        class="text-red-600 hover:text-red-800" title="Hapus Data">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -291,7 +344,79 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"
+                onclick="hideDeleteModal()"></div>
+
+            <!-- Modal panel -->
+            <div
+                class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
+                <div class="flex flex-col items-center">
+                    <!-- Warning Icon -->
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 rounded-full mb-4">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-3xl"></i>
+                    </div>
+
+                    <!-- Title -->
+                    <h3 class="text-xl font-bold text-gray-900 mb-2" id="modal-title">
+                        Konfirmasi Hapus Data
+                    </h3>
+
+                    <!-- Message -->
+                    <p class="text-gray-500 text-center mb-2">
+                        Apakah Anda yakin ingin menghapus data peserta magang:
+                    </p>
+                    <p class="font-semibold text-gray-800 text-lg mb-4" id="deleteInternName"></p>
+                    <p class="text-sm text-red-500 mb-6">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Tindakan ini tidak dapat dibatalkan!
+                    </p>
+
+                    <!-- Buttons -->
+                    <div class="flex gap-3 w-full">
+                        <button type="button" onclick="hideDeleteModal()"
+                            class="flex-1 px-4 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium transition-colors">
+                            <i class="fas fa-times mr-2"></i>Batal
+                        </button>
+                        <form id="deleteForm" method="POST" class="flex-1">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="w-full px-4 py-3 text-white bg-red-500 hover:bg-red-600 rounded-xl font-medium transition-colors">
+                                <i class="fas fa-trash mr-2"></i>Ya, Hapus
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Delete Modal Functions
+        function showDeleteModal(actionUrl, internName) {
+            document.getElementById('deleteForm').action = actionUrl;
+            document.getElementById('deleteInternName').textContent = internName;
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideDeleteModal();
+            }
+        });
+
         const searchInput = document.getElementById('searchInput');
         const searchableRows = document.querySelectorAll('.searchable-row');
         const searchableCards = document.querySelectorAll('.searchable-card');
