@@ -330,7 +330,7 @@
                 </div>
 
                 <!-- Navigation Menu -->
-                <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+                <nav class="flex-1 p-4 space-y-1 overflow-y-auto overflow-x-hidden">
                     <!-- Dashboard - All Roles -->
                     <a href="{{ route('dashboard') }}"
                         class="sidebar-link relative flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -389,6 +389,13 @@
                             @endif
                             <span class="sidebar-tooltip">Approval Pengajuan</span>
                         </a>
+
+                        <a href="{{ route('database-magang.index') }}"
+                            class="sidebar-link relative flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 {{ request()->routeIs('database-magang.*') ? 'active' : '' }}">
+                            <i class="fas fa-database w-5 text-center"></i>
+                            <span class="sidebar-text">Database Magang</span>
+                            <span class="sidebar-tooltip">Database Magang</span>
+                        </a>
                     @endif
 
                     @if (in_array(auth()->user()->role, ['deputy', 'admin']))
@@ -412,6 +419,13 @@
                                     class="sidebar-badge ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{{ $pendingDeputy }}</span>
                             @endif
                             <span class="sidebar-tooltip">Final Approval</span>
+                        </a>
+
+                        <a href="{{ route('database-magang.index') }}"
+                            class="sidebar-link relative flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 {{ request()->routeIs('database-magang.*') ? 'active' : '' }}">
+                            <i class="fas fa-database w-5 text-center"></i>
+                            <span class="sidebar-text">Database Magang</span>
+                            <span class="sidebar-tooltip">Database Magang</span>
                         </a>
                     @endif
 

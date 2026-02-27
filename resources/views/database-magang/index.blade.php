@@ -16,19 +16,21 @@
                 </p>
             </div>
             <div class="flex flex-wrap gap-3">
-                <!-- Export Button -->
-                <a href="{{ route('database-magang.export', $selectedUnit ? ['unit' => $selectedUnit, 'periode' => $selectedPeriode ?? ''] : ['periode' => $selectedPeriode ?? '']) }}"
-                    class="group relative overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-medium smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40">
-                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
-                    <i class="fas fa-file-excel text-sm"></i>
-                    <span class="font-semibold">
-                        @if ($selectedUnit)
-                            Export {{ $selectedUnit }}
-                        @else
-                            Export Semua Data
-                        @endif
-                    </span>
-                </a>
+                @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                    <!-- Export Button -->
+                    <a href="{{ route('database-magang.export', $selectedUnit ? ['unit' => $selectedUnit, 'periode' => $selectedPeriode ?? ''] : ['periode' => $selectedPeriode ?? '']) }}"
+                        class="group relative overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-medium smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40">
+                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                        <i class="fas fa-file-excel text-sm"></i>
+                        <span class="font-semibold">
+                            @if ($selectedUnit)
+                                Export {{ $selectedUnit }}
+                            @else
+                                Export Semua Data
+                            @endif
+                        </span>
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -181,33 +183,37 @@
                 </div>
 
                 <div class="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-100">
-                    @php
-                        $phoneWa = preg_replace('/[^0-9]/', '', $acceptedIntern->intern->no_wa ?? '');
-                        if (str_starts_with($phoneWa, '0')) {
-                            $phoneWa = '62' . substr($phoneWa, 1);
-                        }
-                        $messageWa =
-                            'Halo ' .
-                            $acceptedIntern->intern->nama .
-                            ", perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
-                    @endphp
-                    <a href="https://wa.me/{{ $phoneWa }}?text={{ urlencode($messageWa) }}" target="_blank"
-                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-green-500">
-                        <i class="fab fa-whatsapp mr-1"></i> Kirim WA Surat
-                    </a>
+                    @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                        @php
+                            $phoneWa = preg_replace('/[^0-9]/', '', $acceptedIntern->intern->no_wa ?? '');
+                            if (str_starts_with($phoneWa, '0')) {
+                                $phoneWa = '62' . substr($phoneWa, 1);
+                            }
+                            $messageWa =
+                                'Halo ' .
+                                $acceptedIntern->intern->nama .
+                                ", perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
+                        @endphp
+                        <a href="https://wa.me/{{ $phoneWa }}?text={{ urlencode($messageWa) }}" target="_blank"
+                            class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-green-500">
+                            <i class="fab fa-whatsapp mr-1"></i> Kirim WA Surat
+                        </a>
+                    @endif
                     <a href="{{ route('database-magang.show', $acceptedIntern->id) }}"
                         class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-600">
                         <i class="fas fa-eye mr-1"></i> Detail
                     </a>
-                    <a href="{{ route('database-magang.edit', $acceptedIntern->id) }}"
-                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-yellow-500">
-                        <i class="fas fa-edit mr-1"></i> Edit
-                    </a>
-                    <button type="button"
-                        onclick="showDeleteModal('{{ route('database-magang.destroy', $acceptedIntern->id) }}', '{{ $acceptedIntern->intern->nama }}')"
-                        class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-red-500">
-                        <i class="fas fa-trash mr-1"></i> Hapus
-                    </button>
+                    @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                        <a href="{{ route('database-magang.edit', $acceptedIntern->id) }}"
+                            class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-yellow-500">
+                            <i class="fas fa-edit mr-1"></i> Edit
+                        </a>
+                        <button type="button"
+                            onclick="showDeleteModal('{{ route('database-magang.destroy', $acceptedIntern->id) }}', '{{ $acceptedIntern->intern->nama }}')"
+                            class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-red-500">
+                            <i class="fas fa-trash mr-1"></i> Hapus
+                        </button>
+                    @endif
                 </div>
             </div>
         @empty
@@ -286,38 +292,42 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex items-center gap-3">
-                                    @php
-                                        $phoneWaTable = preg_replace(
-                                            '/[^0-9]/',
-                                            '',
-                                            $acceptedIntern->intern->no_wa ?? '',
-                                        );
-                                        if (str_starts_with($phoneWaTable, '0')) {
-                                            $phoneWaTable = '62' . substr($phoneWaTable, 1);
-                                        }
-                                        $messageWaTable =
-                                            'Halo ' .
-                                            $acceptedIntern->intern->nama .
-                                            ", perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
-                                    @endphp
-                                    <a href="https://wa.me/{{ $phoneWaTable }}?text={{ urlencode($messageWaTable) }}"
-                                        target="_blank" class="text-green-500 hover:text-green-700"
-                                        title="Kirim WA Surat ke Kampus">
-                                        <i class="fab fa-whatsapp text-lg"></i>
-                                    </a>
+                                    @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                                        @php
+                                            $phoneWaTable = preg_replace(
+                                                '/[^0-9]/',
+                                                '',
+                                                $acceptedIntern->intern->no_wa ?? '',
+                                            );
+                                            if (str_starts_with($phoneWaTable, '0')) {
+                                                $phoneWaTable = '62' . substr($phoneWaTable, 1);
+                                            }
+                                            $messageWaTable =
+                                                'Halo ' .
+                                                $acceptedIntern->intern->nama .
+                                                ", perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\nSaat ini berkas pengajuan kamu sudah kami terima dan sedang diproses sesuai dengan ketentuan dan kebutuhan perusahaan. Untuk informasinya selanjutnya akan diberitahukan di kesempatan berikutnya.\n\nTerima kasih.\n-Admin Pemagangan Kantor Regional I (URSHIPORTS; Your Internship Programme at Injourney Airports Kantor Regional I)";
+                                        @endphp
+                                        <a href="https://wa.me/{{ $phoneWaTable }}?text={{ urlencode($messageWaTable) }}"
+                                            target="_blank" class="text-green-500 hover:text-green-700"
+                                            title="Kirim WA Surat ke Kampus">
+                                            <i class="fab fa-whatsapp text-lg"></i>
+                                        </a>
+                                    @endif
                                     <a href="{{ route('database-magang.show', $acceptedIntern->id) }}"
                                         class="text-blue-600 hover:text-blue-800" title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('database-magang.edit', $acceptedIntern->id) }}"
-                                        class="text-yellow-600 hover:text-yellow-800" title="Edit Data">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button"
-                                        onclick="showDeleteModal('{{ route('database-magang.destroy', $acceptedIntern->id) }}', '{{ $acceptedIntern->intern->nama }}')"
-                                        class="text-red-600 hover:text-red-800" title="Hapus Data">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                                        <a href="{{ route('database-magang.edit', $acceptedIntern->id) }}"
+                                            class="text-yellow-600 hover:text-yellow-800" title="Edit Data">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button"
+                                            onclick="showDeleteModal('{{ route('database-magang.destroy', $acceptedIntern->id) }}', '{{ $acceptedIntern->intern->nama }}')"
+                                            class="text-red-600 hover:text-red-800" title="Hapus Data">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

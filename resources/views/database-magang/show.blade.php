@@ -248,18 +248,20 @@
 
         <!-- Action Buttons -->
         <div class="pt-8 mt-8 border-t border-gray-100 flex flex-wrap gap-3">
-            <a href="{{ route('database-magang.edit', $acceptedIntern->id) }}"
-                class="group relative overflow-hidden bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-yellow-500/30 hover:shadow-xl hover:shadow-yellow-500/40">
-                <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
-                <i class="fas fa-edit text-sm"></i>
-                <span>Edit Data</span>
-            </a>
-            <button type="button" onclick="showDeleteModal()"
-                class="group relative overflow-hidden bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40">
-                <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
-                <i class="fas fa-trash text-sm"></i>
-                <span>Hapus Data</span>
-            </button>
+            @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                <a href="{{ route('database-magang.edit', $acceptedIntern->id) }}"
+                    class="group relative overflow-hidden bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-yellow-500/30 hover:shadow-xl hover:shadow-yellow-500/40">
+                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                    <i class="fas fa-edit text-sm"></i>
+                    <span>Edit Data</span>
+                </a>
+                <button type="button" onclick="showDeleteModal()"
+                    class="group relative overflow-hidden bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40">
+                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                    <i class="fas fa-trash text-sm"></i>
+                    <span>Hapus Data</span>
+                </button>
+            @endif
             <a href="{{ route('database-magang.index') }}"
                 class="group bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2">
                 <i class="fas fa-arrow-left text-sm"></i>

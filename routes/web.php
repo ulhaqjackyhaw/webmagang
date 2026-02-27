@@ -105,20 +105,25 @@ Route::middleware(['auth'])->group(function () {
             ->name('approvals.show');
     });
 
-    // Database peserta magang yang sudah di-ACC final (semua role bisa lihat)
-    Route::middleware(['role:hc,div_head,deputy,admin'])->group(function () {
-        Route::get('/database-magang', [AcceptedInternController::class, 'databaseMagang'])
-            ->name('database-magang.index');
+    // Database peserta magang yang sudah di-ACC final
+    // Only HC and Admin can export/edit/delete
+    Route::middleware(['role:hc,admin'])->group(function () {
         Route::get('/database-magang/export', [AcceptedInternController::class, 'exportDatabaseMagang'])
             ->name('database-magang.export');
-        Route::get('/database-magang/{id}', [AcceptedInternController::class, 'showDatabaseMagang'])
-            ->name('database-magang.show');
         Route::get('/database-magang/{id}/edit', [AcceptedInternController::class, 'editDatabaseMagang'])
             ->name('database-magang.edit');
         Route::put('/database-magang/{id}', [AcceptedInternController::class, 'updateDatabaseMagang'])
             ->name('database-magang.update');
         Route::delete('/database-magang/{id}', [AcceptedInternController::class, 'destroyDatabaseMagang'])
             ->name('database-magang.destroy');
+    });
+
+    // All roles can view
+    Route::middleware(['role:hc,div_head,deputy,admin'])->group(function () {
+        Route::get('/database-magang', [AcceptedInternController::class, 'databaseMagang'])
+            ->name('database-magang.index');
+        Route::get('/database-magang/{id}', [AcceptedInternController::class, 'showDatabaseMagang'])
+            ->name('database-magang.show');
     });
 
     // Users management (Admin only)

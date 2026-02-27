@@ -84,15 +84,11 @@
                                 class="flex-1 text-center bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition">
                                 <i class="fas fa-eye mr-1"></i> Detail
                             </a>
-                            <form action="{{ route('approvals.deputy.approve', $item->id) }}" method="POST"
-                                class="flex-1">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition"
-                                    onclick="return confirm('Berikan persetujuan final?')">
-                                    <i class="fas fa-check-double mr-1"></i> Final
-                                </button>
-                            </form>
+                            <button type="button"
+                                onclick="showApproveModal({{ $item->id }}, '{{ $item->intern->nama }}')"
+                                class="flex-1 bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition">
+                                <i class="fas fa-check-double mr-1"></i> Final
+                            </button>
                             <button type="button" onclick="showRejectModal({{ $item->id }})"
                                 class="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition">
                                 <i class="fas fa-times mr-1"></i> Tolak
@@ -146,15 +142,11 @@
                                             class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm transition">
                                             <i class="fas fa-eye mr-1"></i> Detail
                                         </a>
-                                        <form action="{{ route('approvals.deputy.approve', $item->id) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            <button type="submit"
-                                                class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm transition"
-                                                onclick="return confirm('Berikan persetujuan final?')">
-                                                <i class="fas fa-check-double mr-1"></i> Final Approve
-                                            </button>
-                                        </form>
+                                        <button type="button"
+                                            onclick="showApproveModal({{ $item->id }}, '{{ $item->intern->nama }}')"
+                                            class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm transition">
+                                            <i class="fas fa-check-double mr-1"></i> Final Approve
+                                        </button>
                                         <button type="button" onclick="showRejectModal({{ $item->id }})"
                                             class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm transition">
                                             <i class="fas fa-times mr-1"></i> Tolak
@@ -251,27 +243,105 @@
     </div>
 
     <!-- Reject Modal -->
-    <div id="rejectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Tolak Pengajuan</h3>
-            <form id="rejectForm" method="POST">
-                @csrf
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Alasan Penolakan</label>
-                    <textarea name="rejection_reason" rows="4"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                        required placeholder="Masukkan alasan penolakan..."></textarea>
-                </div>
-                <div class="flex justify-end space-x-3">
+    <div id="rejectModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto transform transition-all">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-t-2xl px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-white/20 p-2 rounded-lg">
+                            <i class="fas fa-times-circle text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Tolak Pengajuan</h3>
+                    </div>
                     <button type="button" onclick="closeRejectModal()"
-                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                        Batal
+                        class="text-white/80 hover:text-white transition">
+                        <i class="fas fa-times text-xl"></i>
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-                        Tolak Pengajuan
+                </div>
+            </div>
+            <!-- Body -->
+            <form id="rejectForm" method="POST" class="p-6">
+                @csrf
+                <div class="mb-6">
+                    <p class="text-gray-600 text-sm mb-4">
+                        Apakah Anda yakin ingin menolak pengajuan ini? Anda dapat memberikan alasan penolakan (opsional).
+                    </p>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-comment-alt text-gray-400 mr-1"></i>
+                        Alasan Penolakan <span class="text-gray-400 font-normal">(Opsional)</span>
+                    </label>
+                    <textarea name="rejection_reason" rows="4"
+                        class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition resize-none"
+                        placeholder="Masukkan alasan penolakan jika diperlukan..."></textarea>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeRejectModal()"
+                        class="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium transition">
+                        <i class="fas fa-arrow-left mr-2"></i>Batal
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 font-medium shadow-lg shadow-red-500/30 transition">
+                        <i class="fas fa-times mr-2"></i>Ya, Tolak
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Approve Modal -->
+    <div id="approveModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto transform transition-all">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-t-2xl px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-white/20 p-2 rounded-lg">
+                            <i class="fas fa-check-double text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Final Approval</h3>
+                    </div>
+                    <button type="button" onclick="closeApproveModal()"
+                        class="text-white/80 hover:text-white transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Body -->
+            <div class="p-6">
+                <div class="flex flex-col items-center text-center mb-6">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-award text-green-500 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">Konfirmasi Persetujuan Final</h4>
+                    <p class="text-gray-600 text-sm">
+                        Peserta ini akan mendapatkan <span class="font-semibold text-emerald-600">persetujuan final</span>
+                        dan dapat memulai program magang.
+                    </p>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
+                    <div class="flex items-start space-x-3">
+                        <i class="fas fa-user-check text-emerald-500 mt-0.5"></i>
+                        <div class="text-sm text-emerald-700">
+                            <p class="font-medium mb-1">Peserta:</p>
+                            <p id="approveInternName" class="font-bold text-emerald-800">-</p>
+                        </div>
+                    </div>
+                </div>
+                <form id="approveForm" method="POST">
+                    @csrf
+                    <div class="flex space-x-3">
+                        <button type="button" onclick="closeApproveModal()"
+                            class="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium transition">
+                            <i class="fas fa-arrow-left mr-2"></i>Batal
+                        </button>
+                        <button type="submit"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 font-medium shadow-lg shadow-green-500/30 transition">
+                            <i class="fas fa-check-double mr-2"></i>Ya, Setujui
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -286,5 +356,30 @@
             document.getElementById('rejectModal').classList.add('hidden');
             document.getElementById('rejectModal').classList.remove('flex');
         }
+
+        function showApproveModal(id, name) {
+            document.getElementById('approveForm').action = '/approvals/deputy/' + id + '/approve';
+            document.getElementById('approveInternName').textContent = name;
+            document.getElementById('approveModal').classList.remove('hidden');
+            document.getElementById('approveModal').classList.add('flex');
+        }
+
+        function closeApproveModal() {
+            document.getElementById('approveModal').classList.add('hidden');
+            document.getElementById('approveModal').classList.remove('flex');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('rejectModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRejectModal();
+            }
+        });
+
+        document.getElementById('approveModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeApproveModal();
+            }
+        });
     </script>
 @endsection

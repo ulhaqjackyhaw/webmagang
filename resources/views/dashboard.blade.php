@@ -40,7 +40,7 @@
                 </div>
                 <div class="flex items-center text-white text-opacity-90 text-sm">
                     <i class="fas fa-chart-line mr-2"></i>
-                    <span>Total Pendaftar Magang</span>
+                    <span>Total Pengajuan Magang</span>
                 </div>
             </div>
         </div>
@@ -57,13 +57,13 @@
                         <i class="fas fa-clock text-2xl"></i>
                     </div>
                     <div class="text-right">
-                        <p class="text-yellow-100 text-sm font-medium">Menunggu</p>
+                        <p class="text-yellow-100 text-sm font-medium">Menunggu Diproses oleh Staff HC</p>
                         <p class="text-4xl font-bold mt-1">{{ $stats['pending'] }}</p>
                     </div>
                 </div>
                 <div class="flex items-center text-yellow-100 text-sm">
                     <i class="fas fa-hourglass-half mr-2"></i>
-                    <span>Belum Diproses</span>
+                    <span>Belum Diproses oleh Staff HC</span>
                 </div>
             </div>
         </div>
@@ -80,13 +80,13 @@
                         <i class="fas fa-check-circle text-2xl"></i>
                     </div>
                     <div class="text-right">
-                        <p class="text-green-100 text-sm font-medium">Diterima</p>
+                        <p class="text-green-100 text-sm font-medium">Diterima oleh Staff HC</p>
                         <p class="text-4xl font-bold mt-1">{{ $stats['approved'] }}</p>
                     </div>
                 </div>
                 <div class="flex items-center text-green-100 text-sm">
                     <i class="fas fa-thumbs-up mr-2"></i>
-                    <span>Telah Disetujui</span>
+                    <span>Telah Disetujui oleh Staff HC</span>
                 </div>
             </div>
         </div>
@@ -103,20 +103,20 @@
                         <i class="fas fa-times-circle text-2xl"></i>
                     </div>
                     <div class="text-right">
-                        <p class="text-red-100 text-sm font-medium">Ditolak</p>
+                        <p class="text-red-100 text-sm font-medium">Ditolak oleh Staff HC</p>
                         <p class="text-4xl font-bold mt-1">{{ $stats['rejected'] }}</p>
                     </div>
                 </div>
                 <div class="flex items-center text-red-100 text-sm">
                     <i class="fas fa-ban mr-2"></i>
-                    <span>Tidak Disetujui</span>
+                    <span>Tidak Disetujui oleh Staff HC</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Approval Status Cards (for HC/Admin) -->
-    @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
+    <!-- Approval Status Cards (for HC/Admin/Div Head/Deputy) -->
+    @if (in_array(auth()->user()->role, ['hc', 'admin', 'div_head', 'deputy']))
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-xl shadow-md p-4 border-l-4 border-blue-500">
                 <div class="flex items-center justify-between">
@@ -154,7 +154,7 @@
             <div class="bg-white rounded-xl shadow-md p-4 border-l-4 border-red-500">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm">Ditolak</p>
+                        <p class="text-gray-500 text-sm">Ditolak DivHead atau Deputy</p>
                         <p class="text-2xl font-bold text-red-600">{{ $acceptanceStats['rejected'] ?? 0 }}</p>
                     </div>
                     <div class="bg-red-100 p-3 rounded-full">
@@ -221,14 +221,45 @@
             </div>
         </div>
 
-        <!-- Unit Magang Chart -->
+        <!-- Unit Magang Table -->
         <div class="bg-white rounded-2xl shadow-xl p-6 lg:col-span-2">
             <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                 <i class="fas fa-building text-orange-500 mr-2"></i>
                 Distribusi Unit Magang (Peserta Final)
             </h3>
-            <div class="relative h-64">
-                <canvas id="unitChart"></canvas>
+            <div class="overflow-auto max-h-64 rounded-lg border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50 sticky top-0">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">No
+                            </th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Unit Magang</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($unitData as $index => $unit)
+                            <tr class="hover:bg-orange-50 transition-colors">
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ $index + 1 }}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-800">
+                                    {{ $unit->unit_magang }}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-center">
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-orange-100 text-orange-700">
+                                        {{ $unit->total }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="px-4 py-6 text-center text-gray-500">Belum ada data unit magang
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -246,31 +277,147 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <a href="{{ route('interns.index') }}"
-                class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
-                style="background: linear-gradient(to bottom right, rgba(32, 178, 170, 0.1), rgba(32, 178, 170, 0.2)); border-color: #20B2AA;">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
-                    style="background-color: #20B2AA;">
-                </div>
-                <div class="relative z-10">
-                    <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+            @if (in_array(auth()->user()->role, ['hc', 'admin']))
+                <a href="{{ route('interns.index') }}"
+                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                    style="background: linear-gradient(to bottom right, rgba(32, 178, 170, 0.1), rgba(32, 178, 170, 0.2)); border-color: #20B2AA;">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
                         style="background-color: #20B2AA;">
-                        <i
-                            class="fas fa-list text-white text-2xl transition-colors duration-300 group-hover:text-[#20B2AA]"></i>
                     </div>
-                    <h3 class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
-                        Lihat Data Pengajuan Magang</h3>
-                    <p
-                        class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
-                        Lihat semua
-                        data pengajuan magang</p>
-                    <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
-                        style="color: #20B2AA;">
-                        <span>Buka Data</span>
-                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                            style="background-color: #20B2AA;">
+                            <i
+                                class="fas fa-list text-white text-2xl transition-colors duration-300 group-hover:text-[#20B2AA]"></i>
+                        </div>
+                        <h3
+                            class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
+                            Lihat Data Pengajuan Magang</h3>
+                        <p
+                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                            Lihat semua
+                            data pengajuan magang</p>
+                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                            style="color: #20B2AA;">
+                            <span>Buka Data</span>
+                            <i
+                                class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            @endif
+
+            @if (auth()->user()->role === 'div_head')
+                <a href="{{ route('approvals.divhead.index') }}"
+                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                    style="background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.2)); border-color: #3B82F6;">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
+                        style="background-color: #3B82F6;">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                            style="background-color: #3B82F6;">
+                            <i
+                                class="fas fa-clipboard-check text-white text-2xl transition-colors duration-300 group-hover:text-blue-500"></i>
+                        </div>
+                        <h3
+                            class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
+                            Approval Pengajuan</h3>
+                        <p
+                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                            Review dan approve pengajuan magang</p>
+                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                            style="color: #3B82F6;">
+                            <span>Buka Approval</span>
+                            <i
+                                class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{{ route('database-magang.index') }}"
+                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                    style="background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2)); border-color: #10B981;">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
+                        style="background-color: #10B981;">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                            style="background-color: #10B981;">
+                            <i
+                                class="fas fa-database text-white text-2xl transition-colors duration-300 group-hover:text-green-500"></i>
+                        </div>
+                        <h3
+                            class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
+                            Database Magang</h3>
+                        <p
+                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                            Lihat data peserta magang final</p>
+                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                            style="color: #10B981;">
+                            <span>Lihat Database</span>
+                            <i
+                                class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                </a>
+            @endif
+
+            @if (auth()->user()->role === 'deputy')
+                <a href="{{ route('approvals.deputy.index') }}"
+                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                    style="background: linear-gradient(to bottom right, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.2)); border-color: #8B5CF6;">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
+                        style="background-color: #8B5CF6;">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                            style="background-color: #8B5CF6;">
+                            <i
+                                class="fas fa-stamp text-white text-2xl transition-colors duration-300 group-hover:text-purple-500"></i>
+                        </div>
+                        <h3
+                            class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
+                            Final Approval</h3>
+                        <p
+                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                            Persetujuan akhir pengajuan magang</p>
+                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                            style="color: #8B5CF6;">
+                            <span>Buka Approval</span>
+                            <i
+                                class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{{ route('database-magang.index') }}"
+                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
+                    style="background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2)); border-color: #10B981;">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
+                        style="background-color: #10B981;">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
+                            style="background-color: #10B981;">
+                            <i
+                                class="fas fa-database text-white text-2xl transition-colors duration-300 group-hover:text-green-500"></i>
+                        </div>
+                        <h3
+                            class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
+                            Database Magang</h3>
+                        <p
+                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
+                            Lihat data peserta magang final</p>
+                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
+                            style="color: #10B981;">
+                            <span>Lihat Database</span>
+                            <i
+                                class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                </a>
+            @endif
 
             @if (auth()->user()->role === 'hc' || auth()->user()->role === 'admin')
                 <a href="{{ route('accepted-interns.index') }}"
@@ -534,48 +681,7 @@
                 }
             });
 
-            // Unit Magang Chart
-            const unitCtx = document.getElementById('unitChart').getContext('2d');
-            new Chart(unitCtx, {
-                type: 'bar',
-                data: {
-                    labels: {!! json_encode($unitData->pluck('unit_magang')) !!},
-                    datasets: [{
-                        label: 'Jumlah',
-                        data: {!! json_encode($unitData->pluck('total')) !!},
-                        backgroundColor: '#F97316',
-                        borderRadius: 6,
-                        barThickness: 30
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: {
-                                    size: 10
-                                }
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0,0,0,0.05)'
-                            }
-                        }
-                    }
-                }
-            });
+
         });
     </script>
 @endsection

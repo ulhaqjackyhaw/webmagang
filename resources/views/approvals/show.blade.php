@@ -137,6 +137,40 @@
                         <p class="text-sm text-red-700 mt-1">{{ $acceptedIntern->rejection_reason }}</p>
                     </div>
                 @endif
+
+                {{-- Action Buttons for Div Head --}}
+                @if (auth()->user()->role === 'div_head' && $acceptedIntern->approval_status === 'sent_to_divhead')
+                    <div class="mt-6 space-y-3">
+                        <form action="{{ route('approvals.divhead.approve', $acceptedIntern->id) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-3 rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition shadow-lg shadow-green-500/30">
+                                <i class="fas fa-check mr-2"></i>Setujui Pengajuan
+                            </button>
+                        </form>
+                        <button type="button" onclick="showRejectModal({{ $acceptedIntern->id }})"
+                            class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-medium hover:from-red-600 hover:to-red-700 transition shadow-lg shadow-red-500/30">
+                            <i class="fas fa-times mr-2"></i>Tolak Pengajuan
+                        </button>
+                    </div>
+                @endif
+
+                {{-- Action Buttons for Deputy --}}
+                @if (auth()->user()->role === 'deputy' && $acceptedIntern->approval_status === 'sent_to_deputy')
+                    <div class="mt-6 space-y-3">
+                        <form action="{{ route('approvals.deputy.approve', $acceptedIntern->id) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-3 rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition shadow-lg shadow-green-500/30">
+                                <i class="fas fa-check-double mr-2"></i>Setujui Final
+                            </button>
+                        </form>
+                        <button type="button" onclick="showRejectModal({{ $acceptedIntern->id }})"
+                            class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-medium hover:from-red-600 hover:to-red-700 transition shadow-lg shadow-red-500/30">
+                            <i class="fas fa-times mr-2"></i>Tolak Pengajuan
+                        </button>
+                    </div>
+                @endif
             </div>
 
             <!-- Approval Timeline -->
@@ -239,4 +273,78 @@
             </div>
         </div>
     </div>
+
+    {{-- Reject Modal --}}
+    @if (
+        (auth()->user()->role === 'div_head' && $acceptedIntern->approval_status === 'sent_to_divhead') ||
+            (auth()->user()->role === 'deputy' && $acceptedIntern->approval_status === 'sent_to_deputy'))
+        <div id="rejectModal"
+            class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto transform transition-all">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-t-2xl px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-white/20 p-2 rounded-lg">
+                                <i class="fas fa-times-circle text-white text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Tolak Pengajuan</h3>
+                        </div>
+                        <button type="button" onclick="closeRejectModal()"
+                            class="text-white/80 hover:text-white transition">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Body -->
+                <form id="rejectForm" method="POST"
+                    action="{{ auth()->user()->role === 'div_head' ? route('approvals.divhead.reject', $acceptedIntern->id) : route('approvals.deputy.reject', $acceptedIntern->id) }}"
+                    class="p-6">
+                    @csrf
+                    <div class="mb-6">
+                        <p class="text-gray-600 text-sm mb-4">
+                            Apakah Anda yakin ingin menolak pengajuan ini? Anda dapat memberikan alasan penolakan
+                            (opsional).
+                        </p>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-comment-alt text-gray-400 mr-1"></i>
+                            Alasan Penolakan <span class="text-gray-400 font-normal">(Opsional)</span>
+                        </label>
+                        <textarea name="rejection_reason" rows="4"
+                            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition resize-none"
+                            placeholder="Masukkan alasan penolakan jika diperlukan..."></textarea>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button type="button" onclick="closeRejectModal()"
+                            class="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium transition">
+                            <i class="fas fa-arrow-left mr-2"></i>Batal
+                        </button>
+                        <button type="submit"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 font-medium shadow-lg shadow-red-500/30 transition">
+                            <i class="fas fa-times mr-2"></i>Ya, Tolak
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function showRejectModal(id) {
+                document.getElementById('rejectModal').classList.remove('hidden');
+                document.getElementById('rejectModal').classList.add('flex');
+            }
+
+            function closeRejectModal() {
+                document.getElementById('rejectModal').classList.add('hidden');
+                document.getElementById('rejectModal').classList.remove('flex');
+            }
+
+            // Close modal when clicking outside
+            document.getElementById('rejectModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeRejectModal();
+                }
+            });
+        </script>
+    @endif
 @endsection

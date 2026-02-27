@@ -54,7 +54,7 @@ class ApprovalController extends Controller
     public function divHeadReject(Request $request, $id)
     {
         $request->validate([
-            'rejection_reason' => 'required|string|max:500'
+            'rejection_reason' => 'nullable|string|max:500'
         ]);
 
         $acceptedIntern = AcceptedIntern::findOrFail($id);
@@ -118,7 +118,7 @@ class ApprovalController extends Controller
     public function deputyReject(Request $request, $id)
     {
         $request->validate([
-            'rejection_reason' => 'required|string|max:500'
+            'rejection_reason' => 'nullable|string|max:500'
         ]);
 
         $acceptedIntern = AcceptedIntern::findOrFail($id);
