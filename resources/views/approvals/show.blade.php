@@ -145,7 +145,7 @@
                             @csrf
                             <button type="submit"
                                 class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-3 rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition shadow-lg shadow-green-500/30">
-                                <i class="fas fa-check mr-2"></i>Setujui Pengajuan
+                                <i class="fas fa-check mr-2"></i>Setujui & Kirim ke Deputy
                             </button>
                         </form>
                         <button type="button" onclick="showRejectModal({{ $acceptedIntern->id }})"
