@@ -223,10 +223,17 @@
 
         <!-- Unit Magang Table -->
         <div class="bg-white rounded-2xl shadow-xl p-6 lg:col-span-2">
-            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-building text-orange-500 mr-2"></i>
-                Distribusi Unit Magang (Peserta Final)
-            </h3>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-building text-orange-500 mr-2"></i>
+                    Distribusi Unit Magang (Peserta Final)
+                </h3>
+                <div
+                    class="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-2 rounded-xl shadow-md">
+                    <i class="fas fa-users"></i>
+                    <span class="font-semibold">Total Magang: {{ $unitData->sum('total') }} Orang</span>
+                </div>
+            </div>
             <div class="overflow-auto max-h-64 rounded-lg border border-gray-200">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50 sticky top-0">
@@ -261,6 +268,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 
