@@ -223,7 +223,8 @@
                     <p class="text-lg text-slate-200 leading-relaxed">
                         Para calon peserta magang dapat dengan mudah melengkapi dokumen persyaratan, mengisi formulir
                         pendaftaran, dan mengunggah berkas yang diperlukan hanya dengan <span
-                            class="font-semibold text-accent-cyan">klik tombol "Daftar Sekarang"</span> yang tersedia di
+                            class="font-semibold text-accent-cyan">klik tombol "Daftar Sekarang"</span> yang tersedia
+                        di
                         halaman ini.
                     </p>
                 </div>
@@ -251,7 +252,8 @@
     <section id="gallery" class="py-24 relative overflow-hidden">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-4xl mx-auto mb-16" data-aos="fade-up">
-                <h2 class="text-accent-cyan font-semibold text-sm tracking-widest uppercase mb-4">Galeri Bandara</h2>
+                <h2 class="text-accent-cyan font-semibold text-sm tracking-widest uppercase mb-4">Galeri Injourney
+                    Airports</h2>
                 <h3 class="text-4xl md:text-5xl font-bold mb-6">Fasilitas PT Angkasa Pura Indonesia Kantor Regional 1
                 </h3>
                 <p class="text-slate-400 text-lg">Lihat suasana dan fasilitas tempat Anda akan magang</p>
