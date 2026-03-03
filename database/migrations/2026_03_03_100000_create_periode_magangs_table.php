@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->string('nama_periode'); // e.g., "Juli - September 2026"
             $table->date('tanggal_mulai'); // Start date of the period
             $table->date('tanggal_selesai'); // End date of the period
-            $table->date('batas_pendaftaran'); // Registration deadline
             $table->boolean('is_active')->default(true); // Whether the period is open for registration
             $table->text('keterangan')->nullable(); // Additional notes
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();

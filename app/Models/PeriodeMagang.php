@@ -12,7 +12,6 @@ class PeriodeMagang extends Model
         'nama_periode',
         'tanggal_mulai',
         'tanggal_selesai',
-        'batas_pendaftaran',
         'is_active',
         'keterangan',
         'created_by',
@@ -21,7 +20,6 @@ class PeriodeMagang extends Model
     protected $casts = [
         'tanggal_mulai' => 'date',
         'tanggal_selesai' => 'date',
-        'batas_pendaftaran' => 'date',
         'is_active' => 'boolean',
     ];
 
