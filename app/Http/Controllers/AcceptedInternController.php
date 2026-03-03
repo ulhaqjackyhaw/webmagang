@@ -33,10 +33,22 @@ class AcceptedInternController extends Controller
         // Filter by status if provided
         $selectedStatus = $request->get('status');
         if ($selectedStatus) {
-            $query->where('approval_status', $selectedStatus);
+            if ($selectedStatus === 'doc_unread') {
+                // Dokumen Belum Dibaca: pending + documents_verified = false
+                $query->where('approval_status', 'pending')
+                    ->where('documents_verified', false);
+            } elseif ($selectedStatus === 'doc_read') {
+                // Dokumen Telah Dibaca: pending + documents_verified = true
+                $query->where('approval_status', 'pending')
+                    ->where('documents_verified', true);
+            } else {
+                $query->where('approval_status', $selectedStatus);
+            }
         }
 
-        $acceptedInterns = $query->latest()->get();
+        // Per page pagination
+        $perPage = $request->get('per_page', 10);
+        $acceptedInterns = $query->latest()->paginate($perPage)->withQueryString();
 
         // Get statistics by unit
         $unitStats = AcceptedIntern::selectRaw('unit_magang, COUNT(*) as total')
@@ -53,7 +65,7 @@ class AcceptedInternController extends Controller
             ->orderBy('periode_magang')
             ->pluck('periode_magang');
 
-        return view('accepted-interns.index', compact('acceptedInterns', 'unitStats', 'totalInterns', 'selectedUnit', 'selectedPeriode', 'availablePeriodes', 'selectedStatus'));
+        return view('accepted-interns.index', compact('acceptedInterns', 'unitStats', 'totalInterns', 'selectedUnit', 'selectedPeriode', 'availablePeriodes', 'selectedStatus', 'perPage'));
     }
 
     /**
@@ -206,7 +218,30 @@ class AcceptedInternController extends Controller
     }
 
     /**
-     * Send to Div Head for approval
+     * Verify documents and send to Div Head for approval
+     */
+    public function verifyDocumentsAndSend(string $id)
+    {
+        $acceptedIntern = AcceptedIntern::findOrFail($id);
+
+        if ($acceptedIntern->approval_status !== 'pending') {
+            return back()->with('error', 'Data ini sudah dikirim untuk approval sebelumnya.');
+        }
+
+        // Mark documents as verified and send to Div Head
+        $acceptedIntern->update([
+            'documents_verified' => true,
+            'documents_verified_at' => now(),
+            'documents_verified_by' => Auth::id(),
+            'approval_status' => 'sent_to_divhead',
+            'sent_to_divhead_at' => now(),
+        ]);
+
+        return redirect()->route('accepted-interns.index')->with('success', 'Dokumen berhasil diverifikasi dan data dikirim ke Div Head untuk approval.');
+    }
+
+    /**
+     * Send to Div Head for approval (requires documents to be verified first)
      */
     public function sendToApproval(string $id)
     {
@@ -216,12 +251,177 @@ class AcceptedInternController extends Controller
             return back()->with('error', 'Data ini sudah dikirim untuk approval sebelumnya.');
         }
 
+        if (!$acceptedIntern->documents_verified) {
+            return back()->with('error', 'Dokumen harus diverifikasi terlebih dahulu sebelum dikirim ke Div Head.');
+        }
+
         $acceptedIntern->update([
             'approval_status' => 'sent_to_divhead',
             'sent_to_divhead_at' => now(),
         ]);
 
-        return back()->with('success', 'Data berhasil dikirim ke Div Head untuk approval.');
+        return redirect()->route('accepted-interns.index')->with('success', 'Data berhasil dikirim ke Div Head untuk approval.');
+    }
+
+    /**
+     * Reject by HC (when documents are verified but rejected)
+     */
+    public function rejectByHC(Request $request, string $id)
+    {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:500'
+        ], [
+            'rejection_reason.required' => 'Alasan penolakan harus diisi.'
+        ]);
+
+        $acceptedIntern = AcceptedIntern::with('intern')->findOrFail($id);
+
+        if ($acceptedIntern->approval_status !== 'pending') {
+            return back()->with('error', 'Data ini sudah tidak bisa ditolak.');
+        }
+
+        $acceptedIntern->update([
+            'approval_status' => 'rejected',
+            'rejection_reason' => $request->rejection_reason,
+            'rejected_by' => Auth::id(),
+            'rejected_at' => now(),
+        ]);
+
+        // Redirect to WhatsApp with rejection message
+        $phone = preg_replace('/[^0-9]/', '', $acceptedIntern->intern->no_wa);
+        if (substr($phone, 0, 1) === '0') {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        $message = "Halo {$acceptedIntern->intern->nama},\n\n";
+        $message .= "Mohon maaf, pengajuan magang Anda di PT Angkasa Pura II tidak dapat kami proses lebih lanjut.\n\n";
+        $message .= "Alasan: {$request->rejection_reason}\n\n";
+        $message .= "Terima kasih atas minat Anda.\n\n";
+        $message .= "Salam,\nTim Human Capital";
+
+        $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
+
+        return redirect($waUrl);
+    }
+
+    /**
+     * Bulk delete multiple accepted interns
+     */
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:accepted_interns,id'
+        ]);
+
+        $count = AcceptedIntern::whereIn('id', $request->ids)->delete();
+
+        return redirect()->route('accepted-interns.index')
+            ->with('success', "{$count} data peserta magang berhasil dihapus.");
+    }
+
+    /**
+     * Bulk forward to Div Head (change status from pending to sent_to_divhead)
+     */
+    public function bulkForwardToDivHead(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:accepted_interns,id'
+        ]);
+
+        // Only update items that are pending and documents_verified
+        $count = AcceptedIntern::whereIn('id', $request->ids)
+            ->where('approval_status', 'pending')
+            ->where('documents_verified', true)
+            ->update(['approval_status' => 'sent_to_divhead']);
+
+        return redirect()->route('accepted-interns.index')
+            ->with('success', "{$count} data peserta magang berhasil dikirim ke Div Head untuk approval.");
+    }
+
+    /**
+     * Mark a document as viewed (AJAX endpoint)
+     */
+    public function markDocumentViewed(Request $request, string $id)
+    {
+        $request->validate([
+            'document' => 'required|string|in:cv,transkrip,ktp_ktm,bpjs,surat'
+        ]);
+
+        $acceptedIntern = AcceptedIntern::with('intern')->findOrFail($id);
+
+        // Only process if status is pending and not yet verified
+        if ($acceptedIntern->approval_status !== 'pending' || $acceptedIntern->documents_verified) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Documents already verified or status is not pending'
+            ]);
+        }
+
+        $document = $request->document;
+        $fieldName = 'viewed_' . $document;
+
+        // Mark document as viewed
+        $acceptedIntern->update([$fieldName => true]);
+
+        // Check if all available documents are now viewed
+        $intern = $acceptedIntern->intern;
+        $requiredDocs = [];
+        $viewedDocs = [];
+
+        // Check which documents exist for this intern
+        if ($intern->file_cv) {
+            $requiredDocs[] = 'cv';
+            if ($acceptedIntern->fresh()->viewed_cv)
+                $viewedDocs[] = 'cv';
+        }
+        if ($intern->file_transkrip) {
+            $requiredDocs[] = 'transkrip';
+            if ($acceptedIntern->fresh()->viewed_transkrip)
+                $viewedDocs[] = 'transkrip';
+        }
+        if ($intern->file_ktp_ktm) {
+            $requiredDocs[] = 'ktp_ktm';
+            if ($acceptedIntern->fresh()->viewed_ktp_ktm)
+                $viewedDocs[] = 'ktp_ktm';
+        }
+        if ($intern->file_bpjs) {
+            $requiredDocs[] = 'bpjs';
+            if ($acceptedIntern->fresh()->viewed_bpjs)
+                $viewedDocs[] = 'bpjs';
+        }
+        if ($intern->file_surat) {
+            $requiredDocs[] = 'surat';
+            if ($acceptedIntern->fresh()->viewed_surat)
+                $viewedDocs[] = 'surat';
+        }
+
+        $allViewed = count($requiredDocs) > 0 && count($requiredDocs) === count($viewedDocs);
+
+        // If all documents are viewed, mark as verified but DON'T send to Div Head yet
+        if ($allViewed) {
+            $acceptedIntern->update([
+                'documents_verified' => true,
+                'documents_verified_at' => now(),
+                'documents_verified_by' => Auth::id(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'all_viewed' => true,
+                'documents_verified' => true,
+                'message' => 'Semua dokumen telah dibaca. Silakan klik tombol "Kirim ke Div Head" untuk melanjutkan.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'all_viewed' => false,
+            'viewed_count' => count($viewedDocs),
+            'required_count' => count($requiredDocs),
+            'remaining' => array_diff($requiredDocs, $viewedDocs)
+        ]);
     }
 
     /**
@@ -244,14 +444,9 @@ class AcceptedInternController extends Controller
             $query->where('periode_magang', $selectedPeriode);
         }
 
-        $acceptedInterns = $query->latest()->get();
-
-        // Get statistics by unit (only for approved)
-        $unitStats = AcceptedIntern::where('approval_status', 'approved_deputy')
-            ->selectRaw('unit_magang, COUNT(*) as total')
-            ->groupBy('unit_magang')
-            ->orderBy('total', 'desc')
-            ->get();
+        // Per page pagination
+        $perPage = $request->get('per_page', 10);
+        $acceptedInterns = $query->latest()->paginate($perPage)->withQueryString();
 
         $totalInterns = AcceptedIntern::where('approval_status', 'approved_deputy')->count();
 
@@ -263,20 +458,65 @@ class AcceptedInternController extends Controller
             ->orderBy('periode_magang')
             ->pluck('periode_magang');
 
-        // Get available units
+        // Get available units for filter dropdown
         $availableUnits = AcceptedIntern::where('approval_status', 'approved_deputy')
-            ->distinct('unit_magang')
-            ->pluck('unit_magang');
+            ->select('unit_magang')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('unit_magang')
+            ->orderBy('total', 'desc')
+            ->get();
 
         return view('database-magang.index', compact(
             'acceptedInterns',
-            'unitStats',
             'totalInterns',
             'selectedUnit',
             'selectedPeriode',
             'availablePeriodes',
-            'availableUnits'
+            'availableUnits',
+            'perPage'
         ));
+    }
+
+    /**
+     * Bulk send WhatsApp surat kampus
+     */
+    public function bulkSendWaSuratKampus(Request $request)
+    {
+        $ids = $request->input('ids', []);
+
+        if (empty($ids)) {
+            return response()->json(['error' => 'Tidak ada data yang dipilih'], 400);
+        }
+
+        $acceptedInterns = AcceptedIntern::with('intern')
+            ->whereIn('id', $ids)
+            ->where('approval_status', 'approved_deputy')
+            ->get();
+
+        $waLinks = [];
+        foreach ($acceptedInterns as $accepted) {
+            $intern = $accepted->intern;
+            if ($intern && $intern->no_wa) {
+                $phone = preg_replace('/[^0-9]/', '', $intern->no_wa);
+                if (str_starts_with($phone, '0')) {
+                    $phone = '62' . substr($phone, 1);
+                }
+
+                $message = "Halo {$intern->nama}, perkenalkan saya PIC Magang Unit Learning Management Kantor Regional I\n\n";
+                $message .= "Surat konfirmasi magang Anda sudah siap. Silakan hubungi kami untuk informasi lebih lanjut.\n\n";
+                $message .= "Terima kasih.\n";
+                $message .= "-Admin Pemagangan Kantor Regional I (URSHIPORTS)";
+
+                $waLinks[] = [
+                    'id' => $accepted->id,
+                    'name' => $intern->nama,
+                    'phone' => $phone,
+                    'url' => "https://wa.me/{$phone}?text=" . urlencode($message)
+                ];
+            }
+        }
+
+        return response()->json(['links' => $waLinks]);
     }
 
     /**

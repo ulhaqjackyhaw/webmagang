@@ -63,7 +63,7 @@
         <!-- Filter Section -->
         <div class="mb-6">
             <form method="GET" action="{{ route('interns.index') }}" class="bg-white rounded-xl shadow-md p-6 mb-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Periode Filter -->
                     <div>
                         <label for="periode" class="block text-sm font-medium text-gray-700 mb-2">
@@ -80,13 +80,26 @@
                         </select>
                     </div>
 
+                    <!-- Per Page Filter -->
+                    <div>
+                        <label for="per_page" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-list-ol text-indigo-500 mr-1"></i> Tampilkan Per Halaman
+                        </label>
+                        <select name="per_page" id="per_page"
+                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300">
+                            <option value="10" {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}>10 data</option>
+                            <option value="50" {{ ($perPage ?? 10) == 50 ? 'selected' : '' }}>50 data</option>
+                            <option value="100" {{ ($perPage ?? 10) == 100 ? 'selected' : '' }}>100 data</option>
+                        </select>
+                    </div>
+
                     <!-- Action Buttons -->
                     <div class="flex items-end gap-2">
                         <button type="submit"
                             class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200">
                             <i class="fas fa-filter mr-1"></i> Terapkan
                         </button>
-                        @if ($selectedPeriode)
+                        @if ($selectedPeriode || ($perPage ?? 10) != 10)
                             <a href="{{ route('interns.index') }}"
                                 class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-200">
                                 <i class="fas fa-times"></i>
@@ -221,7 +234,8 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($interns as $index => $intern)
                             <tr class="searchable-row">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ $interns->firstItem() + $index }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {{ $intern->nama }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $intern->nim }}</td>
@@ -285,6 +299,21 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination -->
+            @if ($interns->hasPages())
+                <div class="px-6 py-4 border-t border-gray-200">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-sm text-gray-600">
+                            Menampilkan {{ $interns->firstItem() ?? 0 }} - {{ $interns->lastItem() ?? 0 }} dari
+                            {{ $interns->total() }} data
+                        </div>
+                        <div>
+                            {{ $interns->links() }}
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <!-- Modal Terima Pengajuan -->
@@ -386,8 +415,8 @@
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
                             <p class="text-sm text-blue-700">
                                 <i class="fas fa-info-circle mr-2"></i>
-                                Setelah diterima, data akan masuk ke daftar "Data Anak Magang" untuk diproses lebih lanjut
-                                ke Div Head.
+                                Setelah diterima, data akan masuk ke daftar "Monitoring Approval" untuk diproses lebih
+                                lanjut.
                             </p>
                         </div>
 

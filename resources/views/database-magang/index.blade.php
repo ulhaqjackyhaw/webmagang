@@ -37,8 +37,7 @@
 
     <!-- Statistics Section -->
     <div class="mb-6">
-        <div class="rounded-lg shadow-lg p-6 text-white mb-4"
-            style="background: linear-gradient(to right, #10b981, #059669);">
+        <div class="rounded-lg shadow-lg p-6 text-white" style="background: linear-gradient(to right, #10b981, #059669);">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-2xl font-bold">Total Peserta Magang Final</h2>
@@ -49,54 +48,29 @@
                 </div>
             </div>
         </div>
-
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">
-                    <i class="fas fa-building text-green-600"></i> Daftar Unit Magang
-                </h3>
-                @if ($selectedUnit)
-                    <a href="{{ route('database-magang.index', $selectedPeriode ? ['periode' => $selectedPeriode] : []) }}"
-                        class="text-sm bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded">
-                        <i class="fas fa-times"></i> Hapus Filter Unit
-                    </a>
-                @endif
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                @forelse($unitStats as $stat)
-                    <a href="{{ route('database-magang.index', array_merge(['unit' => $stat->unit_magang], $selectedPeriode ? ['periode' => $selectedPeriode] : [])) }}"
-                        class="group border-2 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer {{ $selectedUnit == $stat->unit_magang ? 'border-green-500 bg-green-50' : 'border-gray-200' }}">
-                        <div class="flex flex-col items-center text-center">
-                            <div
-                                class="w-16 h-16 rounded-full flex items-center justify-center mb-2 transition-all {{ $selectedUnit == $stat->unit_magang ? 'bg-green-500' : 'bg-gray-100 group-hover:bg-green-100' }}">
-                                <i
-                                    class="fas fa-users text-2xl transition-colors {{ $selectedUnit == $stat->unit_magang ? 'text-white' : 'text-gray-500 group-hover:text-green-600' }}"></i>
-                            </div>
-                            <h4 class="font-semibold text-gray-800 mb-1 line-clamp-2">{{ $stat->unit_magang }}</h4>
-                            <div class="flex items-center">
-                                <span
-                                    class="text-2xl font-bold {{ $selectedUnit == $stat->unit_magang ? 'text-green-600' : 'text-gray-700' }}">
-                                    {{ $stat->total }}
-                                </span>
-                                <span class="text-xs text-gray-500 ml-1">peserta</span>
-                            </div>
-                        </div>
-                    </a>
-                @empty
-                    <div class="col-span-full text-center text-gray-500 py-8">
-                        <i class="fas fa-inbox text-gray-300 text-4xl mb-3"></i>
-                        <p>Belum ada data peserta magang yang disetujui final</p>
-                    </div>
-                @endforelse
-            </div>
-        </div>
     </div>
 
     <!-- Filter Section -->
     <div class="mb-6">
-        <form method="GET" action="{{ route('database-magang.index') }}" class="bg-white rounded-xl shadow-md p-6 mb-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form method="GET" action="{{ route('database-magang.index') }}" class="bg-white rounded-xl shadow-md p-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Unit Filter -->
+                <div>
+                    <label for="unit" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-building mr-1 text-green-600"></i> Unit Magang
+                    </label>
+                    <select name="unit" id="unit"
+                        class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300">
+                        <option value="">Semua Unit</option>
+                        @foreach ($availableUnits as $unit)
+                            <option value="{{ $unit->unit_magang }}"
+                                {{ $selectedUnit == $unit->unit_magang ? 'selected' : '' }}>
+                                {{ $unit->unit_magang }} ({{ $unit->total }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!-- Periode Filter -->
                 <div>
                     <label for="periode" class="block text-sm font-medium text-gray-700 mb-2">
@@ -113,25 +87,58 @@
                     </select>
                 </div>
 
+                <!-- Per Page Filter -->
+                <div>
+                    <label for="per_page" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-list-ol mr-1 text-green-600"></i> Tampilkan
+                    </label>
+                    <select name="per_page" id="per_page"
+                        class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300">
+                        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 per halaman</option>
+                        <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 per halaman</option>
+                        <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 per halaman</option>
+                    </select>
+                </div>
+
                 <!-- Action Buttons -->
                 <div class="flex items-end gap-2">
                     <button type="submit"
                         class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200">
                         <i class="fas fa-filter mr-1"></i> Terapkan
                     </button>
-                    @if ($selectedPeriode)
-                        <a href="{{ route('database-magang.index', $selectedUnit ? ['unit' => $selectedUnit] : []) }}"
+                    @if ($selectedUnit || $selectedPeriode)
+                        <a href="{{ route('database-magang.index') }}"
                             class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-200">
                             <i class="fas fa-times"></i>
                         </a>
                     @endif
                 </div>
             </div>
-            @if ($selectedUnit)
-                <input type="hidden" name="unit" value="{{ $selectedUnit }}">
-            @endif
         </form>
     </div>
+
+    <!-- Bulk Action Bar -->
+    @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+        <div id="bulkActionBar"
+            class="hidden mb-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4">
+            <div class="flex items-center justify-between flex-wrap gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-green-800 font-medium"><span id="selectedCount">0</span> data terpilih</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="bulkSendWaSuratKampus()"
+                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Kirim WA Surat ke Kampus</span>
+                    </button>
+                    <button type="button" onclick="clearSelection()"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all">
+                        <i class="fas fa-times mr-1"></i> Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Search Box -->
     <div class="mb-6">
@@ -151,9 +158,16 @@
             <div class="searchable-card bg-white rounded-xl shadow-md p-4"
                 data-search="{{ strtolower($acceptedIntern->intern->nama . ' ' . $acceptedIntern->intern->nim . ' ' . $acceptedIntern->intern->asal_kampus . ' ' . $acceptedIntern->unit_magang . ' ' . ($acceptedIntern->periode_magang ?? '')) }}">
                 <div class="flex justify-between items-start mb-3">
-                    <div class="flex-1">
-                        <h3 class="font-bold text-gray-900 text-lg">{{ $acceptedIntern->intern->nama }}</h3>
-                        <p class="text-gray-500 text-sm">{{ $acceptedIntern->intern->nim }}</p>
+                    <div class="flex items-center gap-3 flex-1">
+                        @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                            <input type="checkbox"
+                                class="item-checkbox w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500"
+                                value="{{ $acceptedIntern->id }}" onchange="updateBulkSelection()">
+                        @endif
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-lg">{{ $acceptedIntern->intern->nama }}</h3>
+                            <p class="text-gray-500 text-sm">{{ $acceptedIntern->intern->nim }}</p>
+                        </div>
                     </div>
                     <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                         <i class="fas fa-check-circle mr-1"></i> Final
@@ -252,6 +266,13 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                            <th class="px-4 py-3 text-center">
+                                <input type="checkbox" id="selectAll"
+                                    class="w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500"
+                                    onchange="toggleSelectAll()">
+                            </th>
+                        @endif
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama
                         </th>
@@ -270,8 +291,17 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($acceptedInterns as $index => $acceptedIntern)
-                        <tr class="searchable-row">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
+                        <tr class="searchable-row hover:bg-gray-50"
+                            data-search="{{ strtolower($acceptedIntern->intern->nama . ' ' . $acceptedIntern->intern->nim . ' ' . $acceptedIntern->intern->asal_kampus . ' ' . $acceptedIntern->unit_magang . ' ' . ($acceptedIntern->periode_magang ?? '')) }}">
+                            @if (!in_array(auth()->user()->role, ['div_head', 'deputy']))
+                                <td class="px-4 py-4 text-center">
+                                    <input type="checkbox"
+                                        class="item-checkbox w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500"
+                                        value="{{ $acceptedIntern->id }}" onchange="updateBulkSelection()">
+                                </td>
+                            @endif
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $acceptedInterns->firstItem() + $index }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ $acceptedIntern->intern->nama }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -333,7 +363,8 @@
                         </tr>
                     @empty
                         <tr id="emptyRow">
-                            <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                            <td colspan="{{ !in_array(auth()->user()->role, ['div_head', 'deputy']) ? '9' : '8' }}"
+                                class="px-6 py-4 text-center text-gray-500">
                                 @if ($selectedUnit || $selectedPeriode)
                                     Tidak ada data peserta magang dengan filter yang dipilih
                                 @else
@@ -343,7 +374,8 @@
                         </tr>
                     @endforelse
                     <tr id="noResultsRow" class="hidden">
-                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                        <td colspan="{{ !in_array(auth()->user()->role, ['div_head', 'deputy']) ? '9' : '8' }}"
+                            class="px-6 py-4 text-center text-gray-500">
                             <i class="fas fa-search text-gray-400 text-3xl mb-2"></i>
                             <p class="font-semibold">Tidak ada data yang cocok dengan pencarian Anda</p>
                             <p class="text-sm">Coba gunakan kata kunci yang berbeda</p>
@@ -352,6 +384,13 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        @if ($acceptedInterns->hasPages())
+            <div class="px-6 py-4 border-t border-gray-200">
+                {{ $acceptedInterns->links() }}
+            </div>
+        @endif
     </div>
 
     <!-- Delete Confirmation Modal -->
@@ -427,6 +466,7 @@
             }
         });
 
+        // Search functionality
         const searchInput = document.getElementById('searchInput');
         const searchableRows = document.querySelectorAll('.searchable-row');
         const searchableCards = document.querySelectorAll('.searchable-card');
@@ -440,7 +480,7 @@
                 let visibleCardCount = 0;
 
                 searchableRows.forEach(function(row) {
-                    const text = row.textContent.toLowerCase();
+                    const text = row.getAttribute('data-search') || row.textContent.toLowerCase();
                     if (text.includes(searchTerm)) {
                         row.style.display = '';
                         visibleRowCount++;
@@ -475,6 +515,98 @@
                     }
                 }
             });
+        }
+
+        // Bulk Selection Functions
+        const bulkActionBar = document.getElementById('bulkActionBar');
+        const selectedCountEl = document.getElementById('selectedCount');
+        const selectAllCheckbox = document.getElementById('selectAll');
+
+        function toggleSelectAll() {
+            const isChecked = selectAllCheckbox.checked;
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+            updateBulkSelection();
+        }
+
+        function updateBulkSelection() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            const count = checkboxes.length;
+
+            if (selectedCountEl) {
+                selectedCountEl.textContent = count;
+            }
+
+            // Show/hide bulk action bar
+            if (bulkActionBar) {
+                if (count > 0) {
+                    bulkActionBar.classList.remove('hidden');
+                } else {
+                    bulkActionBar.classList.add('hidden');
+                }
+            }
+
+            // Update select all checkbox state
+            const allCheckboxes = document.querySelectorAll('.item-checkbox');
+            if (selectAllCheckbox && allCheckboxes.length > 0) {
+                selectAllCheckbox.checked = count === allCheckboxes.length;
+                selectAllCheckbox.indeterminate = count > 0 && count < allCheckboxes.length;
+            }
+        }
+
+        function clearSelection() {
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            if (selectAllCheckbox) {
+                selectAllCheckbox.checked = false;
+            }
+            updateBulkSelection();
+        }
+
+        function bulkSendWaSuratKampus() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+
+            if (ids.length === 0) {
+                alert('Pilih minimal satu data terlebih dahulu.');
+                return;
+            }
+
+            // Send request to get WA links
+            fetch('{{ route('database-magang.bulk-wa-surat-kampus') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        ids: ids
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.links && data.links.length > 0) {
+                        // Open each WhatsApp link in new tab with slight delay
+                        data.links.forEach((link, index) => {
+                            setTimeout(() => {
+                                window.open(link.url, '_blank');
+                            }, index * 500);
+                        });
+
+                        // Clear selection after sending
+                        clearSelection();
+                    } else {
+                        alert('Tidak ada nomor WhatsApp yang valid untuk data yang dipilih.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengirim WhatsApp.');
+                });
         }
     </script>
 @endsection

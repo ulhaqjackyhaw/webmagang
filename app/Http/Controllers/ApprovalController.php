@@ -74,6 +74,63 @@ class ApprovalController extends Controller
     }
 
     /**
+     * Bulk Approve by Div Head
+     */
+    public function bulkDivHeadApprove(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|string'
+        ]);
+
+        $ids = array_filter(explode(',', $request->ids));
+        $count = 0;
+
+        foreach ($ids as $id) {
+            $acceptedIntern = AcceptedIntern::find($id);
+            if ($acceptedIntern && $acceptedIntern->approval_status === 'sent_to_divhead') {
+                $acceptedIntern->update([
+                    'approval_status' => 'sent_to_deputy',
+                    'approved_divhead_at' => now(),
+                    'approved_by_divhead' => Auth::id(),
+                    'sent_to_deputy_at' => now(),
+                ]);
+                $count++;
+            }
+        }
+
+        return back()->with('success', "{$count} pengajuan berhasil disetujui dan diteruskan ke Deputy.");
+    }
+
+    /**
+     * Bulk Reject by Div Head
+     */
+    public function bulkDivHeadReject(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|string',
+            'rejection_reason' => 'nullable|string|max:500'
+        ]);
+
+        $ids = array_filter(explode(',', $request->ids));
+        $count = 0;
+
+        foreach ($ids as $id) {
+            $acceptedIntern = AcceptedIntern::find($id);
+            if ($acceptedIntern && $acceptedIntern->approval_status === 'sent_to_divhead') {
+                $acceptedIntern->update([
+                    'approval_status' => 'rejected',
+                    'rejection_reason' => $request->rejection_reason,
+                    'rejected_by' => Auth::id(),
+                    'rejected_at' => now(),
+                ]);
+                $count++;
+            }
+        }
+
+        return back()->with('success', "{$count} pengajuan telah ditolak.");
+    }
+
+    /**
      * Display approval list for Deputy
      */
     public function deputyIndex()
@@ -135,6 +192,62 @@ class ApprovalController extends Controller
         ]);
 
         return back()->with('success', 'Pengajuan telah ditolak.');
+    }
+
+    /**
+     * Bulk Approve by Deputy
+     */
+    public function bulkDeputyApprove(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|string'
+        ]);
+
+        $ids = array_filter(explode(',', $request->ids));
+        $count = 0;
+
+        foreach ($ids as $id) {
+            $acceptedIntern = AcceptedIntern::find($id);
+            if ($acceptedIntern && $acceptedIntern->approval_status === 'sent_to_deputy') {
+                $acceptedIntern->update([
+                    'approval_status' => 'approved_deputy',
+                    'approved_deputy_at' => now(),
+                    'approved_by_deputy' => Auth::id(),
+                ]);
+                $count++;
+            }
+        }
+
+        return back()->with('success', "{$count} pengajuan berhasil disetujui secara final.");
+    }
+
+    /**
+     * Bulk Reject by Deputy
+     */
+    public function bulkDeputyReject(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|string',
+            'rejection_reason' => 'nullable|string|max:500'
+        ]);
+
+        $ids = array_filter(explode(',', $request->ids));
+        $count = 0;
+
+        foreach ($ids as $id) {
+            $acceptedIntern = AcceptedIntern::find($id);
+            if ($acceptedIntern && $acceptedIntern->approval_status === 'sent_to_deputy') {
+                $acceptedIntern->update([
+                    'approval_status' => 'rejected',
+                    'rejection_reason' => $request->rejection_reason,
+                    'rejected_by' => Auth::id(),
+                    'rejected_at' => now(),
+                ]);
+                $count++;
+            }
+        }
+
+        return back()->with('success', "{$count} pengajuan telah ditolak.");
     }
 
     /**

@@ -49,8 +49,8 @@
                 style="background: linear-gradient(to right, #20B2AA, #1a8f89);">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-2xl font-bold">Total Peserta Magang</h2>
-                        <p class="text-white text-opacity-90">Keseluruhan peserta yang terdaftar</p>
+                        <h2 class="text-2xl font-bold">Jumlah Peserta yang Lolos Apply</h2>
+                        <p class="text-white text-opacity-90">Data keseluruhan peserta yang sudah lolos apply</p>
                     </div>
                     <div class="bg-white bg-opacity-20 rounded-full px-8 py-4">
                         <p class="text-5xl font-bold">{{ $totalInterns }}</p>
@@ -58,62 +58,36 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-bold text-gray-800">
-                        <i class="fas fa-building" style="color: #20B2AA;"></i> Daftar Unit Magang
-                    </h3>
-                    @if ($selectedUnit)
-                        <a href="{{ route('accepted-interns.index') }}"
-                            class="text-sm bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded">
-                            <i class="fas fa-times"></i> Hapus Filter
-                        </a>
-                    @endif
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    @forelse($unitStats as $stat)
-                        <a href="{{ route('accepted-interns.index', ['unit' => $stat->unit_magang]) }}"
-                            class="group border-2 rounded-lg p-4 transition-all hover:shadow-lg cursor-pointer {{ $selectedUnit == $stat->unit_magang ? 'bg-opacity-10' : 'border-gray-200' }}"
-                            style="{{ $selectedUnit == $stat->unit_magang ? 'border-color: #20B2AA; background-color: rgba(32, 178, 170, 0.1);' : '' }}"
-                            onmouseover="if (!'{{ $selectedUnit == $stat->unit_magang }}') this.style.borderColor='#20B2AA';"
-                            onmouseout="if (!'{{ $selectedUnit == $stat->unit_magang }}') this.style.borderColor='#e5e7eb';">
-                            <div class="flex flex-col items-center text-center">
-                                <div class="w-16 h-16 rounded-full flex items-center justify-center mb-2 transition-all"
-                                    style="background-color: {{ $selectedUnit == $stat->unit_magang ? '#20B2AA' : '#f3f4f6' }};"
-                                    onmouseover="if (!'{{ $selectedUnit == $stat->unit_magang }}') this.style.backgroundColor='rgba(32, 178, 170, 0.2)';"
-                                    onmouseout="if (!'{{ $selectedUnit == $stat->unit_magang }}') this.style.backgroundColor='#f3f4f6';">
-                                    <i class="fas fa-users text-2xl transition-colors"
-                                        style="color: {{ $selectedUnit == $stat->unit_magang ? '#ffffff' : '#4b5563' }};"></i>
-                                </div>
-                                <h4 class="font-semibold text-gray-800 mb-1 line-clamp-2">{{ $stat->unit_magang }}</h4>
-                                <div class="flex items-center">
-                                    <span class="text-2xl font-bold"
-                                        style="color: {{ $selectedUnit == $stat->unit_magang ? '#20B2AA' : '#374151' }};">
-                                        {{ $stat->total }}
-                                    </span>
-                                    <span class="text-xs text-gray-500 ml-1">peserta</span>
-                                </div>
-                            </div>
-                        </a>
-                    @empty
-                        <div class="col-span-full text-center text-gray-500 py-8">
-                            Belum ada data unit magang
-                        </div>
-                    @endforelse
-                </div>
-            </div>
         </div>
 
         <!-- Filter Section -->
         <div class="mb-6">
             <form method="GET" action="{{ route('accepted-interns.index') }}"
                 class="bg-white rounded-xl shadow-md p-6 mb-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <!-- Unit Magang Filter -->
+                    <div>
+                        <label for="unit" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-building mr-1" style="color: #20B2AA;"></i> Unit Magang
+                        </label>
+                        <select name="unit" id="unit"
+                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
+                            onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
+                            onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
+                            <option value="">Semua Unit</option>
+                            @foreach ($unitStats as $stat)
+                                <option value="{{ $stat->unit_magang }}"
+                                    {{ $selectedUnit == $stat->unit_magang ? 'selected' : '' }}>
+                                    {{ $stat->unit_magang }} ({{ $stat->total }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <!-- Periode Filter -->
                     <div>
                         <label for="periode" class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-calendar-alt mr-1" style="color: #20B2AA;"></i> Periode Magang
+                            <i class="fas fa-calendar-alt mr-1" style="color: #20B2AA;"></i> Periode Pendaftaran Magang
                         </label>
                         <select name="periode" id="periode"
                             class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
@@ -138,9 +112,10 @@
                             onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
                             onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
                             <option value="">Semua Status</option>
-                            <option value="pending" {{ ($selectedStatus ?? '') == 'pending' ? 'selected' : '' }}>Menunggu
-                                Dikirim
-                            </option>
+                            <option value="doc_unread" {{ ($selectedStatus ?? '') == 'doc_unread' ? 'selected' : '' }}>
+                                Dokumen Belum Dibaca</option>
+                            <option value="doc_read" {{ ($selectedStatus ?? '') == 'doc_read' ? 'selected' : '' }}>Dokumen
+                                Telah Dibaca</option>
                             <option value="sent_to_divhead"
                                 {{ ($selectedStatus ?? '') == 'sent_to_divhead' ? 'selected' : '' }}>Terkirim ke Div Head
                             </option>
@@ -159,6 +134,21 @@
                         </select>
                     </div>
 
+                    <!-- Per Page Filter -->
+                    <div>
+                        <label for="per_page" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-list-ol mr-1" style="color: #20B2AA;"></i> Tampilkan Per Halaman
+                        </label>
+                        <select name="per_page" id="per_page"
+                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
+                            onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
+                            onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';">
+                            <option value="10" {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}>10 data</option>
+                            <option value="50" {{ ($perPage ?? 10) == 50 ? 'selected' : '' }}>50 data</option>
+                            <option value="100" {{ ($perPage ?? 10) == 100 ? 'selected' : '' }}>100 data</option>
+                        </select>
+                    </div>
+
                     <!-- Action Buttons -->
                     <div class="flex items-end gap-2">
                         <button type="submit"
@@ -167,17 +157,14 @@
                             onmouseout="this.style.backgroundColor='#20B2AA';">
                             <i class="fas fa-filter mr-1"></i> Terapkan
                         </button>
-                        @if ($selectedPeriode || ($selectedStatus ?? null))
-                            <a href="{{ route('accepted-interns.index', $selectedUnit ? ['unit' => $selectedUnit] : []) }}"
+                        @if ($selectedUnit || $selectedPeriode || ($selectedStatus ?? null) || ($perPage ?? 10) != 10)
+                            <a href="{{ route('accepted-interns.index') }}"
                                 class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-200">
                                 <i class="fas fa-times"></i>
                             </a>
                         @endif
                     </div>
                 </div>
-                @if ($selectedUnit)
-                    <input type="hidden" name="unit" value="{{ $selectedUnit }}">
-                @endif
             </form>
         </div>
 
@@ -192,6 +179,36 @@
                     onfocus="this.style.borderColor='#20B2AA'; this.style.boxShadow='0 0 0 3px rgba(32, 178, 170, 0.1)';"
                     onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
                     placeholder="Cari nama, NIM, kampus, unit magang, atau periode...">
+            </div>
+        </div>
+
+        <!-- Bulk Action Bar -->
+        <div id="bulkActionBar"
+            class="hidden mb-4 bg-gradient-to-r from-cyan-50 to-teal-50 border border-cyan-200 rounded-xl p-4">
+            <div class="flex items-center justify-between flex-wrap gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="font-semibold" style="color: #20B2AA;">
+                        <i class="fas fa-check-square mr-2"></i>
+                        <span id="selectedCount">0</span> data terpilih
+                    </span>
+                    <span id="selectedStatusInfo" class="text-sm text-gray-500"></span>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <button type="button" onclick="clearSelection()"
+                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-sm font-medium transition">
+                        <i class="fas fa-times mr-1"></i> Batal
+                    </button>
+                    <button type="button" id="btnBulkForward" onclick="openBulkForwardModal()"
+                        class="hidden px-4 py-2 text-white rounded-lg text-sm font-medium transition shadow-lg"
+                        style="background-color: #20B2AA;" onmouseover="this.style.backgroundColor='#1a8f89';"
+                        onmouseout="this.style.backgroundColor='#20B2AA';">
+                        <i class="fas fa-paper-plane mr-1"></i> Forward ke Div Head
+                    </button>
+                    <button type="button" onclick="openBulkDeleteModal()"
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition shadow-lg shadow-red-500/30">
+                        <i class="fas fa-trash mr-1"></i> Hapus Terpilih
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -249,8 +266,19 @@
                             class="flex-1 text-center bg-red-500 text-white hover:bg-red-600 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                             <i class="fas fa-trash mr-1"></i> Hapus
                         </button>
+                    @elseif ($acceptedIntern->approval_status === 'pending')
+                        {{-- Pending: Only show view (to verify docs) and delete --}}
+                        <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
+                            class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                            style="background-color: #20B2AA;">
+                            <i class="fas fa-eye mr-1"></i> Lihat & Verifikasi
+                        </a>
+                        <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                            class="flex-1 text-center bg-red-50 text-red-600 hover:bg-red-100 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <i class="fas fa-trash mr-1"></i> Hapus
+                        </button>
                     @else
-                        {{-- Normal status: Show view, edit, delete buttons --}}
+                        {{-- Other statuses: Show view, edit, delete buttons --}}
                         <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
                             class="flex-1 text-center text-white hover:opacity-90 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                             style="background-color: #20B2AA;">
@@ -300,6 +328,10 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="px-4 py-3 text-left">
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"
+                                class="w-4 h-4 text-cyan-600 rounded border-gray-300 focus:ring-cyan-500">
+                        </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama
@@ -316,8 +348,17 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($acceptedInterns as $index => $acceptedIntern)
-                        <tr class="searchable-row">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
+                        <tr class="searchable-row hover:bg-gray-50">
+                            <td class="px-4 py-4 whitespace-nowrap">
+                                <input type="checkbox"
+                                    class="row-checkbox w-4 h-4 text-cyan-600 rounded border-gray-300 focus:ring-cyan-500"
+                                    value="{{ $acceptedIntern->id }}"
+                                    data-status="{{ $acceptedIntern->approval_status }}"
+                                    data-documents-verified="{{ $acceptedIntern->documents_verified ? '1' : '0' }}"
+                                    onchange="updateBulkSelection()">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $acceptedInterns->firstItem() + $index }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ $acceptedIntern->intern->nama }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -363,8 +404,19 @@
                                         class="text-red-600 hover:text-red-900" title="Hapus">
                                         <i class="fas fa-trash"></i>
                                     </button>
+                                @elseif ($acceptedIntern->approval_status === 'pending')
+                                    {{-- Pending: Only show eye (to verify docs) and delete --}}
+                                    <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
+                                        class="hover:opacity-80 transition-opacity" style="color: #20B2AA;"
+                                        title="Lihat & Verifikasi Dokumen">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <button type="button" onclick="openDeleteModal({{ $acceptedIntern->id }})"
+                                        class="text-red-600 hover:text-red-900" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 @else
-                                    {{-- Normal status: Show view, edit, delete buttons --}}
+                                    {{-- Other status: Show view, edit, delete buttons --}}
                                     <a href="{{ route('accepted-interns.show', $acceptedIntern->id) }}"
                                         class="hover:opacity-80 transition-opacity" style="color: #20B2AA;"
                                         title="Lihat Detail">
@@ -383,7 +435,7 @@
                         </tr>
                     @empty
                         <tr id="emptyRow">
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">
                                 @if ($selectedUnit)
                                     Tidak ada data peserta magang di unit <strong>{{ $selectedUnit }}</strong>
                                 @else
@@ -393,7 +445,7 @@
                         </tr>
                     @endforelse
                     <tr id="noResultsRow" class="hidden">
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
                             <i class="fas fa-search text-gray-400 text-3xl mb-2"></i>
                             <p class="font-semibold">Tidak ada data yang cocok dengan pencarian Anda</p>
                             <p class="text-sm">Coba gunakan kata kunci yang berbeda</p>
@@ -402,6 +454,21 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        @if ($acceptedInterns->hasPages())
+            <div class="px-6 py-4 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-sm text-gray-600">
+                        Menampilkan {{ $acceptedInterns->firstItem() ?? 0 }} - {{ $acceptedInterns->lastItem() ?? 0 }}
+                        dari {{ $acceptedInterns->total() }} data
+                    </div>
+                    <div>
+                        {{ $acceptedInterns->links() }}
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 
     <!-- Modal Konfirmasi Hapus -->
@@ -437,6 +504,92 @@
                     <button type="button" onclick="confirmDelete()"
                         class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
                         <i class="fas fa-trash mr-2"></i>Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi Bulk Delete -->
+    <div id="bulkDeleteModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md transform transition-all">
+            <div class="p-6">
+                <!-- Icon Warning -->
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-4xl"></i>
+                    </div>
+                </div>
+
+                <!-- Title & Message -->
+                <h3 class="text-2xl font-bold text-gray-800 text-center mb-2">Konfirmasi Hapus Massal</h3>
+                <p class="text-gray-600 text-center mb-6">
+                    Apakah Anda yakin ingin menghapus <span id="bulkSelectedCount" class="font-bold text-red-600">0</span>
+                    data yang dipilih? <br>
+                    <span class="text-red-600 font-semibold">Tindakan ini tidak dapat dibatalkan!</span>
+                </p>
+
+                <!-- Form Hidden -->
+                <form id="bulkDeleteForm" method="POST" action="{{ route('accepted-interns.bulkDelete') }}">
+                    @csrf
+                    @method('DELETE')
+                    <div id="bulkDeleteIds"></div>
+                </form>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeBulkDeleteModal()"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                    <button type="button" onclick="confirmBulkDelete()"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-trash mr-2"></i>Hapus Semua
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi Bulk Forward to Div Head -->
+    <div id="bulkForwardModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md transform transition-all">
+            <div class="p-6">
+                <!-- Icon -->
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center"
+                        style="background-color: rgba(32, 178, 170, 0.1);">
+                        <i class="fas fa-paper-plane text-4xl" style="color: #20B2AA;"></i>
+                    </div>
+                </div>
+
+                <!-- Title & Message -->
+                <h3 class="text-2xl font-bold text-gray-800 text-center mb-2">Forward ke Div Head</h3>
+                <p class="text-gray-600 text-center mb-6">
+                    Apakah Anda yakin ingin mengirim <span id="bulkForwardCount" class="font-bold"
+                        style="color: #20B2AA;">0</span>
+                    data yang dipilih ke Div Head untuk approval?
+                </p>
+
+                <!-- Form Hidden -->
+                <form id="bulkForwardForm" method="POST" action="{{ route('accepted-interns.bulkForwardToDivHead') }}">
+                    @csrf
+                    <div id="bulkForwardIds"></div>
+                </form>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeBulkForwardModal()"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                    <button type="button" onclick="confirmBulkForward()"
+                        class="flex-1 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200"
+                        style="background-color: #20B2AA;" onmouseover="this.style.backgroundColor='#1a8f89';"
+                        onmouseout="this.style.backgroundColor='#20B2AA';">
+                        <i class="fas fa-paper-plane mr-2"></i>Forward
                     </button>
                 </div>
             </div>
@@ -544,5 +697,203 @@
                 closeDeleteModal();
             }
         });
+
+        /**
+         * Bulk Selection Functions
+         */
+        const bulkActionBar = document.getElementById('bulkActionBar');
+        const selectedCount = document.getElementById('selectedCount');
+        const selectedStatusInfo = document.getElementById('selectedStatusInfo');
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const bulkDeleteForm = document.getElementById('bulkDeleteForm');
+        const bulkDeleteModal = document.getElementById('bulkDeleteModal');
+        const bulkSelectedCount = document.getElementById('bulkSelectedCount');
+        const btnBulkForward = document.getElementById('btnBulkForward');
+        const bulkForwardModal = document.getElementById('bulkForwardModal');
+        const bulkForwardCount = document.getElementById('bulkForwardCount');
+        const bulkForwardForm = document.getElementById('bulkForwardForm');
+
+        function toggleSelectAll() {
+            const isChecked = selectAllCheckbox.checked;
+            rowCheckboxes.forEach(checkbox => {
+                // Only select visible rows
+                const row = checkbox.closest('tr');
+                if (row && row.style.display !== 'none') {
+                    checkbox.checked = isChecked;
+                }
+            });
+            updateBulkSelection();
+        }
+
+        function updateBulkSelection() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            const count = checkedBoxes.length;
+
+            if (count > 0) {
+                bulkActionBar.classList.remove('hidden');
+                selectedCount.textContent = count;
+
+                // Check if all selected items are "Dokumen Telah Dibaca" (pending + documents_verified)
+                let allDocRead = true;
+                let docReadCount = 0;
+
+                checkedBoxes.forEach(cb => {
+                    const status = cb.getAttribute('data-status');
+                    const docsVerified = cb.getAttribute('data-documents-verified') === '1';
+
+                    if (status === 'pending' && docsVerified) {
+                        docReadCount++;
+                    } else {
+                        allDocRead = false;
+                    }
+                });
+
+                // Show Forward button when at least one doc_read item is selected
+                if (docReadCount > 0 && allDocRead) {
+                    btnBulkForward.classList.remove('hidden');
+                    selectedStatusInfo.textContent = '(Semua: Dokumen Telah Dibaca)';
+                } else if (docReadCount > 0) {
+                    btnBulkForward.classList.add('hidden');
+                    selectedStatusInfo.textContent = '(Campuran status - tidak bisa forward)';
+                } else {
+                    btnBulkForward.classList.add('hidden');
+                    selectedStatusInfo.textContent = '';
+                }
+            } else {
+                bulkActionBar.classList.add('hidden');
+                btnBulkForward.classList.add('hidden');
+                selectedStatusInfo.textContent = '';
+            }
+
+            // Update selectAll checkbox state
+            const visibleCheckboxes = Array.from(rowCheckboxes).filter(cb => {
+                const row = cb.closest('tr');
+                return row && row.style.display !== 'none';
+            });
+
+            if (visibleCheckboxes.length > 0 && checkedBoxes.length === visibleCheckboxes.length) {
+                selectAllCheckbox.checked = true;
+                selectAllCheckbox.indeterminate = false;
+            } else if (checkedBoxes.length > 0) {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = true;
+            } else {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = false;
+            }
+        }
+
+        function clearSelection() {
+            rowCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+            bulkActionBar.classList.add('hidden');
+            btnBulkForward.classList.add('hidden');
+            selectedStatusInfo.textContent = '';
+        }
+
+        function openBulkDeleteModal() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            if (checkedBoxes.length === 0) return;
+
+            bulkSelectedCount.textContent = checkedBoxes.length;
+            bulkDeleteModal.classList.remove('hidden');
+        }
+
+        function closeBulkDeleteModal() {
+            bulkDeleteModal.classList.add('hidden');
+        }
+
+        function confirmBulkDelete() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            const ids = Array.from(checkedBoxes).map(cb => cb.value);
+
+            // Create hidden inputs for each selected ID
+            const container = document.getElementById('bulkDeleteIds');
+            container.innerHTML = '';
+            ids.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids[]';
+                input.value = id;
+                container.appendChild(input);
+            });
+
+            bulkDeleteForm.submit();
+        }
+
+        /**
+         * Bulk Forward to Div Head Functions
+         */
+        function openBulkForwardModal() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            // Filter only doc_read items
+            const docReadIds = Array.from(checkedBoxes).filter(cb => {
+                const status = cb.getAttribute('data-status');
+                const docsVerified = cb.getAttribute('data-documents-verified') === '1';
+                return status === 'pending' && docsVerified;
+            });
+
+            if (docReadIds.length === 0) return;
+
+            bulkForwardCount.textContent = docReadIds.length;
+            bulkForwardModal.classList.remove('hidden');
+        }
+
+        function closeBulkForwardModal() {
+            bulkForwardModal.classList.add('hidden');
+        }
+
+        function confirmBulkForward() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            // Filter only doc_read items
+            const ids = Array.from(checkedBoxes).filter(cb => {
+                const status = cb.getAttribute('data-status');
+                const docsVerified = cb.getAttribute('data-documents-verified') === '1';
+                return status === 'pending' && docsVerified;
+            }).map(cb => cb.value);
+
+            // Create hidden inputs for each selected ID
+            const container = document.getElementById('bulkForwardIds');
+            container.innerHTML = '';
+            ids.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids[]';
+                input.value = id;
+                container.appendChild(input);
+            });
+
+            bulkForwardForm.submit();
+        }
+
+        // Close modals with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeBulkDeleteModal();
+                closeBulkForwardModal();
+            }
+        });
+
+        // Close bulk delete modal when clicking outside
+        if (bulkDeleteModal) {
+            bulkDeleteModal.addEventListener('click', function(e) {
+                if (e.target === bulkDeleteModal) {
+                    closeBulkDeleteModal();
+                }
+            });
+        }
+
+        // Close bulk forward modal when clicking outside
+        if (bulkForwardModal) {
+            bulkForwardModal.addEventListener('click', function(e) {
+                if (e.target === bulkForwardModal) {
+                    closeBulkForwardModal();
+                }
+            });
+        }
     </script>
 @endsection

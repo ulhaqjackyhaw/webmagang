@@ -8,6 +8,8 @@ use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicInternController;
+use App\Http\Controllers\PeriodeMagangController;
+use App\Http\Controllers\AdministrasiPersuratanController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes (Landing page for intern registration)
@@ -54,6 +56,11 @@ Route::middleware(['auth'])->group(function () {
             ->name('interns.sendWhatsapp');
 
         Route::resource('interns', InternController::class)->except(['create', 'store']);
+
+        // Periode Magang Management
+        Route::patch('/periode-magang/{id}/toggle-status', [PeriodeMagangController::class, 'toggleStatus'])
+            ->name('periode-magang.toggle-status');
+        Route::resource('periode-magang', PeriodeMagangController::class);
     });
 
     // Accepted Interns routes (HC and Admin only)
@@ -64,9 +71,29 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/accepted-interns/search', [AcceptedInternController::class, 'search'])
             ->name('accepted-interns.search');
 
+        // Verify documents and send to Div Head
+        Route::post('/accepted-interns/{id}/verify-and-send', [AcceptedInternController::class, 'verifyDocumentsAndSend'])
+            ->name('accepted-interns.verifyAndSend');
+
         // Send to Div Head for approval
         Route::post('/accepted-interns/{id}/send-to-approval', [AcceptedInternController::class, 'sendToApproval'])
             ->name('accepted-interns.sendToApproval');
+
+        // Reject by HC
+        Route::post('/accepted-interns/{id}/reject-by-hc', [AcceptedInternController::class, 'rejectByHC'])
+            ->name('accepted-interns.rejectByHC');
+
+        // Bulk delete
+        Route::delete('/accepted-interns/bulk-delete', [AcceptedInternController::class, 'bulkDelete'])
+            ->name('accepted-interns.bulkDelete');
+
+        // Bulk forward to Div Head
+        Route::post('/accepted-interns/bulk-forward-to-divhead', [AcceptedInternController::class, 'bulkForwardToDivHead'])
+            ->name('accepted-interns.bulkForwardToDivHead');
+
+        // Mark document as viewed (AJAX)
+        Route::post('/accepted-interns/{id}/mark-document-viewed', [AcceptedInternController::class, 'markDocumentViewed'])
+            ->name('accepted-interns.markDocumentViewed');
 
         // Generate surat ke kampus
         Route::get('/accepted-interns/{id}/generate-letter', [AcceptedInternController::class, 'generateLetter'])
@@ -77,6 +104,22 @@ Route::middleware(['auth'])->group(function () {
             ->name('accepted-interns.markRejectionWaSent');
 
         Route::resource('accepted-interns', AcceptedInternController::class);
+
+        // Administrasi Persuratan routes
+        Route::get('/administrasi-persuratan', [AdministrasiPersuratanController::class, 'index'])
+            ->name('administrasi-persuratan.index');
+        Route::get('/administrasi-persuratan/{id}/download-surat-konfirmasi', [AdministrasiPersuratanController::class, 'downloadSuratKonfirmasiUnit'])
+            ->name('administrasi-persuratan.download-surat-konfirmasi');
+        Route::get('/administrasi-persuratan/{id}/download-surat-kampus', [AdministrasiPersuratanController::class, 'downloadSuratKeKampus'])
+            ->name('administrasi-persuratan.download-surat-kampus');
+        Route::get('/administrasi-persuratan/{id}/send-whatsapp', [AdministrasiPersuratanController::class, 'sendWhatsAppOnboarding'])
+            ->name('administrasi-persuratan.send-whatsapp');
+        Route::post('/administrasi-persuratan/bulk-download-konfirmasi', [AdministrasiPersuratanController::class, 'bulkDownloadSuratKonfirmasi'])
+            ->name('administrasi-persuratan.bulk-download-konfirmasi');
+        Route::post('/administrasi-persuratan/bulk-download-kampus', [AdministrasiPersuratanController::class, 'bulkDownloadSuratKampus'])
+            ->name('administrasi-persuratan.bulk-download-kampus');
+        Route::post('/administrasi-persuratan/bulk-send-whatsapp', [AdministrasiPersuratanController::class, 'bulkSendWhatsApp'])
+            ->name('administrasi-persuratan.bulk-send-whatsapp');
     });
 
     // Div Head Routes - Approval from HC
@@ -87,6 +130,10 @@ Route::middleware(['auth'])->group(function () {
             ->name('approvals.divhead.approve');
         Route::post('/approvals/divhead/{id}/reject', [ApprovalController::class, 'divHeadReject'])
             ->name('approvals.divhead.reject');
+        Route::post('/approvals/divhead/bulk-approve', [ApprovalController::class, 'bulkDivHeadApprove'])
+            ->name('approvals.divhead.bulkApprove');
+        Route::post('/approvals/divhead/bulk-reject', [ApprovalController::class, 'bulkDivHeadReject'])
+            ->name('approvals.divhead.bulkReject');
     });
 
     // Deputy Routes - Final Approval
@@ -97,6 +144,10 @@ Route::middleware(['auth'])->group(function () {
             ->name('approvals.deputy.approve');
         Route::post('/approvals/deputy/{id}/reject', [ApprovalController::class, 'deputyReject'])
             ->name('approvals.deputy.reject');
+        Route::post('/approvals/deputy/bulk-approve', [ApprovalController::class, 'bulkDeputyApprove'])
+            ->name('approvals.deputy.bulkApprove');
+        Route::post('/approvals/deputy/bulk-reject', [ApprovalController::class, 'bulkDeputyReject'])
+            ->name('approvals.deputy.bulkReject');
     });
 
     // Show approval detail (all roles that can view)
@@ -110,6 +161,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:hc,admin'])->group(function () {
         Route::get('/database-magang/export', [AcceptedInternController::class, 'exportDatabaseMagang'])
             ->name('database-magang.export');
+        Route::post('/database-magang/bulk-wa-surat-kampus', [AcceptedInternController::class, 'bulkSendWaSuratKampus'])
+            ->name('database-magang.bulk-wa-surat-kampus');
         Route::get('/database-magang/{id}/edit', [AcceptedInternController::class, 'editDatabaseMagang'])
             ->name('database-magang.edit');
         Route::put('/database-magang/{id}', [AcceptedInternController::class, 'updateDatabaseMagang'])

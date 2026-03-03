@@ -58,8 +58,23 @@
             </div>
 
             <div class="space-y-2">
-                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Periode Magang</label>
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Periode
+                    Pendaftaran</label>
                 <p class="text-gray-900 font-semibold text-lg">{{ $intern->periode_magang ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal Mulai
+                    Magang</label>
+                <p class="text-gray-900 font-semibold text-lg">
+                    {{ $intern->tanggal_mulai_magang ? $intern->tanggal_mulai_magang->format('d M Y') : '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal Selesai
+                    Magang</label>
+                <p class="text-gray-900 font-semibold text-lg">
+                    {{ $intern->tanggal_selesai_magang ? $intern->tanggal_selesai_magang->format('d M Y') : '-' }}</p>
             </div>
 
             <div class="space-y-2">
@@ -111,39 +126,7 @@
                 Dokumen Lampiran
             </h3>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            @if ($intern->file_formulir)
-                <a href="{{ asset('storage/' . $intern->file_formulir) }}" target="_blank"
-                    class="group border-2 border-gray-200 hover:border-orange-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-orange-50 to-orange-100">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1 pr-3">
-                            <p class="text-gray-600 text-sm font-medium">Formulir</p>
-                            <p class="text-orange-600 font-bold text-sm flex items-center mt-1">
-                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
-                            </p>
-                        </div>
-                        <i
-                            class="fas fa-external-link-alt text-orange-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
-                    </div>
-                </a>
-            @endif
-
-            @if ($intern->file_proposal)
-                <a href="{{ asset('storage/' . $intern->file_proposal) }}" target="_blank"
-                    class="group border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1 pr-3">
-                            <p class="text-gray-600 text-sm font-medium">Proposal</p>
-                            <p class="text-blue-600 font-bold text-sm flex items-center mt-1">
-                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
-                            </p>
-                        </div>
-                        <i
-                            class="fas fa-external-link-alt text-blue-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
-                    </div>
-                </a>
-            @endif
-
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             @if ($intern->file_cv)
                 <a href="{{ asset('storage/' . $intern->file_cv) }}" target="_blank"
                     class="group border-2 border-gray-200 hover:border-green-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-green-50 to-green-100">
@@ -160,12 +143,60 @@
                 </a>
             @endif
 
+            @if ($intern->file_transkrip)
+                <a href="{{ asset('storage/' . $intern->file_transkrip) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">Transkrip Nilai</p>
+                            <p class="text-blue-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
+                        </div>
+                        <i
+                            class="fas fa-external-link-alt text-blue-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
+                    </div>
+                </a>
+            @endif
+
+            @if ($intern->file_ktp_ktm)
+                <a href="{{ asset('storage/' . $intern->file_ktp_ktm) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-amber-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-amber-50 to-amber-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">KTP & KTM</p>
+                            <p class="text-amber-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
+                        </div>
+                        <i
+                            class="fas fa-external-link-alt text-amber-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
+                    </div>
+                </a>
+            @endif
+
+            @if ($intern->file_bpjs)
+                <a href="{{ asset('storage/' . $intern->file_bpjs) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-red-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-red-50 to-red-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">BPJS Ketenagakerjaan</p>
+                            <p class="text-red-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
+                        </div>
+                        <i
+                            class="fas fa-external-link-alt text-red-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
+                    </div>
+                </a>
+            @endif
+
             @if ($intern->file_surat)
                 <a href="{{ asset('storage/' . $intern->file_surat) }}" target="_blank"
                     class="group border-2 border-gray-200 hover:border-purple-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-purple-50 to-purple-100">
                     <div class="flex items-center justify-between">
                         <div class="flex-1 pr-3">
-                            <p class="text-gray-600 text-sm font-medium">Surat Magang</p>
+                            <p class="text-gray-600 text-sm font-medium">Surat Pengantar Kampus</p>
                             <p class="text-purple-600 font-bold text-sm flex items-center mt-1">
                                 <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
                             </p>
@@ -176,6 +207,38 @@
                 </a>
             @endif
         </div>
+
+        <!-- Keterangan Surat Kampus Section -->
+        @if ($intern->nomor_surat_kampus || $intern->tanggal_surat || $intern->perihal_surat || $intern->pengirim_surat)
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 pt-8">
+                <div class="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-envelope text-cyan-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 font-heading">
+                    Keterangan Surat Kampus
+                </h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Nomor Surat</label>
+                    <p class="text-gray-900 font-semibold text-lg">{{ $intern->nomor_surat_kampus ?? '-' }}</p>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal Surat</label>
+                    <p class="text-gray-900 font-semibold text-lg">
+                        {{ $intern->tanggal_surat ? $intern->tanggal_surat->format('d M Y') : '-' }}</p>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Perihal Surat</label>
+                    <p class="text-gray-900 font-semibold text-lg">{{ $intern->perihal_surat ?? '-' }}</p>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Pengirim
+                        Surat</label>
+                    <p class="text-gray-900 font-semibold text-lg">{{ $intern->pengirim_surat ?? '-' }}</p>
+                </div>
+            </div>
+        @endif
 
         <div class="pt-8 mt-8 border-t border-gray-100">
             <div class="flex flex-wrap gap-3">
@@ -314,7 +377,7 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">Konfirmasi Penerimaan</h3>
-                            <p class="text-sm text-gray-500">Data akan diteruskan ke Div Head</p>
+                            <p class="text-sm text-gray-500">Data akan diterima</p>
                         </div>
                     </div>
 
@@ -346,19 +409,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
-                        <div class="flex items-start gap-3">
-                            <i class="fas fa-info-circle text-amber-500 mt-0.5"></i>
-                            <div class="text-sm text-amber-700">
-                                <p class="font-semibold mb-1">Perhatian!</p>
-                                <p>Setelah dikonfirmasi, data peserta magang akan:</p>
-                                <ul class="list-disc list-inside mt-1 space-y-1">
-                                    <li>Diterima dan masuk daftar "Data Anak Magang"</li>
-                                    <li>Diteruskan ke <strong>Div Head</strong> untuk persetujuan</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <!-- Buttons -->
                     <div class="flex justify-end gap-3">
@@ -369,7 +420,7 @@
                         <button type="button" onclick="submitAcceptForm()"
                             class="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-lg font-semibold shadow-lg transition-all flex items-center gap-2">
                             <i class="fas fa-check-circle"></i>
-                            <span>Ya, Terima & Kirim ke Div Head</span>
+                            <span>Ya, Terima</span>
                         </button>
                     </div>
                 </div>

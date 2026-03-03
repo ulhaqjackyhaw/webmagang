@@ -206,108 +206,109 @@
                             <i class="fas fa-calendar-alt text-accent-cyan"></i> Periode Pendaftaran Magang Kantor
                             Regional I
                         </h3>
-                        <p class="text-slate-400 text-sm mb-6">Pilih periode pelaksanaan magang yang Anda inginkan *</p>
+                        <p class="text-slate-400 text-sm mb-6">Pilih periode pendaftaran magang yang Tersedia</p>
 
                         <input type="hidden" name="periode_magang" id="periode_magang"
                             value="{{ old('periode_magang') }}" required />
 
                         <div class="space-y-6">
-                            <!-- Periode Pendaftaran Juni 2026 -->
-                            <div class="bg-slate-800/30 rounded-xl p-5 border border-slate-700">
-                                <div class="flex items-center gap-3 mb-4">
-                                    <div
-                                        class="w-10 h-10 rounded-lg bg-cyan-500/20 text-accent-cyan flex items-center justify-center">
-                                        <i class="fas fa-calendar"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-white">Pendaftaran Juni 2026</h4>
-                                        <p class="text-xs text-slate-400">Pilih salah satu periode pelaksanaan</p>
-                                    </div>
-                                </div>
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <button type="button" onclick="selectPeriode('Juli - September 2026')"
-                                        class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
-                                        data-periode="Juli - September 2026">
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <p
-                                                    class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
-                                                    Juli - September 2026</p>
-                                                <p class="text-xs text-slate-400 mt-1">3 bulan pelaksanaan</p>
-                                            </div>
-                                            <i
-                                                class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
+                            @forelse($periodes as $batchName => $batchPeriodes)
+                                <div class="bg-slate-800/30 rounded-xl p-5 border border-slate-700">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div
+                                            class="w-10 h-10 rounded-lg bg-cyan-500/20 text-accent-cyan flex items-center justify-center">
+                                            <i class="fas fa-calendar"></i>
                                         </div>
-                                    </button>
-                                    <button type="button" onclick="selectPeriode('Oktober - Desember 2026')"
-                                        class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
-                                        data-periode="Oktober - Desember 2026">
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <p
-                                                    class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
-                                                    Oktober - Desember 2026</p>
-                                                <p class="text-xs text-slate-400 mt-1">3 bulan pelaksanaan</p>
-                                            </div>
-                                            <i
-                                                class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
+                                        <div>
+                                            <h4 class="font-semibold text-white">{{ $batchName }}</h4>
+                                            <p class="text-xs text-slate-400">Pilih salah satu periode pendaftaran</p>
                                         </div>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Periode Pendaftaran Desember 2026 -->
-                            <div class="bg-slate-800/30 rounded-xl p-5 border border-slate-700">
-                                <div class="flex items-center gap-3 mb-4">
-                                    <div
-                                        class="w-10 h-10 rounded-lg bg-cyan-500/20 text-accent-cyan flex items-center justify-center">
-                                        <i class="fas fa-calendar"></i>
                                     </div>
-                                    <div>
-                                        <h4 class="font-semibold text-white">Pendaftaran Desember 2026</h4>
-                                        <p class="text-xs text-slate-400">Pilih salah satu periode pelaksanaan</p>
+                                    <div class="grid sm:grid-cols-2 gap-4">
+                                        @foreach ($batchPeriodes as $periode)
+                                            <button type="button"
+                                                onclick="selectPeriode('{{ $periode->nama_periode }}', '{{ $periode->tanggal_mulai->format('Y-m-d') }}', '{{ $periode->tanggal_selesai->format('Y-m-d') }}')"
+                                                class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
+                                                data-periode="{{ $periode->nama_periode }}"
+                                                data-start="{{ $periode->tanggal_mulai->format('Y-m-d') }}"
+                                                data-end="{{ $periode->tanggal_selesai->format('Y-m-d') }}">
+                                                <div class="flex items-center justify-between">
+                                                    <div>
+                                                        <p
+                                                            class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
+                                                            {{ $periode->nama_periode }}</p>
+                                                        <p class="text-xs text-slate-400 mt-1">
+                                                            {{ $periode->tanggal_mulai->format('d M Y') }} -
+                                                            {{ $periode->tanggal_selesai->format('d M Y') }}
+                                                        </p>
+                                                    </div>
+                                                    <i
+                                                        class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
+                                                </div>
+                                            </button>
+                                        @endforeach
                                     </div>
                                 </div>
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <button type="button" onclick="selectPeriode('Januari - Maret 2027')"
-                                        class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
-                                        data-periode="Januari - Maret 2027">
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <p
-                                                    class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
-                                                    Januari - Maret 2027</p>
-                                                <p class="text-xs text-slate-400 mt-1">3 bulan pelaksanaan</p>
-                                            </div>
-                                            <i
-                                                class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
-                                        </div>
-                                    </button>
-                                    <button type="button" onclick="selectPeriode('April - Juni 2027')"
-                                        class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
-                                        data-periode="April - Juni 2027">
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <p
-                                                    class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
-                                                    April - Juni 2027</p>
-                                                <p class="text-xs text-slate-400 mt-1">3 bulan pelaksanaan</p>
-                                            </div>
-                                            <i
-                                                class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
-                                        </div>
-                                    </button>
+                            @empty
+                                <div class="bg-slate-800/30 rounded-xl p-8 border border-slate-700 text-center">
+                                    <i class="fas fa-calendar-times text-slate-500 text-4xl mb-4"></i>
+                                    <p class="text-slate-400 font-medium">Tidak ada periode pendaftaran yang dibuka saat
+                                        ini.</p>
+                                    <p class="text-slate-500 text-sm mt-2">Silakan kunjungi kembali halaman ini nanti
+                                        atau hubungi HC untuk informasi lebih lanjut.</p>
                                 </div>
-                            </div>
+                            @endforelse
                         </div>
 
                         <!-- Selected Period Display -->
                         <div id="selected-periode-display" class="mt-6 hidden">
-                            <div
-                                class="bg-accent-cyan/10 border border-accent-cyan/30 rounded-xl px-5 py-3 flex items-center gap-3">
-                                <i class="fas fa-check-circle text-accent-cyan"></i>
-                                <span class="text-accent-cyan font-medium">Periode dipilih: <span
-                                        id="selected-periode-text"></span></span>
+                            <div class="bg-accent-cyan/10 border border-accent-cyan/30 rounded-xl px-5 py-4">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <i class="fas fa-check-circle text-accent-cyan"></i>
+                                    <span class="text-accent-cyan font-medium">Periode dipilih: <span
+                                            id="selected-periode-text"></span></span>
+                                </div>
+                                <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+                                    <p class="text-sm text-slate-300 mb-3"><i
+                                            class="fas fa-info-circle text-accent-cyan mr-2"></i>Pilih tanggal mulai
+                                        (dalam periode) lalu tanggal selesai (durasi min. 1 bulan, maks. 6 bulan)</p>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="tanggal_mulai_magang"
+                                                class="block text-sm font-medium text-slate-300 mb-2">Tanggal Mulai
+                                                Magang *</label>
+                                            <input type="date" name="tanggal_mulai_magang" id="tanggal_mulai_magang"
+                                                value="{{ old('tanggal_mulai_magang') }}" required
+                                                class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:border-accent-cyan transition-all"
+                                                onchange="validateDates()" />
+                                            <p class="text-xs text-slate-400 mt-1"><i
+                                                    class="fas fa-calendar-check mr-1"></i>Harus dalam rentang periode
+                                                yang dipilih</p>
+                                        </div>
+                                        <div>
+                                            <label for="tanggal_selesai_magang"
+                                                class="block text-sm font-medium text-slate-300 mb-2">Tanggal Selesai
+                                                Magang *</label>
+                                            <input type="date" name="tanggal_selesai_magang"
+                                                id="tanggal_selesai_magang"
+                                                value="{{ old('tanggal_selesai_magang') }}" required disabled
+                                                class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:border-accent-cyan transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                                onchange="validateDates()" />
+                                            <p class="text-xs text-slate-400 mt-1"><i
+                                                    class="fas fa-clock mr-1"></i>Otomatis tersedia setelah pilih
+                                                tanggal mulai (1-6 bulan)</p>
+                                        </div>
+                                    </div>
+                                    <div id="date-validation-msg" class="mt-3 hidden">
+                                        <p class="text-sm text-yellow-300"><i
+                                                class="fas fa-exclamation-triangle mr-2"></i><span
+                                                id="date-validation-text"></span></p>
+                                    </div>
+                                    <div id="duration-display" class="mt-3 hidden">
+                                        <p class="text-sm text-green-400"><i class="fas fa-clock mr-2"></i>Durasi
+                                            magang: <span id="duration-text"></span></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -485,6 +486,52 @@
                         @endif
                     </div> --}}
 
+
+                    <!-- Keterangan Surat Magang -->
+                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="550">
+                        <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <i class="fas fa-file-signature text-accent-cyan"></i> Keterangan Surat Magang
+                        </h3>
+                        <p class="text-sm text-slate-400 mb-6">Isi keterangan berdasarkan surat permohonan magang resmi
+                            dari kampus Anda</p>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="nomor_surat_kampus"
+                                    class="block text-sm font-medium text-slate-300 mb-2">Nomor Surat Magang Kampus
+                                    *</label>
+                                <input type="text" name="nomor_surat_kampus" id="nomor_surat_kampus"
+                                    value="{{ old('nomor_surat_kampus') }}" required
+                                    placeholder="Contoh: 001/UN/PKL/2026"
+                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
+                            </div>
+                            <div>
+                                <label for="tanggal_surat"
+                                    class="block text-sm font-medium text-slate-300 mb-2">Tanggal Surat *</label>
+                                <input type="date" name="tanggal_surat" id="tanggal_surat"
+                                    value="{{ old('tanggal_surat') }}" required
+                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:border-accent-cyan transition-all" />
+                            </div>
+                            <div>
+                                <label for="perihal_surat"
+                                    class="block text-sm font-medium text-slate-300 mb-2">Perihal Surat *</label>
+                                <input type="text" name="perihal_surat" id="perihal_surat"
+                                    value="{{ old('perihal_surat') }}" required
+                                    placeholder="Contoh: Permohonan Magang/PKL"
+                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
+                            </div>
+                            <div>
+                                <label for="pengirim_surat"
+                                    class="block text-sm font-medium text-slate-300 mb-2">Pengirim / Penandatangan
+                                    Surat *</label>
+                                <input type="text" name="pengirim_surat" id="pengirim_surat"
+                                    value="{{ old('pengirim_surat') }}" required
+                                    placeholder="Contoh: Dekan Fakultas Teknik"
+                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Upload Dokumen -->
                     <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="500">
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
@@ -497,19 +544,7 @@
                         </p>
 
                         <div class="space-y-6">
-                            {{-- File Formulir - Dihilangkan karena sudah input data kampus by ketik --}}
-                            {{-- <div>
-                                <label for="file_formulir"
-                                    class="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
-                                    <i class="fas fa-file-signature text-accent-cyan"></i> Formulir Pendaftaran yang
-                                    Sudah Diisi *
-                                </label>
-                                <input type="file" name="file_formulir" id="file_formulir" required
-                                    accept=".pdf,.doc,.docx"
-                                    class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
-                            </div> --}}
-
-                            <!-- Sisanya (CV, Proposal, Surat) pola sama, copy-paste dan ganti name/id/label -->
+                            <!-- 1. CV -->
                             <div>
                                 <label for="file_cv"
                                     class="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
@@ -520,21 +555,52 @@
                                     class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
                             </div>
 
+                            <!-- 2. Transkrip Nilai -->
                             <div>
-                                <label for="file_proposal"
+                                <label for="file_transkrip"
                                     class="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
-                                    <i class="fas fa-file-alt text-accent-cyan"></i> Proposal Magang *
+                                    <i class="fas fa-file-alt text-accent-cyan"></i> Transkrip Nilai Terakhir *
                                 </label>
-                                <input type="file" name="file_proposal" id="file_proposal" required
+                                <input type="file" name="file_transkrip" id="file_transkrip" required
                                     accept=".pdf,.doc,.docx"
                                     class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
                             </div>
 
+                            <!-- 3. KTP dan KTM/Kartu Pelajar -->
+                            <div>
+                                <label for="file_ktp_ktm"
+                                    class="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                                    <i class="fas fa-address-card text-accent-cyan"></i> Fotokopi KTP dan KTM/Kartu
+                                    Pelajar (gabung 1 file) *
+                                </label>
+                                <input type="file" name="file_ktp_ktm" id="file_ktp_ktm" required
+                                    accept=".pdf,.doc,.docx"
+                                    class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                <p class="text-xs text-slate-400 mt-2"><i
+                                        class="fas fa-info-circle mr-1"></i>Gabungkan fotokopi KTP dan KTM/Kartu
+                                    Pelajar dalam 1 file PDF</p>
+                            </div>
+
+                            <!-- 4. BPJS Kesehatan -->
+                            <div>
+                                <label for="file_bpjs"
+                                    class="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                                    <i class="fas fa-heartbeat text-accent-cyan"></i> Bukti Kepesertaan BPJS Kesehatan
+                                    *
+                                </label>
+                                <input type="file" name="file_bpjs" id="file_bpjs" required
+                                    accept=".pdf,.doc,.docx"
+                                    class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                <p class="text-xs text-slate-400 mt-2"><i class="fas fa-info-circle mr-1"></i>Bukti
+                                    kepesertaan jaminan kesehatan yang masih aktif selama periode magang</p>
+                            </div>
+
+                            <!-- 5. Surat Permohonan Magang -->
                             <div>
                                 <label for="file_surat"
                                     class="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
                                     <i class="fas fa-envelope-open-text text-accent-cyan"></i> Surat Permohonan Magang
-                                    Resmi *
+                                    Resmi dari Kampus *
                                 </label>
                                 <input type="file" name="file_surat" id="file_surat" required
                                     accept=".pdf,.doc,.docx"
@@ -542,6 +608,8 @@
                             </div>
                         </div>
                     </div>
+
+                    
 
                     <!-- Persetujuan -->
                     <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="600">
@@ -753,10 +821,31 @@
                 toggleKampusLainnya('Lainnya');
             }
 
+            // Initially disable end date input
+            const endInput = document.getElementById('tanggal_selesai_magang');
+            endInput.disabled = true;
+
             // Check for old() periode value
             const periodeValue = document.getElementById('periode_magang').value;
             if (periodeValue) {
-                selectPeriode(periodeValue);
+                const selectedBtn = document.querySelector(`.periode-btn[data-periode="${periodeValue}"]`);
+                if (selectedBtn) {
+                    const startDate = selectedBtn.dataset.start;
+                    const endDate = selectedBtn.dataset.end;
+                    selectPeriode(periodeValue, startDate, endDate);
+
+                    // Restore old date values
+                    const oldStartDate = '{{ old('tanggal_mulai_magang') }}';
+                    const oldEndDate = '{{ old('tanggal_selesai_magang') }}';
+                    if (oldStartDate) {
+                        document.getElementById('tanggal_mulai_magang').value = oldStartDate;
+                        validateDates(); // This will enable end input and set constraints
+                    }
+                    if (oldEndDate) {
+                        document.getElementById('tanggal_selesai_magang').value = oldEndDate;
+                        validateDates(); // Recalculate duration display
+                    }
+                }
             }
 
             // Auto uppercase for text inputs
@@ -769,9 +858,14 @@
         });
 
         // Select periode magang
-        function selectPeriode(periode) {
+        let selectedPeriodStart = null;
+        let selectedPeriodEnd = null;
+
+        function selectPeriode(periode, startDate, endDate) {
             // Update hidden input
             document.getElementById('periode_magang').value = periode;
+            selectedPeriodStart = startDate;
+            selectedPeriodEnd = endDate;
 
             // Remove selected state from all buttons
             document.querySelectorAll('.periode-btn').forEach(btn => {
@@ -793,6 +887,100 @@
             // Show selected display
             document.getElementById('selected-periode-display').classList.remove('hidden');
             document.getElementById('selected-periode-text').textContent = periode;
+
+            // Set date input constraints
+            const startInput = document.getElementById('tanggal_mulai_magang');
+            const endInput = document.getElementById('tanggal_selesai_magang');
+
+            // Tanggal mulai harus dalam periode pendaftaran
+            startInput.min = startDate;
+            startInput.max = endDate;
+
+            // Tanggal selesai akan diatur saat tanggal mulai dipilih
+            endInput.min = '';
+            endInput.max = '';
+            endInput.disabled = true;
+
+            // Reset date values
+            startInput.value = '';
+            endInput.value = '';
+            document.getElementById('date-validation-msg').classList.add('hidden');
+            document.getElementById('duration-display').classList.add('hidden');
+        }
+
+        function validateDates() {
+            const startInput = document.getElementById('tanggal_mulai_magang');
+            const endInput = document.getElementById('tanggal_selesai_magang');
+            const validationMsg = document.getElementById('date-validation-msg');
+            const validationText = document.getElementById('date-validation-text');
+            const durationDisplay = document.getElementById('duration-display');
+            const durationText = document.getElementById('duration-text');
+
+            // Jika tanggal mulai dipilih, atur constraint untuk tanggal selesai
+            if (startInput.value) {
+                const start = new Date(startInput.value);
+
+                // Min = tanggal mulai + 1 bulan
+                const minEnd = new Date(start);
+                minEnd.setMonth(minEnd.getMonth() + 1);
+
+                // Max = tanggal mulai + 6 bulan
+                const maxEnd = new Date(start);
+                maxEnd.setMonth(maxEnd.getMonth() + 6);
+
+                endInput.min = minEnd.toISOString().split('T')[0];
+                endInput.max = maxEnd.toISOString().split('T')[0];
+                endInput.disabled = false;
+            } else {
+                endInput.disabled = true;
+                endInput.value = '';
+            }
+
+            if (!startInput.value || !endInput.value) {
+                durationDisplay.classList.add('hidden');
+                validationMsg.classList.add('hidden');
+                return;
+            }
+
+            const start = new Date(startInput.value);
+            const end = new Date(endInput.value);
+
+            // Calculate months difference
+            const monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+
+            // Calculate days for more accurate display
+            const daysDiff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+
+            // Validate minimum 1 month (approximately 28 days)
+            if (daysDiff < 28) {
+                validationMsg.classList.remove('hidden');
+                validationText.textContent = 'Durasi magang minimal 1 bulan';
+                durationDisplay.classList.add('hidden');
+                return;
+            }
+
+            // Validate maximum 6 months (approximately 186 days)
+            if (daysDiff > 186) {
+                validationMsg.classList.remove('hidden');
+                validationText.textContent = 'Durasi magang maksimal 6 bulan';
+                durationDisplay.classList.add('hidden');
+                return;
+            }
+
+            // Valid duration - show in months and days
+            validationMsg.classList.add('hidden');
+            durationDisplay.classList.remove('hidden');
+
+            if (monthsDiff >= 1) {
+                const remainingDays = daysDiff - (monthsDiff * 30);
+                if (remainingDays > 0) {
+                    durationText.textContent = monthsDiff + ' bulan ' + remainingDays + ' hari';
+                } else {
+                    durationText.textContent = monthsDiff + ' bulan';
+                }
+            } else {
+                durationText.textContent = daysDiff + ' hari';
+            }
         }
     </script>
 </body>

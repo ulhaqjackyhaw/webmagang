@@ -359,11 +359,41 @@
                             <span class="sidebar-tooltip">Monitoring Approval</span>
                         </a>
 
+                        <a href="{{ route('administrasi-persuratan.index') }}"
+                            class="sidebar-link relative flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 {{ request()->routeIs('administrasi-persuratan.*') ? 'active' : '' }}">
+                            <i class="fas fa-file-signature w-5 text-center"></i>
+                            <span class="sidebar-text">Administrasi Persuratan</span>
+                            @php
+                                $pendingPersuratan = \App\Models\AcceptedIntern::where(
+                                    'approval_status',
+                                    'approved_by_deputy',
+                                )
+                                    ->where(function ($q) {
+                                        $q->where('surat_konfirmasi_unit_downloaded', false)
+                                            ->orWhere('surat_ke_kampus_downloaded', false)
+                                            ->orWhere('wa_onboarding_sent', false);
+                                    })
+                                    ->count();
+                            @endphp
+                            @if ($pendingPersuratan > 0)
+                                <span
+                                    class="sidebar-badge ml-auto bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full">{{ $pendingPersuratan }}</span>
+                            @endif
+                            <span class="sidebar-tooltip">Administrasi Persuratan</span>
+                        </a>
+
                         <a href="{{ route('database-magang.index') }}"
                             class="sidebar-link relative flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 {{ request()->routeIs('database-magang.*') ? 'active' : '' }}">
                             <i class="fas fa-database w-5 text-center"></i>
                             <span class="sidebar-text">Database Magang</span>
                             <span class="sidebar-tooltip">Database Magang</span>
+                        </a>
+
+                        <a href="{{ route('periode-magang.index') }}"
+                            class="sidebar-link relative flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 {{ request()->routeIs('periode-magang.*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-alt w-5 text-center"></i>
+                            <span class="sidebar-text">Periode Magang</span>
+                            <span class="sidebar-tooltip">Periode Magang</span>
                         </a>
                     @endif
 
@@ -389,13 +419,6 @@
                             @endif
                             <span class="sidebar-tooltip">Approval Pengajuan</span>
                         </a>
-
-                        <a href="{{ route('database-magang.index') }}"
-                            class="sidebar-link relative flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 {{ request()->routeIs('database-magang.*') ? 'active' : '' }}">
-                            <i class="fas fa-database w-5 text-center"></i>
-                            <span class="sidebar-text">Database Magang</span>
-                            <span class="sidebar-tooltip">Database Magang</span>
-                        </a>
                     @endif
 
                     @if (in_array(auth()->user()->role, ['deputy', 'admin']))
@@ -419,13 +442,6 @@
                                     class="sidebar-badge ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{{ $pendingDeputy }}</span>
                             @endif
                             <span class="sidebar-tooltip">Final Approval</span>
-                        </a>
-
-                        <a href="{{ route('database-magang.index') }}"
-                            class="sidebar-link relative flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 {{ request()->routeIs('database-magang.*') ? 'active' : '' }}">
-                            <i class="fas fa-database w-5 text-center"></i>
-                            <span class="sidebar-text">Database Magang</span>
-                            <span class="sidebar-tooltip">Database Magang</span>
                         </a>
                     @endif
 

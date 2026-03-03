@@ -25,7 +25,9 @@ class InternController extends Controller
             $query->where('periode_magang', $selectedPeriode);
         }
 
-        $interns = $query->latest()->get();
+        // Per page pagination
+        $perPage = $request->get('per_page', 10);
+        $interns = $query->latest()->paginate($perPage)->withQueryString();
 
         // Get available periodes from data
         $availablePeriodes = Intern::select('periode_magang')
@@ -34,7 +36,7 @@ class InternController extends Controller
             ->orderBy('periode_magang')
             ->pluck('periode_magang');
 
-        return view('interns.index', compact('interns', 'selectedPeriode', 'availablePeriodes'));
+        return view('interns.index', compact('interns', 'selectedPeriode', 'availablePeriodes', 'perPage'));
     }
 
     /**
@@ -175,21 +177,21 @@ class InternController extends Controller
             return back()->withErrors(['error' => 'Anak magang ini sudah diproses sebelumnya.'])->withInput();
         }
 
-        // Create AcceptedIntern entry - automatically sent to Div Head
+        // Create AcceptedIntern entry - status pending (documents not verified yet)
         // Periode taken from intern registration data
         \App\Models\AcceptedIntern::create([
             'intern_id' => $intern->id,
             'periode_magang' => $intern->periode_magang,
             'unit_magang' => $validated['unit_magang'],
             'created_by' => Auth::id(),
-            'approval_status' => 'sent_to_divhead', // Automatically sent to Div Head
-            'sent_to_divhead_at' => now(),
+            'approval_status' => 'pending', // Waiting for document verification
+            'documents_verified' => false,
         ]);
 
         // Update intern status to approved (accepted by HC)
         $intern->update(['status' => 'approved']);
 
-        return redirect()->route('accepted-interns.index')->with('success', 'Pengajuan magang diterima dan sudah diteruskan ke Div Head untuk persetujuan.');
+        return redirect()->route('accepted-interns.index')->with('success', 'Pengajuan magang diterima! Silakan verifikasi dokumen di halaman Monitoring Approval sebelum diteruskan ke Div Head.');
     }
 
     /**

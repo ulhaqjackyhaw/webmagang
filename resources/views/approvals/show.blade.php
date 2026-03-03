@@ -61,9 +61,21 @@
                         <p class="font-medium text-gray-800">{{ $acceptedIntern->unit_magang }}</p>
                     </div>
                     <div>
-                        <label class="text-sm text-gray-500">Periode Magang</label>
+                        <label class="text-sm text-gray-500">Periode Pendaftaran</label>
                         <p class="font-medium text-gray-800">
                             {{ $acceptedIntern->periode_magang ?? ($acceptedIntern->intern->periode_magang ?? '-') }}
+                        </p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-500">Tanggal Mulai Magang</label>
+                        <p class="font-medium text-gray-800">
+                            {{ $acceptedIntern->intern->tanggal_mulai_magang ? $acceptedIntern->intern->tanggal_mulai_magang->format('d M Y') : '-' }}
+                        </p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-500">Tanggal Selesai Magang</label>
+                        <p class="font-medium text-gray-800">
+                            {{ $acceptedIntern->intern->tanggal_selesai_magang ? $acceptedIntern->intern->tanggal_selesai_magang->format('d M Y') : '-' }}
                         </p>
                     </div>
                     <div>
@@ -85,32 +97,52 @@
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    @if ($acceptedIntern->intern->file_proposal)
-                        <a href="{{ asset('storage/' . $acceptedIntern->intern->file_proposal) }}" target="_blank"
-                            class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                            <i class="fas fa-file-pdf text-red-500 text-2xl mr-3"></i>
-                            <div>
-                                <p class="font-medium text-gray-800">Proposal</p>
-                                <p class="text-sm text-gray-500">Lihat dokumen</p>
-                            </div>
-                        </a>
-                    @endif
                     @if ($acceptedIntern->intern->file_cv)
                         <a href="{{ asset('storage/' . $acceptedIntern->intern->file_cv) }}" target="_blank"
-                            class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                            <i class="fas fa-file-pdf text-red-500 text-2xl mr-3"></i>
+                            class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition">
+                            <i class="fas fa-file-pdf text-green-500 text-2xl mr-3"></i>
                             <div>
                                 <p class="font-medium text-gray-800">CV</p>
                                 <p class="text-sm text-gray-500">Lihat dokumen</p>
                             </div>
                         </a>
                     @endif
-                    @if ($acceptedIntern->intern->file_surat)
-                        <a href="{{ asset('storage/' . $acceptedIntern->intern->file_surat) }}" target="_blank"
-                            class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    @if ($acceptedIntern->intern->file_transkrip)
+                        <a href="{{ asset('storage/' . $acceptedIntern->intern->file_transkrip) }}" target="_blank"
+                            class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
+                            <i class="fas fa-file-pdf text-blue-500 text-2xl mr-3"></i>
+                            <div>
+                                <p class="font-medium text-gray-800">Transkrip Nilai</p>
+                                <p class="text-sm text-gray-500">Lihat dokumen</p>
+                            </div>
+                        </a>
+                    @endif
+                    @if ($acceptedIntern->intern->file_ktp_ktm)
+                        <a href="{{ asset('storage/' . $acceptedIntern->intern->file_ktp_ktm) }}" target="_blank"
+                            class="flex items-center p-4 bg-amber-50 rounded-lg hover:bg-amber-100 transition">
+                            <i class="fas fa-file-pdf text-amber-500 text-2xl mr-3"></i>
+                            <div>
+                                <p class="font-medium text-gray-800">KTP & KTM</p>
+                                <p class="text-sm text-gray-500">Lihat dokumen</p>
+                            </div>
+                        </a>
+                    @endif
+                    @if ($acceptedIntern->intern->file_bpjs)
+                        <a href="{{ asset('storage/' . $acceptedIntern->intern->file_bpjs) }}" target="_blank"
+                            class="flex items-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition">
                             <i class="fas fa-file-pdf text-red-500 text-2xl mr-3"></i>
                             <div>
-                                <p class="font-medium text-gray-800">Surat Pengantar</p>
+                                <p class="font-medium text-gray-800">BPJS Ketenagakerjaan</p>
+                                <p class="text-sm text-gray-500">Lihat dokumen</p>
+                            </div>
+                        </a>
+                    @endif
+                    @if ($acceptedIntern->intern->file_surat)
+                        <a href="{{ asset('storage/' . $acceptedIntern->intern->file_surat) }}" target="_blank"
+                            class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition">
+                            <i class="fas fa-file-pdf text-purple-500 text-2xl mr-3"></i>
+                            <div>
+                                <p class="font-medium text-gray-800">Surat Pengantar Kampus</p>
                                 <p class="text-sm text-gray-500">Lihat dokumen</p>
                             </div>
                         </a>

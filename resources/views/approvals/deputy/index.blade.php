@@ -44,14 +44,36 @@
                 <p>Tidak ada pengajuan yang menunggu persetujuan</p>
             </div>
         @else
+            <!-- Bulk Actions -->
+            <div id="bulkActionsBar" class="hidden mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="flex flex-wrap items-center gap-3">
+                    <span class="text-sm text-gray-600">
+                        <span id="selectedCount">0</span> item dipilih
+                    </span>
+                    <button type="button" onclick="showBulkApproveModal()"
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                        <i class="fas fa-check-double mr-2"></i>Terima Semua
+                    </button>
+                    <button type="button" onclick="showBulkRejectModal()"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                        <i class="fas fa-times-circle mr-2"></i>Tolak Semua
+                    </button>
+                </div>
+            </div>
+
             <!-- Mobile Card View -->
             <div class="mobile-card space-y-4">
                 @foreach ($pendingApprovals as $index => $item)
                     <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                         <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h3 class="font-bold text-gray-900">{{ $item->intern->nama }}</h3>
-                                <p class="text-sm text-gray-500">{{ $item->intern->program_studi }}</p>
+                            <div class="flex items-start gap-3">
+                                <input type="checkbox"
+                                    class="item-checkbox mt-1 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                    value="{{ $item->id }}" data-name="{{ $item->intern->nama }}">
+                                <div>
+                                    <h3 class="font-bold text-gray-900">{{ $item->intern->nama }}</h3>
+                                    <p class="text-sm text-gray-500">{{ $item->intern->program_studi }}</p>
+                                </div>
                             </div>
                             <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Waiting Final</span>
                         </div>
@@ -87,7 +109,7 @@
                             <button type="button"
                                 onclick="showApproveModal({{ $item->id }}, '{{ $item->intern->nama }}')"
                                 class="flex-1 bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition">
-                                <i class="fas fa-check-double mr-1"></i> Final
+                                <i class="fas fa-check-double mr-1"></i> Terima
                             </button>
                             <button type="button" onclick="showRejectModal({{ $item->id }})"
                                 class="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition">
@@ -103,6 +125,10 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
+                            <th class="px-4 py-3 text-center">
+                                <input type="checkbox" id="selectAll"
+                                    class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                            </th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Peserta</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Asal Kampus</th>
@@ -117,6 +143,11 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($pendingApprovals as $index => $item)
                             <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 text-center">
+                                    <input type="checkbox"
+                                        class="item-checkbox w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                        value="{{ $item->id }}" data-name="{{ $item->intern->nama }}">
+                                </td>
                                 <td class="px-4 py-3 text-sm text-gray-600">{{ $index + 1 }}</td>
                                 <td class="px-4 py-3">
                                     <div class="font-medium text-gray-900">{{ $item->intern->nama }}</div>
@@ -145,7 +176,7 @@
                                         <button type="button"
                                             onclick="showApproveModal({{ $item->id }}, '{{ $item->intern->nama }}')"
                                             class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm transition">
-                                            <i class="fas fa-check-double mr-1"></i> Final Approve
+                                            <i class="fas fa-check-double mr-1"></i> Terima
                                         </button>
                                         <button type="button" onclick="showRejectModal({{ $item->id }})"
                                             class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm transition">
@@ -299,7 +330,7 @@
                         <div class="bg-white/20 p-2 rounded-lg">
                             <i class="fas fa-check-double text-white text-xl"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-white">Final Approval</h3>
+                        <h3 class="text-lg font-bold text-white">Terima Pengajuan Final</h3>
                     </div>
                     <button type="button" onclick="closeApproveModal()"
                         class="text-white/80 hover:text-white transition">
@@ -337,7 +368,7 @@
                         </button>
                         <button type="submit"
                             class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 font-medium shadow-lg shadow-green-500/30 transition">
-                            <i class="fas fa-check-double mr-2"></i>Ya, Setujui
+                            <i class="fas fa-check-double mr-2"></i>Ya, Terima
                         </button>
                     </div>
                 </form>
@@ -345,7 +376,110 @@
         </div>
     </div>
 
+    <!-- Bulk Approve Modal -->
+    <div id="bulkApproveModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto transform transition-all">
+            <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-t-2xl px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-white/20 p-2 rounded-lg">
+                            <i class="fas fa-check-double text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Terima Semua Final</h3>
+                    </div>
+                    <button type="button" onclick="closeBulkApproveModal()"
+                        class="text-white/80 hover:text-white transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="flex flex-col items-center text-center mb-6">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-green-500 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">Konfirmasi Terima Final Massal</h4>
+                    <p class="text-gray-600 text-sm">
+                        <span id="bulkApproveCount" class="font-bold text-emerald-600">0</span> peserta akan mendapat
+                        persetujuan final dan dapat memulai magang.
+                    </p>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6 max-h-40 overflow-y-auto">
+                    <p class="font-medium text-sm text-emerald-700 mb-2">Peserta yang akan diterima:</p>
+                    <ul id="bulkApproveNames" class="text-sm text-emerald-800 space-y-1"></ul>
+                </div>
+                <form id="bulkApproveForm" method="POST" action="{{ route('approvals.deputy.bulkApprove') }}">
+                    @csrf
+                    <input type="hidden" name="ids" id="bulkApproveIds">
+                    <div class="flex space-x-3">
+                        <button type="button" onclick="closeBulkApproveModal()"
+                            class="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium transition">
+                            <i class="fas fa-arrow-left mr-2"></i>Batal
+                        </button>
+                        <button type="submit"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 font-medium shadow-lg shadow-green-500/30 transition">
+                            <i class="fas fa-check-double mr-2"></i>Ya, Terima Semua
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Reject Modal -->
+    <div id="bulkRejectModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto transform transition-all">
+            <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-t-2xl px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-white/20 p-2 rounded-lg">
+                            <i class="fas fa-times-circle text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Tolak Semua Pengajuan</h3>
+                    </div>
+                    <button type="button" onclick="closeBulkRejectModal()"
+                        class="text-white/80 hover:text-white transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="bulkRejectForm" method="POST" action="{{ route('approvals.deputy.bulkReject') }}"
+                class="p-6">
+                @csrf
+                <input type="hidden" name="ids" id="bulkRejectIds">
+                <div class="mb-4">
+                    <p class="text-gray-600 text-sm mb-2">
+                        <span id="bulkRejectCount" class="font-bold text-red-600">0</span> pengajuan akan ditolak.
+                    </p>
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-4 max-h-32 overflow-y-auto mb-4">
+                        <ul id="bulkRejectNames" class="text-sm text-red-800 space-y-1"></ul>
+                    </div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-comment-alt text-gray-400 mr-1"></i>
+                        Alasan Penolakan <span class="text-gray-400 font-normal">(Opsional)</span>
+                    </label>
+                    <textarea name="rejection_reason" rows="3"
+                        class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition resize-none"
+                        placeholder="Masukkan alasan penolakan..."></textarea>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeBulkRejectModal()"
+                        class="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium transition">
+                        <i class="fas fa-arrow-left mr-2"></i>Batal
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 font-medium shadow-lg shadow-red-500/30 transition">
+                        <i class="fas fa-times mr-2"></i>Ya, Tolak Semua
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // Single item modal functions
         function showRejectModal(id) {
             document.getElementById('rejectForm').action = '/approvals/deputy/' + id + '/reject';
             document.getElementById('rejectModal').classList.remove('hidden');
@@ -369,17 +503,103 @@
             document.getElementById('approveModal').classList.remove('flex');
         }
 
-        // Close modal when clicking outside
-        document.getElementById('rejectModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeRejectModal();
+        // Helper: get only visible checkboxes (mobile or desktop, not both)
+        function getVisibleCheckboxes(onlyChecked = false) {
+            const selector = onlyChecked ? '.item-checkbox:checked' : '.item-checkbox';
+            return [...document.querySelectorAll(selector)].filter(cb => cb.offsetParent !== null);
+        }
+
+        // Checkbox handling
+        function updateBulkActionsBar() {
+            const checkboxes = getVisibleCheckboxes(true);
+            const bulkActionsBar = document.getElementById('bulkActionsBar');
+            const selectedCount = document.getElementById('selectedCount');
+
+            if (checkboxes.length > 0) {
+                bulkActionsBar.classList.remove('hidden');
+                selectedCount.textContent = checkboxes.length;
+            } else {
+                bulkActionsBar.classList.add('hidden');
             }
+        }
+
+        // Select all functionality
+        document.getElementById('selectAll')?.addEventListener('change', function() {
+            const checkboxes = getVisibleCheckboxes(false);
+            checkboxes.forEach(cb => cb.checked = this.checked);
+            updateBulkActionsBar();
         });
 
-        document.getElementById('approveModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeApproveModal();
-            }
+        // Individual checkbox change
+        document.querySelectorAll('.item-checkbox').forEach(cb => {
+            cb.addEventListener('change', function() {
+                const allCheckboxes = getVisibleCheckboxes(false);
+                const checkedCheckboxes = getVisibleCheckboxes(true);
+                const selectAll = document.getElementById('selectAll');
+
+                if (selectAll) {
+                    selectAll.checked = allCheckboxes.length === checkedCheckboxes.length;
+                }
+                updateBulkActionsBar();
+            });
+        });
+
+        // Bulk approve modal
+        function showBulkApproveModal() {
+            const checkboxes = getVisibleCheckboxes(true);
+            const ids = [];
+            const names = [];
+
+            checkboxes.forEach(cb => {
+                ids.push(cb.value);
+                names.push(cb.dataset.name);
+            });
+
+            document.getElementById('bulkApproveIds').value = ids.join(',');
+            document.getElementById('bulkApproveCount').textContent = ids.length;
+            document.getElementById('bulkApproveNames').innerHTML = names.map(n => `<li>• ${n}</li>`).join('');
+
+            document.getElementById('bulkApproveModal').classList.remove('hidden');
+            document.getElementById('bulkApproveModal').classList.add('flex');
+        }
+
+        function closeBulkApproveModal() {
+            document.getElementById('bulkApproveModal').classList.add('hidden');
+            document.getElementById('bulkApproveModal').classList.remove('flex');
+        }
+
+        // Bulk reject modal
+        function showBulkRejectModal() {
+            const checkboxes = getVisibleCheckboxes(true);
+            const ids = [];
+            const names = [];
+
+            checkboxes.forEach(cb => {
+                ids.push(cb.value);
+                names.push(cb.dataset.name);
+            });
+
+            document.getElementById('bulkRejectIds').value = ids.join(',');
+            document.getElementById('bulkRejectCount').textContent = ids.length;
+            document.getElementById('bulkRejectNames').innerHTML = names.map(n => `<li>• ${n}</li>`).join('');
+
+            document.getElementById('bulkRejectModal').classList.remove('hidden');
+            document.getElementById('bulkRejectModal').classList.add('flex');
+        }
+
+        function closeBulkRejectModal() {
+            document.getElementById('bulkRejectModal').classList.add('hidden');
+            document.getElementById('bulkRejectModal').classList.remove('flex');
+        }
+
+        // Close modals when clicking outside
+        ['rejectModal', 'approveModal', 'bulkApproveModal', 'bulkRejectModal'].forEach(modalId => {
+            document.getElementById(modalId)?.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                    this.classList.remove('flex');
+                }
+            });
         });
     </script>
 @endsection

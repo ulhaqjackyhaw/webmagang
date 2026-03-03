@@ -93,7 +93,7 @@
     class="bg-gradient-to-b from-slate-950 via-slate-900 to-primary-900 text-slate-100 font-sans antialiased selection:bg-accent-cyan selection:text-slate-950">
 
     <!-- Navbar Glassmorphism -->
-    <nav class="fixed top-0 inset-x-0 z-50 glass">
+    <nav class="fixed top-0 inset-x-0 z-50 glass" x-data="{ mobileMenuOpen: false }">
         <div class="container mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-3 hover:opacity-90 transition">
                 <div>
@@ -103,16 +103,51 @@
             </a>
 
             <div class="hidden md:flex items-center gap-10">
+                <a href="#about"
+                    class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">About</a>
+                <a href="#gallery"
+                    class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">Galeri</a>
                 <a href="#benefits"
                     class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">Keuntungan</a>
                 <a href="#requirements"
                     class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">Persyaratan</a>
             </div>
 
-            <!-- Mobile menu button (gunakan Alpine nanti) -->
-            <button class="md:hidden text-2xl text-slate-300">
-                <i class="fas fa-bars"></i>
+            <!-- Mobile menu button -->
+            <button @click="mobileMenuOpen = !mobileMenuOpen"
+                class="md:hidden text-2xl text-slate-300 hover:text-accent-cyan transition-colors">
+                <i class="fas" :class="mobileMenuOpen ? 'fa-times' : 'fa-bars'"></i>
             </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2" @click.away="mobileMenuOpen = false"
+            class="md:hidden absolute top-full left-0 right-0 glass border-t border-slate-700/50">
+            <div class="container mx-auto px-6 py-4 flex flex-col gap-4">
+                <a href="#about" @click="mobileMenuOpen = false"
+                    class="text-base font-medium text-slate-300 hover:text-accent-cyan transition-colors py-2 border-b border-slate-700/30">
+                    <i class="fas fa-info-circle mr-3 text-accent-cyan"></i>About
+                </a>
+                <a href="#gallery" @click="mobileMenuOpen = false"
+                    class="text-base font-medium text-slate-300 hover:text-accent-cyan transition-colors py-2 border-b border-slate-700/30">
+                    <i class="fas fa-images mr-3 text-accent-cyan"></i>Galeri
+                </a>
+                <a href="#benefits" @click="mobileMenuOpen = false"
+                    class="text-base font-medium text-slate-300 hover:text-accent-cyan transition-colors py-2 border-b border-slate-700/30">
+                    <i class="fas fa-gift mr-3 text-accent-cyan"></i>Keuntungan
+                </a>
+                <a href="#requirements" @click="mobileMenuOpen = false"
+                    class="text-base font-medium text-slate-300 hover:text-accent-cyan transition-colors py-2 border-b border-slate-700/30">
+                    <i class="fas fa-clipboard-list mr-3 text-accent-cyan"></i>Persyaratan
+                </a>
+                <a href="{{ route('public.register') }}" @click="mobileMenuOpen = false"
+                    class="text-base font-medium text-accent-cyan hover:text-cyan-300 transition-colors py-2">
+                    <i class="fas fa-user-plus mr-3"></i>Daftar Sekarang
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -386,59 +421,101 @@
     <!-- Requirements -->
     <section id="requirements" class="py-24">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col lg:flex-row gap-16 items-center" data-aos="fade-up">
-                <div class="lg:w-1/3 text-center lg:text-left">
-                    <h2 class="text-accent-cyan font-semibold text-sm tracking-widest uppercase mb-4">Persyaratan</h2>
-                    <h3 class="text-4xl md:text-5xl font-bold mb-6">Siapkan Dokumen Anda</h3>
-                    <p class="text-slate-400 text-lg mb-8">Pastikan Anda memenuhi kriteria dan melengkapi seluruh
-                        dokumen sebelum mendaftar.</p>
+            <div class="text-center max-w-4xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-accent-cyan font-semibold text-sm tracking-widest uppercase mb-4">Ketentuan</h2>
+                <h3 class="text-4xl md:text-5xl font-bold mb-6">Ketentuan Magang</h3>
+                <p class="text-slate-400 text-lg">Pastikan Anda memahami persyaratan dan ketentuan program magang.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-12" data-aos="fade-up" data-aos-delay="100">
+                <!-- Persyaratan Dokumen -->
+                <div class="glass rounded-3xl p-10">
+                    <div class="flex items-center gap-5 mb-8">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-accent-cyan flex items-center justify-center text-2xl">
+                            <i class="fas fa-file-lines"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold">Persyaratan Magang/PKL</h4>
+                    </div>
+                    <ul class="space-y-5 text-slate-300">
+                        <li class="flex items-start gap-4">
+                            <span class="text-accent-cyan font-semibold">a.</span>
+                            Curriculum Vitae (CV)
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-accent-cyan font-semibold">b.</span>
+                            Transkrip Nilai Terakhir
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-accent-cyan font-semibold">c.</span>
+                            Fotokopi KTP dan KTM/Kartu Pelajar
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-accent-cyan font-semibold">d.</span>
+                            <span><strong class="text-white">Bukti kepesertaan jaminan kesehatan</strong> yang masih
+                                aktif selama periode magang/PKL (BPJS Kesehatan atau asuransi kesehatan lainnya)</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-accent-cyan font-semibold">e.</span>
+                            Surat Permohonan Magang Resmi dari Kampus atau Sekolah (jika peserta adalah siswa SMA/SMK)
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Ketentuan Durasi & Benefit -->
+                <div class="glass rounded-3xl p-10">
+                    <div class="flex items-center gap-5 mb-8">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-accent-cyan flex items-center justify-center text-2xl">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold">Ketentuan Magang</h4>
+                    </div>
+                    <ul class="space-y-5 text-slate-300">
+                        <li class="flex items-start gap-4">
+                            <span class="text-accent-cyan font-semibold">1.</span>
+                            <span><strong class="text-white">Jangka waktu</strong> Magang atau PKL <strong
+                                    class="text-white">minimal 1 (satu) bulan</strong>, dan <strong
+                                    class="text-white">paling lama 6 (enam) bulan</strong>, serta <strong
+                                    class="text-white">dapat diperpanjang paling lama selama 6 (enam)
+                                    bulan</strong></span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-accent-cyan font-semibold">2.</span>
+                            <span>Peserta Magang atau PKL diberikan <strong class="text-white">uang saku</strong>
+                                sebagai pengganti biaya transportasi dan konsumsi <strong
+                                    class="text-white">sebanyak-banyaknya sebesar 50%</strong> (lima puluh persen) dari
+                                uang makan karyawan per kehadiran.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Kriteria Peserta -->
+            <div class="max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass rounded-3xl p-10">
+                    <div class="flex items-center gap-5 mb-8">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-accent-cyan flex items-center justify-center text-2xl">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold">Kriteria Peserta</h4>
+                    </div>
+                    <ul class="space-y-5 text-slate-300">
+                        <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
+                            Mahasiswa atau siswa aktif</li>
+                        <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
+                            Sehat jasmani & rohani</li>
+                        <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
+                            Bersedia ditempatkan di unit kerja manapun</li>
+                    </ul>
+                </div>
+
+                <div class="text-center mt-10">
                     <a href="{{ route('public.register') }}"
                         class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-accent-cyan rounded-2xl text-slate-950 font-bold hover:shadow-xl hover:shadow-cyan-500/30 transition-all">
                         Daftar Sekarang <i class="fas fa-arrow-right"></i>
                     </a>
-                </div>
-
-                <div class="lg:w-2/3 grid md:grid-cols-2 gap-8">
-                    <!-- Kriteria Peserta -->
-                    <div class="glass rounded-3xl p-10">
-                        <div class="flex items-center gap-5 mb-8">
-                            <div
-                                class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-accent-cyan flex items-center justify-center text-2xl">
-                                <i class="fas fa-user-check"></i>
-                            </div>
-                            <h4 class="text-2xl font-bold">Kriteria Peserta</h4>
-                        </div>
-                        <ul class="space-y-5 text-slate-300">
-                            <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
-                                Mahasiswa atau siswa aktif</li>
-                            <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
-                                Sehat jasmani & rohani</li>
-                            <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
-                                Bersedia ditempatkan di unit kerja</li>
-                        </ul>
-                    </div>
-
-                    <!-- Dokumen Wajib -->
-                    <div class="glass rounded-3xl p-10">
-                        <div class="flex items-center gap-5 mb-8">
-                            <div
-                                class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-accent-cyan flex items-center justify-center text-2xl">
-                                <i class="fas fa-file-lines"></i>
-                            </div>
-                            <h4 class="text-2xl font-bold">Dokumen Wajib</h4>
-                        </div>
-                        <ul class="space-y-5 text-slate-300">
-                            <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
-                                Lengkapi data diri</li>
-                            {{-- Formulir upload dihilangkan karena sudah input data kampus by ketik --}}
-                            {{-- <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
-                                Download formulir dan isi</li>
-                            <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
-                                Upload formulir yang sudah diisi</li> --}}
-                            <li class="flex items-start gap-4"><i class="fas fa-check text-accent-cyan mt-1.5"></i>
-                                Upload CV, Proposal, Surat Magang Resmi</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>

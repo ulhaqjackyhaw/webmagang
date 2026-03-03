@@ -80,7 +80,8 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="space-y-2">
-                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Periode Magang</label>
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Periode
+                    Pendaftaran</label>
                 <p class="text-gray-900 font-semibold text-lg flex items-center gap-2">
                     <i class="fas fa-calendar text-blue-500 text-sm"></i>
                     {{ $acceptedIntern->periode_magang ?? ($acceptedIntern->intern->periode_magang ?? '-') }}
@@ -92,6 +93,24 @@
                 <p class="text-gray-900 font-semibold text-lg flex items-center gap-2">
                     <i class="fas fa-building text-purple-500 text-sm"></i>
                     {{ $acceptedIntern->unit_magang }}
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal Mulai
+                    Magang</label>
+                <p class="text-gray-900 font-semibold text-lg flex items-center gap-2">
+                    <i class="fas fa-calendar-check text-green-500 text-sm"></i>
+                    {{ $acceptedIntern->intern->tanggal_mulai_magang ? $acceptedIntern->intern->tanggal_mulai_magang->format('d M Y') : '-' }}
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal Selesai
+                    Magang</label>
+                <p class="text-gray-900 font-semibold text-lg flex items-center gap-2">
+                    <i class="fas fa-calendar-times text-red-500 text-sm"></i>
+                    {{ $acceptedIntern->intern->tanggal_selesai_magang ? $acceptedIntern->intern->tanggal_selesai_magang->format('d M Y') : '-' }}
                 </p>
             </div>
 
@@ -137,39 +156,7 @@
                 Dokumen Lampiran
             </h3>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            @if ($acceptedIntern->intern->file_formulir)
-                <a href="{{ asset('storage/' . $acceptedIntern->intern->file_formulir) }}" target="_blank"
-                    class="group border-2 border-gray-200 hover:border-orange-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-orange-50 to-orange-100">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1 pr-3">
-                            <p class="text-gray-600 text-sm font-medium">Formulir</p>
-                            <p class="text-orange-600 font-bold text-sm flex items-center mt-1">
-                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
-                            </p>
-                        </div>
-                        <i
-                            class="fas fa-external-link-alt text-orange-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
-                    </div>
-                </a>
-            @endif
-
-            @if ($acceptedIntern->intern->file_proposal)
-                <a href="{{ asset('storage/' . $acceptedIntern->intern->file_proposal) }}" target="_blank"
-                    class="group border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1 pr-3">
-                            <p class="text-gray-600 text-sm font-medium">Proposal</p>
-                            <p class="text-blue-600 font-bold text-sm flex items-center mt-1">
-                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
-                            </p>
-                        </div>
-                        <i
-                            class="fas fa-external-link-alt text-blue-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
-                    </div>
-                </a>
-            @endif
-
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             @if ($acceptedIntern->intern->file_cv)
                 <a href="{{ asset('storage/' . $acceptedIntern->intern->file_cv) }}" target="_blank"
                     class="group border-2 border-gray-200 hover:border-green-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-green-50 to-green-100">
@@ -186,12 +173,60 @@
                 </a>
             @endif
 
+            @if ($acceptedIntern->intern->file_transkrip)
+                <a href="{{ asset('storage/' . $acceptedIntern->intern->file_transkrip) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-blue-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">Transkrip Nilai</p>
+                            <p class="text-blue-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
+                        </div>
+                        <i
+                            class="fas fa-external-link-alt text-blue-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
+                    </div>
+                </a>
+            @endif
+
+            @if ($acceptedIntern->intern->file_ktp_ktm)
+                <a href="{{ asset('storage/' . $acceptedIntern->intern->file_ktp_ktm) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-amber-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-amber-50 to-amber-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">KTP & KTM</p>
+                            <p class="text-amber-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
+                        </div>
+                        <i
+                            class="fas fa-external-link-alt text-amber-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
+                    </div>
+                </a>
+            @endif
+
+            @if ($acceptedIntern->intern->file_bpjs)
+                <a href="{{ asset('storage/' . $acceptedIntern->intern->file_bpjs) }}" target="_blank"
+                    class="group border-2 border-gray-200 hover:border-red-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-red-50 to-red-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 pr-3">
+                            <p class="text-gray-600 text-sm font-medium">BPJS Ketenagakerjaan</p>
+                            <p class="text-red-600 font-bold text-sm flex items-center mt-1">
+                                <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
+                            </p>
+                        </div>
+                        <i
+                            class="fas fa-external-link-alt text-red-500 text-xl group-hover:scale-110 transition-transform flex-shrink-0"></i>
+                    </div>
+                </a>
+            @endif
+
             @if ($acceptedIntern->intern->file_surat)
                 <a href="{{ asset('storage/' . $acceptedIntern->intern->file_surat) }}" target="_blank"
                     class="group border-2 border-gray-200 hover:border-purple-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-purple-50 to-purple-100">
                     <div class="flex items-center justify-between">
                         <div class="flex-1 pr-3">
-                            <p class="text-gray-600 text-sm font-medium">Surat Magang</p>
+                            <p class="text-gray-600 text-sm font-medium">Surat Pengantar Kampus</p>
                             <p class="text-purple-600 font-bold text-sm flex items-center mt-1">
                                 <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
                             </p>
