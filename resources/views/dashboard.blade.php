@@ -15,7 +15,17 @@
                 Airports Kantor Regional I)</p>
             <div class="mt-4 inline-flex items-center bg-white bg-opacity-20 rounded-full px-4 py-2 backdrop-blur-sm">
                 <i class="fas fa-user-tag mr-2"></i>
-                <span class="font-semibold">{{ ucfirst(str_replace('_', ' ', auth()->user()->role)) }}</span>
+                <span class="font-semibold">
+                    @php
+                        $roleLabels = [
+                            'admin' => 'Admin',
+                            'hc' => 'Human Capital Development',
+                            'div_head' => 'Division Head',
+                            'deputy' => 'Deputy',
+                        ];
+                    @endphp
+                    {{ $roleLabels[auth()->user()->role] ?? ucfirst(auth()->user()->role) }}
+                </span>
             </div>
         </div>
     </div>
@@ -342,33 +352,6 @@
                         </div>
                     </div>
                 </a>
-
-                <a href="{{ route('database-magang.index') }}"
-                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
-                    style="background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2)); border-color: #10B981;">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
-                        style="background-color: #10B981;">
-                    </div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
-                            style="background-color: #10B981;">
-                            <i
-                                class="fas fa-database text-white text-2xl transition-colors duration-300 group-hover:text-green-500"></i>
-                        </div>
-                        <h3
-                            class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
-                            Database Magang</h3>
-                        <p
-                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
-                            Lihat data peserta magang final</p>
-                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
-                            style="color: #10B981;">
-                            <span>Lihat Database</span>
-                            <i
-                                class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                </a>
             @endif
 
             @if (auth()->user()->role === 'deputy')
@@ -393,33 +376,6 @@
                         <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
                             style="color: #8B5CF6;">
                             <span>Buka Approval</span>
-                            <i
-                                class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="{{ route('database-magang.index') }}"
-                    class="group relative rounded-xl p-6 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl overflow-hidden border-2"
-                    style="background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2)); border-color: #10B981;">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500"
-                        style="background-color: #10B981;">
-                    </div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 shadow-lg group-hover:bg-white"
-                            style="background-color: #10B981;">
-                            <i
-                                class="fas fa-database text-white text-2xl transition-colors duration-300 group-hover:text-green-500"></i>
-                        </div>
-                        <h3
-                            class="font-bold text-gray-800 group-hover:text-white text-lg mb-2 transition-colors duration-300">
-                            Database Magang</h3>
-                        <p
-                            class="text-gray-600 group-hover:text-white group-hover:text-opacity-90 text-sm transition-colors duration-300">
-                            Lihat data peserta magang final</p>
-                        <div class="mt-4 flex items-center text-sm font-medium transition-colors duration-300 group-hover:text-white"
-                            style="color: #10B981;">
-                            <span>Lihat Database</span>
                             <i
                                 class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
                         </div>
