@@ -106,7 +106,7 @@
                 <a href="#about"
                     class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">About</a>
                 <a href="#gallery"
-                    class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">Galeri</a>
+                    class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">Fasilitas</a>
                 <a href="#benefits"
                     class="text-sm font-medium text-slate-300 hover:text-accent-cyan transition-colors">Keuntungan</a>
                 <a href="#requirements"
@@ -133,7 +133,7 @@
                 </a>
                 <a href="#gallery" @click="mobileMenuOpen = false"
                     class="text-base font-medium text-slate-300 hover:text-accent-cyan transition-colors py-2 border-b border-slate-700/30">
-                    <i class="fas fa-images mr-3 text-accent-cyan"></i>Galeri
+                    <i class="fas fa-images mr-3 text-accent-cyan"></i>Fasilitas
                 </a>
                 <a href="#benefits" @click="mobileMenuOpen = false"
                     class="text-base font-medium text-slate-300 hover:text-accent-cyan transition-colors py-2 border-b border-slate-700/30">
