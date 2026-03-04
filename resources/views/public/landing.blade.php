@@ -312,12 +312,12 @@
 
                     <!-- Navigation Arrows -->
                     <button onclick="prevSlide()"
-                        class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full glass flex items-center justify-center text-white hover:bg-accent-cyan/20 transition-all z-10">
-                        <i class="fas fa-chevron-left"></i>
+                        class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/20 sm:glass flex items-center justify-center text-white/70 sm:text-white hover:bg-accent-cyan/20 transition-all z-10">
+                        <i class="fas fa-chevron-left text-sm sm:text-base"></i>
                     </button>
                     <button onclick="nextSlide()"
-                        class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full glass flex items-center justify-center text-white hover:bg-accent-cyan/20 transition-all z-10">
-                        <i class="fas fa-chevron-right"></i>
+                        class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/20 sm:glass flex items-center justify-center text-white/70 sm:text-white hover:bg-accent-cyan/20 transition-all z-10">
+                        <i class="fas fa-chevron-right text-sm sm:text-base"></i>
                     </button>
 
                     <!-- Dots Indicator -->

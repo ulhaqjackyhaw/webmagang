@@ -106,7 +106,7 @@
 <body class="min-h-screen antialiased selection:bg-accent-cyan selection:text-slate-950">
 
     <!-- Header -->
-    <div class="container mx-auto px-6 py-8">
+    <div class="container mx-auto px-4 sm:px-6 py-8">
         <div class="flex items-center justify-between" data-aos="fade-down">
             <a href="{{ route('public.landing') }}" class="flex items-center gap-3 hover:opacity-90 transition">
                 <div>
@@ -122,7 +122,7 @@
         </div>
     </div>
 
-    <div class="container mx-auto px-6 pb-12 max-w-4xl">
+    <div class="container mx-auto px-4 sm:px-6 pb-12 max-w-4xl">
         <div class="glass rounded-3xl overflow-hidden shadow-2xl" data-aos="fade-up" data-aos-duration="800">
             <!-- Header Gradient -->
             <div class="gradient-header p-12 text-center">
@@ -201,7 +201,7 @@
                     @csrf
 
                     <!-- Periode Magang -->
-                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="150">
+                    <div class="glass rounded-2xl p-4 sm:p-8 overflow-hidden" data-aos="fade-up" data-aos-delay="150">
                         <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
                             <i class="fas fa-calendar-alt text-accent-cyan"></i> Periode Pendaftaran Magang Kantor
                             Regional I
@@ -314,7 +314,8 @@
                     </div>
 
                     <!-- Data Pribadi -->
-                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="200">
+                    <div class="glass rounded-2xl p-4 sm:p-8 overflow-hidden" data-aos="fade-up"
+                        data-aos-delay="200">
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
                             <i class="fas fa-user text-accent-cyan"></i> Data Pribadi
                         </h3>
@@ -375,12 +376,13 @@
                     </div>
 
                     <!-- Data Akademik -->
-                    <div class="glass rounded-2xl p-8 relative z-[100]" data-aos="fade-up" data-aos-delay="300">
+                    <div class="glass rounded-2xl p-4 sm:p-8 relative z-[100]" data-aos="fade-up"
+                        data-aos-delay="300">
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
                             <i class="fas fa-graduation-cap text-accent-cyan"></i> Data Akademik
                         </h3>
                         <div class="grid md:grid-cols-2 gap-6">
-                            <div>
+                            <div class="min-w-0">
                                 <label for="asal_kampus" class="block text-sm font-medium text-slate-300 mb-2">Asal
                                     Kampus *</label>
 
@@ -400,14 +402,15 @@
                                 <!-- Custom Searchable Dropdown -->
                                 <div class="searchable-select-container relative" id="kampus_dropdown_container">
                                     <div id="kampus_selected"
-                                        class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white cursor-pointer flex items-center justify-between hover:border-accent-cyan transition-all">
-                                        <span id="kampus_selected_text" class="truncate">-- Pilih Universitas/Kampus
+                                        class="w-full px-4 sm:px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white cursor-pointer flex items-center justify-between hover:border-accent-cyan transition-all">
+                                        <span id="kampus_selected_text" class="truncate text-sm sm:text-base">-- Pilih
+                                            Universitas/Kampus
                                             --</span>
                                         <i class="fas fa-chevron-down text-slate-400 transition-transform"
                                             id="kampus_arrow"></i>
                                     </div>
                                     <div id="kampus_dropdown"
-                                        class="absolute z-[9999] w-full mt-2 bg-slate-800 border border-slate-600 rounded-xl shadow-2xl hidden max-h-72 overflow-hidden">
+                                        class="absolute z-[9999] w-full mt-2 bg-slate-800 border border-slate-600 rounded-xl shadow-2xl hidden max-h-[60vh] overflow-hidden">
                                         <div class="p-3 border-b border-slate-700">
                                             <div class="relative">
                                                 <i
@@ -416,7 +419,7 @@
                                                     class="w-full pl-10 pr-4 py-2.5 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:border-accent-cyan focus:outline-none transition-all" />
                                             </div>
                                         </div>
-                                        <div id="kampus_options" class="overflow-y-auto max-h-52">
+                                        <div id="kampus_options" class="overflow-y-auto max-h-[50vh]">
                                             <!-- Options will be populated by JS -->
                                         </div>
                                     </div>
@@ -488,7 +491,8 @@
 
 
                     <!-- Keterangan Surat Magang -->
-                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="550">
+                    <div class="glass rounded-2xl p-4 sm:p-8 overflow-hidden" data-aos="fade-up"
+                        data-aos-delay="550">
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
                             <i class="fas fa-file-signature text-accent-cyan"></i> Keterangan Surat Magang
                         </h3>
@@ -533,7 +537,8 @@
                     </div>
 
                     <!-- Upload Dokumen -->
-                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="500">
+                    <div class="glass rounded-2xl p-4 sm:p-8 overflow-hidden" data-aos="fade-up"
+                        data-aos-delay="500">
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
                             <i class="fas fa-file-upload text-accent-cyan"></i> Dokumen Persyaratan
                         </h3>
@@ -609,10 +614,11 @@
                         </div>
                     </div>
 
-                    
+
 
                     <!-- Persetujuan -->
-                    <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="600">
+                    <div class="glass rounded-2xl p-4 sm:p-8 overflow-hidden" data-aos="fade-up"
+                        data-aos-delay="600">
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
                             <i class="fas fa-check-circle text-accent-cyan"></i> Persetujuan & Pernyataan
                         </h3>
@@ -971,12 +977,22 @@
             validationMsg.classList.add('hidden');
             durationDisplay.classList.remove('hidden');
 
-            if (monthsDiff >= 1) {
-                const remainingDays = daysDiff - (monthsDiff * 30);
+            // Calculate full months accurately
+            let fullMonths = monthsDiff;
+            if (end.getDate() < start.getDate()) {
+                fullMonths--;
+            }
+
+            // Calculate actual remaining days
+            const tempDate = new Date(start);
+            tempDate.setMonth(tempDate.getMonth() + fullMonths);
+            const remainingDays = Math.ceil((end - tempDate) / (1000 * 60 * 60 * 24));
+
+            if (fullMonths >= 1) {
                 if (remainingDays > 0) {
-                    durationText.textContent = monthsDiff + ' bulan ' + remainingDays + ' hari';
+                    durationText.textContent = fullMonths + ' bulan ' + remainingDays + ' hari';
                 } else {
-                    durationText.textContent = monthsDiff + ' bulan';
+                    durationText.textContent = fullMonths + ' bulan';
                 }
             } else {
                 durationText.textContent = daysDiff + ' hari';
