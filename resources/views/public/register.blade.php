@@ -352,7 +352,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="nim" class="block text-sm font-medium text-slate-300 mb-2">NIM
+                                <label for="nim" class="block text-sm font-medium text-slate-300 mb-2">NIM / NISN
                                     *</label>
                                 <input type="text" name="nim" id="nim" value="{{ old('nim') }}"
                                     required
@@ -384,7 +384,7 @@
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="min-w-0">
                                 <label for="asal_kampus" class="block text-sm font-medium text-slate-300 mb-2">Asal
-                                    Kampus *</label>
+                                    Kampus / Sekolah *</label>
 
                                 <!-- Hidden select for form submission -->
                                 <select name="asal_kampus" id="asal_kampus" required class="hidden">
@@ -403,8 +403,8 @@
                                 <div class="searchable-select-container relative" id="kampus_dropdown_container">
                                     <div id="kampus_selected"
                                         class="w-full px-4 sm:px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white cursor-pointer flex items-center justify-between hover:border-accent-cyan transition-all">
-                                        <span id="kampus_selected_text" class="truncate text-sm sm:text-base">-- Pilih
-                                            Universitas/Kampus
+                                        <span id="kampus_selected_text" class="truncate text-sm sm:text-base">-- Asal
+                                            Kampus / Sekolah
                                             --</span>
                                         <i class="fas fa-chevron-down text-slate-400 transition-transform"
                                             id="kampus_arrow"></i>
@@ -427,9 +427,9 @@
                             </div>
                             <div id="kampus_lainnya_wrapper" style="display: none;">
                                 <label for="kampus_lainnya" class="block text-sm font-medium text-slate-300 mb-2">Nama
-                                    Kampus Lainnya *</label>
+                                    Kampus / Sekolah *</label>
                                 <input type="text" name="kampus_lainnya" id="kampus_lainnya"
-                                    value="{{ old('kampus_lainnya') }}" placeholder="Ketik nama kampus Anda"
+                                    value="{{ old('kampus_lainnya') }}" placeholder="Ketik nama kampus/sekolah Anda"
                                     class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
                             </div>
                             <div id="program_studi_wrapper"
@@ -439,6 +439,48 @@
                                 <input type="text" name="program_studi" id="program_studi"
                                     value="{{ old('program_studi') }}" required
                                     class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
+                            </div>
+                            <div>
+                                <label for="kelas" class="block text-sm font-medium text-slate-300 mb-2">Kelas
+                                    <span class="text-slate-500">(Opsional, untuk siswa)</span></label>
+                                <input type="text" name="kelas" id="kelas" value="{{ old('kelas') }}"
+                                    placeholder="Contoh: XII"
+                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
+                            </div>
+                            <div>
+                                <label for="semester" class="block text-sm font-medium text-slate-300 mb-2">Semester
+                                    *</label>
+                                <select name="semester" id="semester" required
+                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:border-accent-cyan transition-all">
+                                    <option value="">-- Pilih Semester --</option>
+                                    <option value="I" {{ old('semester') == 'I' ? 'selected' : '' }}>I</option>
+                                    <option value="II" {{ old('semester') == 'II' ? 'selected' : '' }}>II</option>
+                                    <option value="III" {{ old('semester') == 'III' ? 'selected' : '' }}>III
+                                    </option>
+                                    <option value="IV" {{ old('semester') == 'IV' ? 'selected' : '' }}>IV</option>
+                                    <option value="V" {{ old('semester') == 'V' ? 'selected' : '' }}>V</option>
+                                    <option value="VI" {{ old('semester') == 'VI' ? 'selected' : '' }}>VI</option>
+                                    <option value="VII" {{ old('semester') == 'VII' ? 'selected' : '' }}>VII
+                                    </option>
+                                    <option value="VIII" {{ old('semester') == 'VIII' ? 'selected' : '' }}>VIII
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="tujuan_magang"
+                                    class="block text-sm font-medium text-slate-300 mb-2">Tujuan Magang *</label>
+                                <select name="tujuan_magang" id="tujuan_magang" required
+                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:border-accent-cyan transition-all">
+                                    <option value="">-- Pilih Tujuan Magang --</option>
+                                    <option value="Mata Kuliah Magang"
+                                        {{ old('tujuan_magang') == 'Mata Kuliah Magang' ? 'selected' : '' }}>Mata
+                                        Kuliah Magang</option>
+                                    <option value="Praktik Kerja Lapangan"
+                                        {{ old('tujuan_magang') == 'Praktik Kerja Lapangan' ? 'selected' : '' }}>
+                                        Praktik Kerja Lapangan</option>
+                                    <option value="Lainnya" {{ old('tujuan_magang') == 'Lainnya' ? 'selected' : '' }}>
+                                        Lainnya</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -557,7 +599,8 @@
                                 </label>
                                 <input type="file" name="file_cv" id="file_cv" required
                                     accept=".pdf,.doc,.docx"
-                                    class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                    class="file-input w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                <p class="file-size-info text-xs mt-2 hidden"></p>
                             </div>
 
                             <!-- 2. Transkrip Nilai -->
@@ -568,7 +611,8 @@
                                 </label>
                                 <input type="file" name="file_transkrip" id="file_transkrip" required
                                     accept=".pdf,.doc,.docx"
-                                    class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                    class="file-input w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                <p class="file-size-info text-xs mt-2 hidden"></p>
                             </div>
 
                             <!-- 3. KTP dan KTM/Kartu Pelajar -->
@@ -580,8 +624,9 @@
                                 </label>
                                 <input type="file" name="file_ktp_ktm" id="file_ktp_ktm" required
                                     accept=".pdf,.doc,.docx"
-                                    class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
-                                <p class="text-xs text-slate-400 mt-2"><i
+                                    class="file-input w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                <p class="file-size-info text-xs mt-2 hidden"></p>
+                                <p class="text-xs text-slate-400 mt-1"><i
                                         class="fas fa-info-circle mr-1"></i>Gabungkan fotokopi KTP dan KTM/Kartu
                                     Pelajar dalam 1 file PDF</p>
                             </div>
@@ -590,13 +635,15 @@
                             <div>
                                 <label for="file_bpjs"
                                     class="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
-                                    <i class="fas fa-heartbeat text-accent-cyan"></i> Bukti Kepesertaan BPJS Kesehatan
+                                    <i class="fas fa-heartbeat text-accent-cyan"></i> Bukti BPJS Kesehatan / Asuransi
+                                    Kesehatan Lainnya
                                     *
                                 </label>
                                 <input type="file" name="file_bpjs" id="file_bpjs" required
                                     accept=".pdf,.doc,.docx"
-                                    class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
-                                <p class="text-xs text-slate-400 mt-2"><i class="fas fa-info-circle mr-1"></i>Bukti
+                                    class="file-input w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                <p class="file-size-info text-xs mt-2 hidden"></p>
+                                <p class="text-xs text-slate-400 mt-1"><i class="fas fa-info-circle mr-1"></i>Bukti
                                     kepesertaan jaminan kesehatan yang masih aktif selama periode magang</p>
                             </div>
 
@@ -609,7 +656,8 @@
                                 </label>
                                 <input type="file" name="file_surat" id="file_surat" required
                                     accept=".pdf,.doc,.docx"
-                                    class="w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                    class="file-input w-full px-5 py-4 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-300 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:font-medium file:bg-gradient-to-r file:from-accent-cyan file:to-cyanDark file:text-slate-950 hover:file:opacity-90 transition-all" />
+                                <p class="file-size-info text-xs mt-2 hidden"></p>
                             </div>
                         </div>
                     </div>
@@ -861,6 +909,40 @@
                     this.value = this.value.toUpperCase();
                 });
             });
+
+            // File size validation (max 2MB = 2048KB = 2097152 bytes)
+            const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
+            const fileInputs = document.querySelectorAll('input[type="file"].file-input');
+
+            fileInputs.forEach(function(input) {
+                input.addEventListener('change', function() {
+                    const file = this.files[0];
+                    const sizeInfo = this.parentElement.querySelector('.file-size-info');
+
+                    if (file) {
+                        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+
+                        if (file.size > maxFileSize) {
+                            // File too large - show custom modal
+                            showFileSizeModal(file.name, fileSizeMB);
+                            sizeInfo.innerHTML =
+                                `<i class="fas fa-exclamation-circle mr-1"></i> File terlalu besar. Maksimal 2 MB.`;
+                            sizeInfo.className = 'file-size-info text-xs mt-2 text-red-400';
+                            sizeInfo.classList.remove('hidden');
+                            this.value = ''; // Clear the input
+                        } else {
+                            // File OK - show success
+                            sizeInfo.innerHTML =
+                                `<i class="fas fa-check-circle mr-1"></i> ${file.name} (${fileSizeMB} MB)`;
+                            sizeInfo.className = 'file-size-info text-xs mt-2 text-green-400';
+                            sizeInfo.classList.remove('hidden');
+                        }
+                    } else {
+                        // No file selected
+                        sizeInfo.classList.add('hidden');
+                    }
+                });
+            });
         });
 
         // Select periode magang
@@ -998,6 +1080,104 @@
                 durationText.textContent = daysDiff + ' hari';
             }
         }
+    </script>
+
+    <!-- Custom Modal for File Size Error -->
+    <div id="fileSizeModal" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeFileSizeModal()"></div>
+
+        <!-- Modal Content -->
+        <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md mx-4">
+            <div
+                class="glass rounded-3xl overflow-hidden shadow-2xl border border-red-500/30 animate-[fadeInScale_0.3s_ease-out]">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-red-900/50 to-orange-900/50 px-6 py-5 border-b border-red-500/20">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-red-500/20 flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-2xl text-red-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">File Terlalu Besar</h3>
+                            <p class="text-sm text-red-300/80">Ukuran file melebihi batas maksimal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="px-6 py-6">
+                    <div class="bg-red-950/30 rounded-2xl p-4 border border-red-500/20 mb-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-file-alt text-red-400 mt-1"></i>
+                            <div class="flex-1">
+                                <p class="text-sm text-slate-300 mb-1">Nama File:</p>
+                                <p id="modalFileName" class="text-white font-medium break-all">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/30">
+                            <p class="text-xs text-slate-400 mb-1">Ukuran File</p>
+                            <p id="modalFileSize" class="text-lg font-bold text-red-400">-</p>
+                        </div>
+                        <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/30">
+                            <p class="text-xs text-slate-400 mb-1">Batas Maksimal</p>
+                            <p class="text-lg font-bold text-green-400">2 MB</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 text-sm text-slate-400 bg-slate-800/30 rounded-xl px-4 py-3">
+                        <i class="fas fa-lightbulb text-yellow-400"></i>
+                        <span>Silakan kompres atau pilih file yang lebih kecil</span>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="px-6 py-4 bg-slate-900/50 border-t border-slate-700/50">
+                    <button onclick="closeFileSizeModal()"
+                        class="w-full bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-slate-950 font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25">
+                        <i class="fas fa-check"></i>
+                        <span>Mengerti</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+
+    <script>
+        function showFileSizeModal(fileName, fileSize) {
+            document.getElementById('modalFileName').textContent = fileName;
+            document.getElementById('modalFileSize').textContent = fileSize + ' MB';
+            document.getElementById('fileSizeModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFileSizeModal() {
+            document.getElementById('fileSizeModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !document.getElementById('fileSizeModal').classList.contains('hidden')) {
+                closeFileSizeModal();
+            }
+        });
     </script>
 </body>
 

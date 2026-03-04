@@ -476,18 +476,14 @@
                     <ul class="space-y-5 text-slate-300">
                         <li class="flex items-start gap-4">
                             <span class="text-accent-cyan font-semibold">1.</span>
-                            <span><strong class="text-white">Jangka waktu</strong> Magang atau PKL <strong
-                                    class="text-white">minimal 1 (satu) bulan</strong>, dan <strong
-                                    class="text-white">paling lama 6 (enam) bulan</strong>, serta <strong
-                                    class="text-white">dapat diperpanjang paling lama selama 6 (enam)
-                                    bulan</strong></span>
+                            <span><strong class="text-white">Pelaksanaan magang</strong> minimal <strong
+                                    class="text-white">1 (Satu) bulan</strong></span>
                         </li>
                         <li class="flex items-start gap-4">
                             <span class="text-accent-cyan font-semibold">2.</span>
-                            <span>Peserta Magang atau PKL diberikan <strong class="text-white">uang saku</strong>
-                                sebagai pengganti biaya transportasi dan konsumsi <strong
-                                    class="text-white">sebanyak-banyaknya sebesar 50%</strong> (lima puluh persen) dari
-                                uang makan karyawan per kehadiran.</span>
+                            <span><strong class="text-white">Peserta magang</strong> minimal <strong
+                                    class="text-white">SMA</strong> dan <strong class="text-white">mahasiswa semester
+                                    V (lima)</strong></span>
                         </li>
                     </ul>
                 </div>

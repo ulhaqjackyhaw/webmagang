@@ -59,6 +59,21 @@
             </div>
 
             <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Kelas</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->kelas ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Semester</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->semester ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Tujuan Magang</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->tujuan_magang ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
                 <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Kampus</label>
                 <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->email_kampus ?? '-' }}</p>
             </div>
@@ -210,7 +225,7 @@
                     class="group border-2 border-gray-200 hover:border-red-400 rounded-xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-red-50 to-red-100">
                     <div class="flex items-center justify-between">
                         <div class="flex-1 pr-3">
-                            <p class="text-gray-600 text-sm font-medium">BPJS Ketenagakerjaan</p>
+                            <p class="text-gray-600 text-sm font-medium">Bukti Kepesertaan BPJS Kesehatan / Asuransi</p>
                             <p class="text-red-600 font-bold text-sm flex items-center mt-1">
                                 <i class="fas fa-file-pdf mr-1"></i> Lihat Dokumen
                             </p>

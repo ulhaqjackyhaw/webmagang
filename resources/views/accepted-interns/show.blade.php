@@ -53,6 +53,26 @@
             </div>
 
             <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Kelas</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->kelas ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Semester</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->semester ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Tujuan Magang</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->tujuan_magang ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Jenis Kelamin</label>
+                <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->jenis_kelamin ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-2">
                 <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Kampus</label>
                 <p class="text-gray-900 font-semibold text-lg">{{ $acceptedIntern->intern->email_kampus ?? '-' }}</p>
             </div>
@@ -248,7 +268,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex-1 pr-3">
                             <p class="text-gray-600 text-sm font-medium flex items-center gap-2">
-                                BPJS Ketenagakerjaan
+                                Bukti Kepesertaan BPJS Kesehatan / Asuransi
                                 @if ($acceptedIntern->viewed_bpjs)
                                     <span class="text-red-600"><i class="fas fa-check-circle"></i></span>
                                 @endif

@@ -38,12 +38,28 @@
                         <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->program_studi }}</p>
                     </div>
                     <div>
-                        <label class="text-sm text-gray-500">Email</label>
-                        <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->email }}</p>
+                        <label class="text-sm text-gray-500">NIM</label>
+                        <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->nim }}</p>
                     </div>
                     <div>
-                        <label class="text-sm text-gray-500">No. Telepon</label>
-                        <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->no_telepon }}</p>
+                        <label class="text-sm text-gray-500">Kelas</label>
+                        <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->kelas ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-500">Semester</label>
+                        <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->semester ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-500">Tujuan Magang</label>
+                        <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->tujuan_magang ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-500">Email Kampus</label>
+                        <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->email_kampus ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-500">No. WhatsApp</label>
+                        <p class="font-medium text-gray-800">{{ $acceptedIntern->intern->no_wa }}</p>
                     </div>
                 </div>
             </div>
@@ -132,7 +148,7 @@
                             class="flex items-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition">
                             <i class="fas fa-file-pdf text-red-500 text-2xl mr-3"></i>
                             <div>
-                                <p class="font-medium text-gray-800">BPJS Ketenagakerjaan</p>
+                                <p class="font-medium text-gray-800">Bukti Kepesertaan BPJS Kesehatan / Asuransi</p>
                                 <p class="text-sm text-gray-500">Lihat dokumen</p>
                             </div>
                         </a>

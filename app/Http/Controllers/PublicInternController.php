@@ -80,6 +80,9 @@ class PublicInternController extends Controller
             'asal_kampus' => 'required|string|max:255',
             'kampus_lainnya' => 'required_if:asal_kampus,Lainnya|nullable|string|max:255',
             'program_studi' => 'required|string|max:255',
+            'kelas' => 'nullable|string|max:50',
+            'semester' => 'required|string|max:10',
+            'tujuan_magang' => 'required|string|in:Mata Kuliah Magang,Praktik Kerja Lapangan,Lainnya',
             'email_kampus' => 'nullable|email|max:255',
             'no_wa' => 'required|string|max:20',
             // File uploads - 4 files + surat
@@ -109,7 +112,10 @@ class PublicInternController extends Controller
             'asal_kampus.required' => 'Asal kampus wajib diisi.',
             'kampus_lainnya.required_if' => 'Nama kampus wajib diisi jika memilih Lainnya.',
             'program_studi.required' => 'Program studi wajib diisi.',
-            'email_kampus.email' => 'Format email tidak valid.',
+            'semester.required' => 'Semester wajib dipilih.',
+            'tujuan_magang.required' => 'Tujuan magang wajib dipilih.',
+            'tujuan_magang.in' => 'Tujuan magang tidak valid.',
+            'email_kampus.email' => 'Format email tidak valid',
             'no_wa.required' => 'Nomor WhatsApp wajib diisi.',
             // File validation messages
             'file_cv.required' => 'File CV wajib diupload.',
@@ -146,7 +152,7 @@ class PublicInternController extends Controller
         $data['created_by'] = null; // Public registration, no user logged in
 
         // Convert text fields to uppercase
-        $uppercaseFields = ['nama', 'nim', 'program_studi', 'email_kampus', 'asal_kampus', 'nomor_surat_kampus', 'perihal_surat', 'pengirim_surat'];
+        $uppercaseFields = ['nama', 'nim', 'program_studi', 'kelas', 'email_kampus', 'asal_kampus', 'nomor_surat_kampus', 'perihal_surat', 'pengirim_surat'];
         foreach ($uppercaseFields as $field) {
             if (isset($data[$field])) {
                 $data[$field] = strtoupper($data[$field]);
