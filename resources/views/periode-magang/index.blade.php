@@ -273,7 +273,7 @@
 
     <script>
         function openDeleteModal(id, name) {
-            document.getElementById('deleteForm').action = '/periode-magang/' + id;
+            document.getElementById('deleteForm').action = '{{ url('periode-magang') }}/' + id;
             document.getElementById('deleteModalPeriodeName').textContent = name;
             document.getElementById('deleteModal').classList.remove('hidden');
         }

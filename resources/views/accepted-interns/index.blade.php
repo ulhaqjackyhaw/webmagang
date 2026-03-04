@@ -17,15 +17,6 @@
                 </p>
             </div>
             <div class="flex flex-wrap gap-3">
-                <a href="{{ route('accepted-interns.create') }}"
-                    class="group relative overflow-hidden text-white px-6 py-3 rounded-xl font-medium smooth-transition flex items-center gap-2 shadow-lg hover:shadow-xl"
-                    style="background: linear-gradient(to right, #20B2AA, #1a8f89); box-shadow: 0 10px 15px -3px rgba(32, 178, 170, 0.3);"
-                    onmouseover="this.style.background='linear-gradient(to right, #1a8f89, #157a74)'; this.style.boxShadow='0 20px 25px -5px rgba(32, 178, 170, 0.4)';"
-                    onmouseout="this.style.background='linear-gradient(to right, #20B2AA, #1a8f89)'; this.style.boxShadow='0 10px 15px -3px rgba(32, 178, 170, 0.3)';">
-                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
-                    <i class="fas fa-plus text-sm group-hover:rotate-90 smooth-transition"></i>
-                    <span>Tambah Data</span>
-                </a>
 
                 <!-- Export Button -->
                 <a href="{{ route('accepted-interns.export', $selectedUnit ? ['unit' => $selectedUnit] : []) }}"

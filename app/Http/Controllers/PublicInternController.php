@@ -26,12 +26,11 @@ class PublicInternController extends Controller
         // $formulirs = FormulirTemplate::where('is_active', true)->latest()->get(); // Dihilangkan - formulir tidak digunakan
         $universities = $this->getUniversitiesFromCsv();
 
-        // Get open periods grouped by batch
-        $periodes = PeriodeMagang::openForRegistration()
-            ->orderBy('nama_batch')
+        // Get ALL periods (both active and inactive) to show in UI
+        // Active periods can be selected, inactive shown as "DITUTUP"
+        $periodes = PeriodeMagang::orderBy('nama_batch')
             ->orderBy('tanggal_mulai')
-            ->get()
-            ->groupBy('nama_batch');
+            ->get();
 
         return view('public.register', compact('universities', 'periodes'));
     }

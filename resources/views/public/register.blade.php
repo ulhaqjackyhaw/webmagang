@@ -212,20 +212,46 @@
                             value="{{ old('periode_magang') }}" required />
 
                         <div class="space-y-6">
-                            @forelse($periodes as $batchName => $batchPeriodes)
-                                <div class="bg-slate-800/30 rounded-xl p-5 border border-slate-700">
-                                    <div class="flex items-center gap-3 mb-4">
-                                        <div
-                                            class="w-10 h-10 rounded-lg bg-cyan-500/20 text-accent-cyan flex items-center justify-center">
-                                            <i class="fas fa-calendar"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-semibold text-white">{{ $batchName }}</h4>
-                                            <p class="text-xs text-slate-400">Pilih salah satu periode pendaftaran</p>
-                                        </div>
+                            <!-- Pendaftaran Magang -->
+                            <div class="bg-slate-800/30 rounded-xl p-5 border border-slate-700">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-10 h-10 rounded-lg bg-cyan-500/20 text-accent-cyan flex items-center justify-center">
+                                        <i class="fas fa-calendar"></i>
                                     </div>
-                                    <div class="grid sm:grid-cols-2 gap-4">
-                                        @foreach ($batchPeriodes as $periode)
+                                    <div>
+                                        <h4 class="font-semibold text-white">Pendaftaran Magang</h4>
+                                        <p class="text-xs text-slate-400">Pilih salah satu periode pendaftaran</p>
+                                    </div>
+                                </div>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    @forelse($periodes as $periode)
+                                        @if (!$periode->is_active)
+                                            {{-- Periode DITUTUP --}}
+                                            <div class="relative">
+                                                <div
+                                                    class="px-5 py-4 rounded-xl border-2 border-slate-700 bg-slate-900/70 text-left opacity-60 cursor-not-allowed">
+                                                    <div class="flex items-center justify-between">
+                                                        <div>
+                                                            <div class="flex items-center gap-2 mb-1">
+                                                                <p class="font-semibold text-slate-400">
+                                                                    {{ $periode->nama_periode }}</p>
+                                                                <span
+                                                                    class="px-2 py-0.5 text-[10px] font-bold bg-red-500/20 text-red-400 rounded-full">DITUTUP</span>
+                                                            </div>
+                                                            <p class="text-[11px] text-slate-500 mt-1 italic">
+                                                                <i class="fas fa-briefcase mr-1"></i>Periode
+                                                                Pelaksanaan Magang:<br>
+                                                                {{ $periode->tanggal_mulai->format('j F Y') }} s.d.
+                                                                {{ $periode->tanggal_selesai->format('j F Y') }}
+                                                            </p>
+                                                        </div>
+                                                        <i class="fas fa-lock text-slate-600"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            {{-- Periode AKTIF --}}
                                             <button type="button"
                                                 onclick="selectPeriode('{{ $periode->nama_periode }}', '{{ $periode->tanggal_mulai->format('Y-m-d') }}', '{{ $periode->tanggal_selesai->format('Y-m-d') }}')"
                                                 class="periode-btn px-5 py-4 rounded-xl border-2 border-slate-600 bg-slate-800/50 text-left hover:border-accent-cyan hover:bg-slate-700/50 transition-all group"
@@ -234,30 +260,37 @@
                                                 data-end="{{ $periode->tanggal_selesai->format('Y-m-d') }}">
                                                 <div class="flex items-center justify-between">
                                                     <div>
-                                                        <p
-                                                            class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
-                                                            {{ $periode->nama_periode }}</p>
-                                                        <p class="text-xs text-slate-400 mt-1">
-                                                            {{ $periode->tanggal_mulai->format('d M Y') }} -
-                                                            {{ $periode->tanggal_selesai->format('d M Y') }}
+                                                        <div class="flex items-center gap-2 mb-1">
+                                                            <p
+                                                                class="font-semibold text-white group-hover:text-accent-cyan transition-colors">
+                                                                {{ $periode->nama_periode }}</p>
+                                                            <span
+                                                                class="px-2 py-0.5 text-[10px] font-bold bg-green-500/20 text-green-400 rounded-full">DIBUKA</span>
+                                                        </div>
+                                                        <p class="text-[11px] text-slate-400 mt-1 italic">
+                                                            <i class="fas fa-briefcase mr-1"></i>Periode Pelaksanaan
+                                                            Magang:<br>
+                                                            {{ $periode->tanggal_mulai->format('j F Y') }} s.d.
+                                                            {{ $periode->tanggal_selesai->format('j F Y') }}
                                                         </p>
                                                     </div>
                                                     <i
                                                         class="fas fa-check-circle text-accent-cyan opacity-0 periode-check transition-opacity"></i>
                                                 </div>
                                             </button>
-                                        @endforeach
-                                    </div>
+                                        @endif
+                                    @empty
+                                        <div
+                                            class="sm:col-span-2 bg-slate-800/30 rounded-xl p-8 border border-slate-700 text-center">
+                                            <i class="fas fa-calendar-times text-slate-500 text-4xl mb-4"></i>
+                                            <p class="text-slate-400 font-medium">Tidak ada periode pendaftaran yang
+                                                tersedia saat ini.</p>
+                                            <p class="text-slate-500 text-sm mt-2">Silakan kunjungi kembali halaman ini
+                                                nanti atau hubungi HC untuk informasi lebih lanjut.</p>
+                                        </div>
+                                    @endforelse
                                 </div>
-                            @empty
-                                <div class="bg-slate-800/30 rounded-xl p-8 border border-slate-700 text-center">
-                                    <i class="fas fa-calendar-times text-slate-500 text-4xl mb-4"></i>
-                                    <p class="text-slate-400 font-medium">Tidak ada periode pendaftaran yang dibuka saat
-                                        ini.</p>
-                                    <p class="text-slate-500 text-sm mt-2">Silakan kunjungi kembali halaman ini nanti
-                                        atau hubungi HC untuk informasi lebih lanjut.</p>
-                                </div>
-                            @endforelse
+                            </div>
                         </div>
 
                         <!-- Selected Period Display -->
@@ -270,33 +303,33 @@
                                 </div>
                                 <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
                                     <p class="text-sm text-slate-300 mb-3"><i
-                                            class="fas fa-info-circle text-accent-cyan mr-2"></i>Pilih tanggal mulai
-                                        (dalam periode) lalu tanggal selesai (durasi min. 1 bulan, maks. 6 bulan)</p>
+                                            class="fas fa-info-circle text-accent-cyan mr-2"></i>Pilih bulan mulai dan
+                                        bulan selesai magang (durasi min. 1 bulan, maks. 6 bulan)</p>
                                     <div class="grid md:grid-cols-2 gap-4">
                                         <div>
                                             <label for="tanggal_mulai_magang"
                                                 class="block text-sm font-medium text-slate-300 mb-2">Tanggal Mulai
                                                 Magang *</label>
-                                            <input type="date" name="tanggal_mulai_magang" id="tanggal_mulai_magang"
-                                                value="{{ old('tanggal_mulai_magang') }}" required
+                                            <select name="tanggal_mulai_magang" id="tanggal_mulai_magang" required
                                                 class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:border-accent-cyan transition-all"
-                                                onchange="validateDates()" />
+                                                onchange="onStartDateChange()">
+                                                <option value="">-- Pilih Tanggal Mulai --</option>
+                                            </select>
                                             <p class="text-xs text-slate-400 mt-1"><i
-                                                    class="fas fa-calendar-check mr-1"></i>Harus dalam rentang periode
-                                                yang dipilih</p>
+                                                    class="fas fa-calendar-check mr-1"></i>Tanggal 1 di awal bulan</p>
                                         </div>
                                         <div>
                                             <label for="tanggal_selesai_magang"
                                                 class="block text-sm font-medium text-slate-300 mb-2">Tanggal Selesai
                                                 Magang *</label>
-                                            <input type="date" name="tanggal_selesai_magang"
-                                                id="tanggal_selesai_magang"
-                                                value="{{ old('tanggal_selesai_magang') }}" required disabled
+                                            <select name="tanggal_selesai_magang" id="tanggal_selesai_magang" required
+                                                disabled
                                                 class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:border-accent-cyan transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                                onchange="validateDates()" />
+                                                onchange="onEndDateChange()">
+                                                <option value="">-- Pilih Tanggal Selesai --</option>
+                                            </select>
                                             <p class="text-xs text-slate-400 mt-1"><i
-                                                    class="fas fa-clock mr-1"></i>Otomatis tersedia setelah pilih
-                                                tanggal mulai (1-6 bulan)</p>
+                                                    class="fas fa-clock mr-1"></i>Akhir bulan (durasi 1-6 bulan)</p>
                                         </div>
                                     </div>
                                     <div id="date-validation-msg" class="mt-3 hidden">
@@ -875,11 +908,11 @@
                 toggleKampusLainnya('Lainnya');
             }
 
-            // Initially disable end date input
-            const endInput = document.getElementById('tanggal_selesai_magang');
-            endInput.disabled = true;
+            // Initially disable end date select
+            const endSelect = document.getElementById('tanggal_selesai_magang');
+            endSelect.disabled = true;
 
-            // Check for old() periode value
+            // Check for old() periode value and restore selections
             const periodeValue = document.getElementById('periode_magang').value;
             if (periodeValue) {
                 const selectedBtn = document.querySelector(`.periode-btn[data-periode="${periodeValue}"]`);
@@ -893,11 +926,11 @@
                     const oldEndDate = '{{ old('tanggal_selesai_magang') }}';
                     if (oldStartDate) {
                         document.getElementById('tanggal_mulai_magang').value = oldStartDate;
-                        validateDates(); // This will enable end input and set constraints
+                        onStartDateChange(); // Populate end date options
                     }
                     if (oldEndDate) {
                         document.getElementById('tanggal_selesai_magang').value = oldEndDate;
-                        validateDates(); // Recalculate duration display
+                        onEndDateChange(); // Show duration
                     }
                 }
             }
@@ -949,6 +982,21 @@
         let selectedPeriodStart = null;
         let selectedPeriodEnd = null;
 
+        // Helper: get month name in Indonesian
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
+            'Oktober', 'November', 'Desember'
+        ];
+
+        // Helper: get last day of month
+        function getLastDayOfMonth(year, month) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+
+        // Helper: format date as YYYY-MM-DD
+        function formatDate(year, month, day) {
+            return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        }
+
         function selectPeriode(periode, startDate, endDate) {
             // Update hidden input
             document.getElementById('periode_magang').value = periode;
@@ -976,109 +1024,95 @@
             document.getElementById('selected-periode-display').classList.remove('hidden');
             document.getElementById('selected-periode-text').textContent = periode;
 
-            // Set date input constraints
-            const startInput = document.getElementById('tanggal_mulai_magang');
-            const endInput = document.getElementById('tanggal_selesai_magang');
+            // Populate start date dropdown with first day of each month
+            const startSelect = document.getElementById('tanggal_mulai_magang');
+            const endSelect = document.getElementById('tanggal_selesai_magang');
 
-            // Tanggal mulai harus dalam periode pendaftaran
-            startInput.min = startDate;
-            startInput.max = endDate;
+            // Clear and populate start date options
+            startSelect.innerHTML = '<option value="">-- Pilih Tanggal Mulai --</option>';
 
-            // Tanggal selesai akan diatur saat tanggal mulai dipilih
-            endInput.min = '';
-            endInput.max = '';
-            endInput.disabled = true;
+            const start = new Date(startDate);
+            const end = new Date(endDate);
 
-            // Reset date values
-            startInput.value = '';
-            endInput.value = '';
+            // Generate options for first day of each month within the period
+            let current = new Date(start.getFullYear(), start.getMonth(), 1);
+            while (current <= end) {
+                const value = formatDate(current.getFullYear(), current.getMonth(), 1);
+                const label = `1 ${monthNames[current.getMonth()]} ${current.getFullYear()}`;
+                startSelect.innerHTML += `<option value="${value}">${label}</option>`;
+                current.setMonth(current.getMonth() + 1);
+            }
+
+            // Reset end date
+            endSelect.innerHTML = '<option value="">-- Pilih Tanggal Selesai --</option>';
+            endSelect.disabled = true;
+            endSelect.value = '';
+
+            // Reset displays
             document.getElementById('date-validation-msg').classList.add('hidden');
             document.getElementById('duration-display').classList.add('hidden');
         }
 
-        function validateDates() {
-            const startInput = document.getElementById('tanggal_mulai_magang');
-            const endInput = document.getElementById('tanggal_selesai_magang');
-            const validationMsg = document.getElementById('date-validation-msg');
-            const validationText = document.getElementById('date-validation-text');
+        function onStartDateChange() {
+            const startSelect = document.getElementById('tanggal_mulai_magang');
+            const endSelect = document.getElementById('tanggal_selesai_magang');
+            const durationDisplay = document.getElementById('duration-display');
+
+            durationDisplay.classList.add('hidden');
+
+            if (!startSelect.value) {
+                endSelect.innerHTML = '<option value="">-- Pilih Tanggal Selesai --</option>';
+                endSelect.disabled = true;
+                return;
+            }
+
+            // Populate end date options (last day of month, 1-6 months from start)
+            endSelect.innerHTML = '<option value="">-- Pilih Tanggal Selesai --</option>';
+
+            const startDate = new Date(startSelect.value);
+            const periodEnd = new Date(selectedPeriodEnd);
+
+            // Generate options for last day of each month (1-6 months from start)
+            for (let i = 1; i <= 6; i++) {
+                const endMonth = new Date(startDate.getFullYear(), startDate.getMonth() + i, 1);
+                const lastDay = getLastDayOfMonth(endMonth.getFullYear(), endMonth.getMonth() - 1);
+                const endDate = new Date(endMonth.getFullYear(), endMonth.getMonth() - 1, lastDay);
+
+                // Check if within period
+                if (endDate > periodEnd) break;
+
+                const value = formatDate(endDate.getFullYear(), endDate.getMonth(), lastDay);
+                const label = `${lastDay} ${monthNames[endDate.getMonth()]} ${endDate.getFullYear()} (${i} bulan)`;
+                endSelect.innerHTML += `<option value="${value}">${label}</option>`;
+            }
+
+            endSelect.disabled = false;
+        }
+
+        function onEndDateChange() {
+            const startSelect = document.getElementById('tanggal_mulai_magang');
+            const endSelect = document.getElementById('tanggal_selesai_magang');
             const durationDisplay = document.getElementById('duration-display');
             const durationText = document.getElementById('duration-text');
 
-            // Jika tanggal mulai dipilih, atur constraint untuk tanggal selesai
-            if (startInput.value) {
-                const start = new Date(startInput.value);
-
-                // Min = tanggal mulai + 1 bulan
-                const minEnd = new Date(start);
-                minEnd.setMonth(minEnd.getMonth() + 1);
-
-                // Max = tanggal mulai + 6 bulan
-                const maxEnd = new Date(start);
-                maxEnd.setMonth(maxEnd.getMonth() + 6);
-
-                endInput.min = minEnd.toISOString().split('T')[0];
-                endInput.max = maxEnd.toISOString().split('T')[0];
-                endInput.disabled = false;
-            } else {
-                endInput.disabled = true;
-                endInput.value = '';
-            }
-
-            if (!startInput.value || !endInput.value) {
-                durationDisplay.classList.add('hidden');
-                validationMsg.classList.add('hidden');
-                return;
-            }
-
-            const start = new Date(startInput.value);
-            const end = new Date(endInput.value);
-
-            // Calculate months difference
-            const monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-
-            // Calculate days for more accurate display
-            const daysDiff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-
-            // Validate minimum 1 month (approximately 28 days)
-            if (daysDiff < 28) {
-                validationMsg.classList.remove('hidden');
-                validationText.textContent = 'Durasi magang minimal 1 bulan';
+            if (!startSelect.value || !endSelect.value) {
                 durationDisplay.classList.add('hidden');
                 return;
             }
 
-            // Validate maximum 6 months (approximately 186 days)
-            if (daysDiff > 186) {
-                validationMsg.classList.remove('hidden');
-                validationText.textContent = 'Durasi magang maksimal 6 bulan';
-                durationDisplay.classList.add('hidden');
-                return;
-            }
+            const start = new Date(startSelect.value);
+            const end = new Date(endSelect.value);
 
-            // Valid duration - show in months and days
-            validationMsg.classList.add('hidden');
+            // Calculate months
+            const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+
             durationDisplay.classList.remove('hidden');
+            durationText.textContent = months + ' bulan';
+        }
 
-            // Calculate full months accurately
-            let fullMonths = monthsDiff;
-            if (end.getDate() < start.getDate()) {
-                fullMonths--;
-            }
-
-            // Calculate actual remaining days
-            const tempDate = new Date(start);
-            tempDate.setMonth(tempDate.getMonth() + fullMonths);
-            const remainingDays = Math.ceil((end - tempDate) / (1000 * 60 * 60 * 24));
-
-            if (fullMonths >= 1) {
-                if (remainingDays > 0) {
-                    durationText.textContent = fullMonths + ' bulan ' + remainingDays + ' hari';
-                } else {
-                    durationText.textContent = fullMonths + ' bulan';
-                }
-            } else {
-                durationText.textContent = daysDiff + ' hari';
-            }
+        function validateDates() {
+            // This function is kept for compatibility but main logic moved to onStartDateChange/onEndDateChange
+            onEndDateChange();
         }
     </script>
 

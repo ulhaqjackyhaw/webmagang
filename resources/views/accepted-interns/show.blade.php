@@ -312,16 +312,12 @@
             {{-- Show action buttons when documents are verified but not yet sent --}}
             @if ($acceptedIntern->approval_status === 'pending' && $acceptedIntern->documents_verified)
                 {{-- Terima & Kirim ke Div Head --}}
-                <form action="{{ route('accepted-interns.sendToApproval', $acceptedIntern->id) }}" method="POST"
-                    onsubmit="return confirm('Anda yakin ingin menerima dan mengirim data ini ke Div Head untuk approval?')">
-                    @csrf
-                    <button type="submit"
-                        class="group relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40">
-                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
-                        <i class="fas fa-check-circle text-sm"></i>
-                        <span>Terima & Kirim ke Div Head</span>
-                    </button>
-                </form>
+                <button type="button" onclick="openForwardModal()"
+                    class="group relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40">
+                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                    <i class="fas fa-check-circle text-sm"></i>
+                    <span>Terima & Kirim ke Div Head</span>
+                </button>
 
                 {{-- Tolak Button --}}
                 <button type="button" onclick="openRejectModal()"
@@ -335,16 +331,12 @@
             {{-- Hidden buttons for JS to show dynamically after all docs read --}}
             <div id="actionButtonsContainer" class="hidden flex-wrap gap-3">
                 {{-- Terima & Kirim ke Div Head --}}
-                <form action="{{ route('accepted-interns.sendToApproval', $acceptedIntern->id) }}" method="POST"
-                    onsubmit="return confirm('Anda yakin ingin menerima dan mengirim data ini ke Div Head untuk approval?')">
-                    @csrf
-                    <button type="submit"
-                        class="group relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40">
-                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
-                        <i class="fas fa-check-circle text-sm"></i>
-                        <span>Terima & Kirim ke Div Head</span>
-                    </button>
-                </form>
+                <button type="button" onclick="openForwardModal()"
+                    class="group relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3.5 rounded-xl font-semibold smooth-transition flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40">
+                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 smooth-transition"></span>
+                    <i class="fas fa-check-circle text-sm"></i>
+                    <span>Terima & Kirim ke Div Head</span>
+                </button>
 
                 {{-- Tolak Button --}}
                 <button type="button" onclick="openRejectModal()"
@@ -561,6 +553,80 @@
         </div>
     </div>
 
+    {{-- Forward to Div Head Modal --}}
+    <div id="forwardModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md transform transition-all animate-[fadeInScale_0.3s_ease-out]">
+            <div class="p-6">
+                {{-- Icon Header --}}
+                <div class="flex justify-center mb-4">
+                    <div
+                        class="w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/30">
+                        <i class="fas fa-paper-plane text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                {{-- Title --}}
+                <h3 class="text-2xl font-bold text-gray-800 text-center mb-2">Kirim ke Div Head</h3>
+                <p class="text-gray-600 text-center mb-6">Anda akan menerima dan mengirim data ini ke Div Head untuk proses
+                    approval selanjutnya.</p>
+
+                {{-- Info Box --}}
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 mb-6">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-user text-green-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">{{ $acceptedIntern->intern->nama }}</p>
+                            <p class="text-sm text-gray-600">{{ $acceptedIntern->intern->asal_kampus }}</p>
+                            <p class="text-sm text-gray-500">{{ $acceptedIntern->unit_magang }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Warning --}}
+                <div class="flex items-center gap-2 text-sm text-amber-700 bg-amber-50 rounded-lg px-4 py-3 mb-6">
+                    <i class="fas fa-info-circle text-amber-500"></i>
+                    <span>Data akan diteruskan ke Div Head untuk approval final.</span>
+                </div>
+
+                {{-- Form --}}
+                <form id="forwardForm" action="{{ route('accepted-interns.sendToApproval', $acceptedIntern->id) }}"
+                    method="POST">
+                    @csrf
+                </form>
+
+                {{-- Action Buttons --}}
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeForwardModal()"
+                        class="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-semibold transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-times"></i>
+                        Batal
+                    </button>
+                    <button type="button" onclick="submitForwardForm()"
+                        class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/30">
+                        <i class="fas fa-paper-plane"></i>
+                        Ya, Kirim
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+
     <script>
         function openRejectModal() {
             document.getElementById('rejectModal').classList.remove('hidden');
@@ -570,10 +636,23 @@
             document.getElementById('rejectModal').classList.add('hidden');
         }
 
+        function openForwardModal() {
+            document.getElementById('forwardModal').classList.remove('hidden');
+        }
+
+        function closeForwardModal() {
+            document.getElementById('forwardModal').classList.add('hidden');
+        }
+
+        function submitForwardForm() {
+            document.getElementById('forwardForm').submit();
+        }
+
         // Close modal with ESC key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeRejectModal();
+                closeForwardModal();
             }
         });
 
@@ -581,6 +660,12 @@
         document.getElementById('rejectModal')?.addEventListener('click', function(e) {
             if (e.target === this) {
                 closeRejectModal();
+            }
+        });
+
+        document.getElementById('forwardModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeForwardModal();
             }
         });
     </script>
