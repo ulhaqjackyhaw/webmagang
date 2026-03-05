@@ -495,8 +495,6 @@
                                     <option value="VI" {{ old('semester') == 'VI' ? 'selected' : '' }}>VI</option>
                                     <option value="VII" {{ old('semester') == 'VII' ? 'selected' : '' }}>VII
                                     </option>
-                                    <option value="VIII" {{ old('semester') == 'VIII' ? 'selected' : '' }}>VIII
-                                    </option>
                                 </select>
                             </div>
                             <div class="md:col-span-2">
