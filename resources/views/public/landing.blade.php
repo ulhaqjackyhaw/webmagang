@@ -165,10 +165,10 @@
             </div>
 
             <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tight mb-8">
-                Your Internship<br />
+                Yo<span class="text-accent-cyan">ur</span> Intern<span class="text-accent-cyan">ship</span>
                 Programme at<br />
-                <span class="bg-gradient-to-r from-cyan-300 to-accent-cyan bg-clip-text text-transparent">Injourney
-                    Airports</span>
+                Injourney
+                Air<span class="text-accent-cyan">ports</span>
             </h1>
 
             <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto mb-6 font-light">
@@ -203,7 +203,8 @@
                 </div>
 
                 <h3 class="text-4xl md:text-6xl font-extrabold mb-10 leading-tight">
-                    Your Intern<span class="text-accent-cyan">ship</span> Programme<br />
+                    Yo<span class="text-accent-cyan">ur</span> Intern<span class="text-accent-cyan">ship</span>
+                    Programme<br />
                     At Injourney Air<span class="text-accent-cyan">ports</span>
                 </h3>
 
@@ -477,13 +478,16 @@
                         <li class="flex items-start gap-4">
                             <span class="text-accent-cyan font-semibold">1.</span>
                             <span><strong class="text-white">Pelaksanaan magang</strong> minimal <strong
-                                    class="text-white">1 (Satu) bulan</strong></span>
+                                    class="text-white">1 (Satu) bulan</strong> dan maksimal <strong
+                                    class="text-white">6 (Enam) bulan</strong></span>
                         </li>
                         <li class="flex items-start gap-4">
                             <span class="text-accent-cyan font-semibold">2.</span>
                             <span><strong class="text-white">Peserta magang</strong> minimal <strong
-                                    class="text-white">SMA</strong> dan <strong class="text-white">mahasiswa semester
-                                    V (lima)</strong></span>
+                                    class="text-white">SMA</strong> dan untuk <strong class="text-white"> Mahasiswa
+                                    semester
+                                    V (lima)</strong> sampai dengan <strong class="text-white">semester VII
+                                    (tujuh)</strong></span>
                         </li>
                     </ul>
                 </div>
