@@ -497,10 +497,11 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="md:col-span-2">
+                            <div>
                                 <label for="tujuan_magang"
                                     class="block text-sm font-medium text-slate-300 mb-2">Tujuan Magang *</label>
                                 <select name="tujuan_magang" id="tujuan_magang" required
+                                    onchange="toggleTujuanLainnya(this.value)"
                                     class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:border-accent-cyan transition-all">
                                     <option value="">-- Pilih Tujuan Magang --</option>
                                     <option value="Mata Kuliah Magang"
@@ -513,54 +514,17 @@
                                         Lainnya</option>
                                 </select>
                             </div>
+                            <div id="tujuan_lainnya_wrapper"
+                                style="display: {{ old('tujuan_magang') == 'Lainnya' ? 'block' : 'none' }};">
+                                <label for="tujuan_lainnya"
+                                    class="block text-sm font-medium text-slate-300 mb-2">Tujuan Magang Lainnya
+                                    *</label>
+                                <input type="text" name="tujuan_lainnya" id="tujuan_lainnya"
+                                    value="{{ old('tujuan_lainnya') }}" placeholder="Ketik tujuan magang Anda"
+                                    class="w-full px-5 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:border-accent-cyan transition-all" />
+                            </div>
                         </div>
                     </div>
-
-                    {{-- Download Formulir - Dihilangkan karena sudah input data kampus by ketik --}}
-                    {{-- <div class="glass rounded-2xl p-8" data-aos="fade-up" data-aos-delay="400">
-                        <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                            <i class="fas fa-download text-accent-cyan"></i> Download Formulir
-                        </h3>
-
-                        @if ($formulirs->isEmpty())
-                            <div class="bg-slate-800/40 border border-slate-600 rounded-xl p-8 text-center">
-                                <i class="fas fa-info-circle text-slate-400 text-4xl mb-4"></i>
-                                <p class="text-slate-300">Belum ada formulir yang tersedia saat ini.</p>
-                            </div>
-                        @else
-                            <div class="bg-slate-800/40 border border-slate-600 rounded-xl p-8">
-                                <p class="text-slate-300 mb-6 flex items-center gap-3">
-                                    <i class="fas fa-info-circle text-accent-cyan"></i>
-                                    Download formulir, isi lengkap, lalu upload di bagian dokumen.
-                                </p>
-                                <div class="space-y-4">
-                                    @foreach ($formulirs as $formulir)
-                                        <div
-                                            class="bg-slate-900/50 border border-slate-700 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                            <div class="flex items-center gap-4">
-                                                <div
-                                                    class="w-14 h-14 bg-accent-cyan/10 rounded-xl flex items-center justify-center">
-                                                    <i class="fas fa-file-pdf text-accent-cyan text-2xl"></i>
-                                                </div>
-                                                <div>
-                                                    <h4 class="font-semibold text-white">
-                                                        {{ $formulir->nama_formulir }}</h4>
-                                                    @if ($formulir->deskripsi)
-                                                        <p class="text-sm text-slate-400 mt-1">
-                                                            {{ $formulir->deskripsi }}</p>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <a href="{{ route('public.download-formulir', $formulir->id) }}"
-                                                class="inline-flex items-center gap-2 bg-gradient-to-r from-accent-cyan to-cyanDark text-slate-950 font-bold py-3 px-6 rounded-xl hover:shadow-lg hover:shadow-cyan-500/30 transition-all hover:scale-105">
-                                                <i class="fas fa-file-download"></i> Download
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-                    </div> --}}
 
 
                     <!-- Keterangan Surat Magang -->
@@ -773,6 +737,21 @@
                 lainnyaInput.required = false;
                 lainnyaInput.value = '';
                 prodiWrapper.classList.remove('md:col-span-2');
+            }
+        }
+
+        // Toggle tujuan magang lainnya input
+        function toggleTujuanLainnya(value) {
+            const wrapper = document.getElementById('tujuan_lainnya_wrapper');
+            const input = document.getElementById('tujuan_lainnya');
+
+            if (value === 'Lainnya') {
+                wrapper.style.display = 'block';
+                input.required = true;
+            } else {
+                wrapper.style.display = 'none';
+                input.required = false;
+                input.value = '';
             }
         }
 

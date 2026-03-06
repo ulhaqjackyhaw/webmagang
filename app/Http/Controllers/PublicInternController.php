@@ -82,6 +82,7 @@ class PublicInternController extends Controller
             'kelas' => 'nullable|string|max:50',
             'semester' => 'required|string|max:10',
             'tujuan_magang' => 'required|string|in:Mata Kuliah Magang,Praktik Kerja Lapangan,Lainnya',
+            'tujuan_lainnya' => 'required_if:tujuan_magang,Lainnya|nullable|string|max:255',
             'email_kampus' => 'nullable|email|max:255',
             'no_wa' => 'required|string|max:20',
             // File uploads - 4 files + surat
@@ -114,6 +115,7 @@ class PublicInternController extends Controller
             'semester.required' => 'Semester wajib dipilih.',
             'tujuan_magang.required' => 'Tujuan magang wajib dipilih.',
             'tujuan_magang.in' => 'Tujuan magang tidak valid.',
+            'tujuan_lainnya.required_if' => 'Tujuan magang wajib diisi jika memilih Lainnya.',
             'email_kampus.email' => 'Format email tidak valid',
             'no_wa.required' => 'Nomor WhatsApp wajib diisi.',
             // File validation messages
@@ -163,6 +165,11 @@ class PublicInternController extends Controller
             $data['asal_kampus'] = strtoupper($request->kampus_lainnya);
         }
 
+        // Handle "Lainnya" selection - use custom tujuan magang
+        if ($request->tujuan_magang === 'Lainnya' && $request->tujuan_lainnya) {
+            $data['tujuan_magang'] = strtoupper($request->tujuan_lainnya);
+        }
+
         // Upload files
         if ($request->hasFile('file_cv')) {
             $data['file_cv'] = $request->file('file_cv')->store('cvs', 'public');
@@ -180,8 +187,8 @@ class PublicInternController extends Controller
             $data['file_surat'] = $request->file('file_surat')->store('surats', 'public');
         }
 
-        // Remove checkbox values and kampus_lainnya before saving
-        unset($data['persetujuan_sehat'], $data['persetujuan_penempatan'], $data['persetujuan_data'], $data['kampus_lainnya']);
+        // Remove checkbox values and temporary fields before saving
+        unset($data['persetujuan_sehat'], $data['persetujuan_penempatan'], $data['persetujuan_data'], $data['kampus_lainnya'], $data['tujuan_lainnya']);
 
         Intern::create($data);
 
